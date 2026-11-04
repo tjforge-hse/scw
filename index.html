@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survei Hentikan – Panggil – Tunggu | SCS TJFI</title>
+<link rel="icon" href="data:image/png;base64,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">
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#1b2a3a;--mut:#5d6b7a;--pri:#1f4e78;--pri2:#2e75b6;--ok:#2e7d32;--bad:#c62828;--line:#d5dde6;--warn:#fff4d6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+header{background:var(--pri);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+.logo{width:44px;height:44px;border-radius:8px;background:#fff;color:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;object-fit:contain;padding:3px}
+header h1{font-size:15px;margin:0;line-height:1.2}header small{opacity:.8;font-size:11px}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-size:17px;margin:0 0 4px}h3{font-size:14px;margin:0 0 8px;color:var(--pri)}.sub{color:var(--mut);margin:0 0 12px;font-size:13px;line-height:1.5}
+label.f{display:block;font-weight:700;font-size:13px;margin:12px 0 4px}label.f span{color:var(--bad)}
+input[type=text],input[type=number],select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri2);border-color:var(--pri2)}
+.err{border-color:var(--bad)!important;background:#fff6f6}.msg{color:var(--bad);font-size:12px;margin-top:3px;display:none}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.type{border:2px solid var(--line);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff}
+.type b{display:block;margin-top:4px}.type small{color:var(--mut);font-size:12px}.type .ic{font-size:26px}
+.type.on{border-color:var(--pri2);background:#eaf3fc}
+.btn{display:block;width:100%;padding:13px;border:0;border-radius:10px;background:var(--pri);color:#fff;font:inherit;font-weight:700;margin-top:16px;cursor:pointer}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri)}.btn.inl{display:inline-block;width:auto;margin:0 6px 0 0;padding:9px 14px}
+.scw{display:flex;gap:6px;margin:10px 0 0}.scw div{flex:1;text-align:center;padding:8px 4px;border-radius:8px;color:#fff;font-weight:700;font-size:12px}
+.scw .s{background:#c62828}.scw .c{background:#ef8f00}.scw .w{background:#2e7d32}
+.prog{height:8px;background:#e3e9f0;border-radius:6px;overflow:hidden;margin:6px 0 2px}.prog i{display:block;height:100%;background:var(--pri2);width:0;transition:width .2s}
+.who{background:#eaf3fc;border-radius:8px;padding:8px 10px;font-size:12px;color:var(--pri);margin-bottom:12px;line-height:1.5}
+.sec-h{margin:18px 0 0;padding:8px 10px;background:var(--pri);color:#fff;border-radius:8px;font-size:13px;font-weight:700}
+.q{padding:14px 0;border-bottom:1px solid var(--line)}.q:last-child{border-bottom:0}
+.q.miss{background:#fff6f6;border-radius:8px;padding-left:8px;padding-right:8px}
+.q p{margin:0 0 4px;line-height:1.45}.q p b{color:var(--pri)}.hint{font-size:11px;color:var(--mut);margin:0 0 8px}
+.ch{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:8px;margin-top:6px;cursor:pointer;line-height:1.35;font-size:14px}
+.ch input{margin-top:2px;width:18px;height:18px;flex:none}.ch.on{border-color:var(--pri2);background:#eaf3fc}
+.oth{margin-top:6px;display:none}.oth.show{display:block}
+.note{background:var(--warn);border-radius:8px;padding:10px;font-size:12px;margin-top:12px;line-height:1.5}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}th,td{border:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}th{background:var(--pri);color:#fff}
+.bar{display:inline-block;height:8px;background:var(--pri2);border-radius:4px;vertical-align:middle}
+.hide{display:none!important}
+footer{text-align:center;color:var(--mut);font-size:11px;padding:10px 0 24px}footer a{color:var(--pri2);cursor:pointer}
+
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}.kpi{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+.kpi b{display:block;font-size:24px;color:var(--pri)}.kpi small{color:var(--mut);font-size:11px;line-height:1.3;display:block}
+.br{margin:7px 0}.bl{font-size:12px;line-height:1.3;margin-bottom:2px}.bt{display:flex;align-items:center;gap:6px}.bt span.tr{flex:1;background:#e8eef5;border-radius:4px;height:12px;overflow:hidden}.bt i{display:block;height:100%;border-radius:4px}.bt em{font-style:normal;font-size:12px;min-width:74px;text-align:right}
+.qc{border-top:1px solid var(--line);padding:12px 0}.qc h4{margin:0 0 6px;font-size:13px;line-height:1.4}.qc h4 small{color:var(--mut);font-weight:400}
+.flt{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}.flt select:first-child{grid-column:1/-1}.flt select{padding:9px 6px;font-size:13px}
+.cm{border-left:3px solid var(--pri2);background:#f6f9fc;padding:6px 9px;margin:6px 0;font-size:12px;line-height:1.4}.cm small{color:var(--mut);display:block}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><img class="logo" src="data:image/png;base64,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" alt="SCS" onerror="this.outerHTML='<div class=logo>SCS</div>'"><div><h1>Survei Hentikan – Panggil – Tunggu</h1><small>SCS · PT TJ Forge Indonesia · HSE</small></div></header>
+<main>
+
+<section id="s1">
+  <div class="card">
+    <h2>Selamat datang</h2>
+    <p class="sub">Terima kasih atas kerja sama Anda selama ini dalam menjaga kualitas. Tahun ini pun, sebagai bagian dari kegiatan Bulan Kualitas, kami mengadakan survei mengenai penerapan “Hentikan, Panggil, Tunggu”. Survei ini bertujuan mengumpulkan suara jujur dari lapangan untuk menciptakan lingkungan kerja yang lebih nyaman dan lebih mudah dalam menjaga kualitas.</p>
+    <p class="sub">Jawaban tidak digunakan sebagai jawaban individu, melainkan sebagai hasil agregat, sehingga mohon sampaikan pendapat Anda dengan jujur. Atas kerja sama Anda, kami ucapkan terima kasih.</p>
+    <div class="scw"><div class="s">HENTIKAN</div><div class="c">PANGGIL</div><div class="w">TUNGGU</div></div>
+  </div>
+  <div class="card">
+    <h2>1. Informasi Dasar</h2>
+    <label class="f">Jenis survei <span>*</span></label>
+    <div class="types">
+      <div class="type" data-t="operator"><div class="ic">🧑‍🏭</div><b>Operator</b><small>Survei untuk Teknisi</small></div>
+      <div class="type" data-t="pengawas"><div class="ic">🦺</div><b>Pengawas</b><small>Foreman, leader, supervisor</small></div>
+    </div>
+    <div class="msg" id="tmsg">Pilih jenis survei.</div>
+    <label class="f">Plant (Site Pabrik) <span>*</span></label><select id="plant"><option value="">— Pilih plant —</option><option>Plant 1</option><option>Plant 2</option></select><div class="msg">Pilih plant.</div>
+    <label class="f">Departemen <span>*</span></label><select id="dept" disabled><option value="">— Pilih plant terlebih dahulu —</option></select><div class="msg">Pilih departemen.</div>
+    <label class="f">Line <span>*</span></label><input type="text" id="line" placeholder="Contoh: Line Carrier"><div class="msg">Line wajib diisi.</div>
+    <label class="f">Tim <span>*</span></label><input type="text" id="tim" placeholder="Contoh: Tim Leader A"><div class="msg">Tim wajib diisi.</div>
+    <div id="extra"></div>
+    <div class="note">Survei ini tidak meminta nama atau NIK. Jawaban hanya ditampilkan sebagai hasil agregat.</div>
+    <button class="btn" id="go">Mulai Survei →</button>
+  </div>
+</section>
+
+<section id="s2" class="hide">
+  <div class="card">
+    <div class="who" id="who"></div>
+    <h2 id="qtitle" style="font-size:15px;line-height:1.4"></h2>
+    <div class="prog"><i id="bar"></i></div><div class="hint" id="plabel"></div>
+    <div id="qs"></div>
+    <div class="note hide" id="miss">Masih ada pertanyaan wajib yang belum dijawab (ditandai merah).</div>
+    <div class="note hide" id="sendmsg" style="background:#fdecea"></div>
+    <button class="btn" id="submit">Kirim Survei</button>
+    <button class="btn sec" id="back">← Ubah informasi dasar</button>
+  </div>
+</section>
+
+<section id="s3" class="hide">
+  <div class="card" style="text-align:center">
+    <div style="font-size:48px">✅</div><h2>Terima kasih</h2>
+    <p class="sub">Survei Anda sudah tersimpan. Suara Anda membantu kami membuat lapangan lebih aman dan lebih mudah menjaga kualitas.</p>
+    <button class="btn" id="again">Kembali ke awal</button>
+  </div>
+</section>
+
+<section id="s4" class="hide">
+  <div class="card">
+    <h2>Hasil survei (demo HSE)</h2>
+    <p class="sub">Di sistem sebenarnya halaman ini berada di balik login HSE dan membaca Google Spreadsheet.</p>
+    <div class="flt"><select id="rj"><option value="operator">Operator (Teknisi)</option><option value="pengawas">Pengawas</option></select><select id="rp"><option value="">Semua plant</option><option>Plant 1</option><option>Plant 2</option></select><select id="rd"><option value="">Semua dept.</option></select></div>
+    <div id="tokrow" class="hide" style="margin-bottom:10px"><input type="password" id="tok" placeholder="Token HSE" autocomplete="off"><button class="btn sec" id="load" style="margin-top:8px">Muat data dari Spreadsheet</button><div class="msg" id="tokmsg"></div></div>
+    <div><button class="btn sec inl" id="demo">+ Isi 40 data contoh</button><button class="btn sec inl" id="csv">Unduh CSV</button><button class="btn sec inl" id="clr">Hapus semua data</button></div>
+    <div id="rk" style="margin-top:14px"></div>
+    <button class="btn" id="close4">← Kembali</button>
+  </div>
+</section>
+
+<footer>Prototipe · <a id="adm">Lihat hasil survei (demo HSE)</a></footer>
+</main>
+
+<script>
+/* ===== KONFIGURASI ===== */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";   // isi alamat /exec Apps Script agar data masuk ke Google Spreadsheet
+const DEPT_BY_PLANT = {
+  "Plant 1":["Forging","Machining","Maintenance","PPIC","QA & QC"],
+  "Plant 2":["Assembling","Machining","Maintenance","PPIC","QA & QC"]};
+/* ===== ISI SURVEI (dari file Angket - Stop Call Wait.xlsx) =====
+ k: s = pilih satu, m = boleh lebih dari satu, t = isian bebas
+ L: opsi terakhir adalah "Lainnya (…)" dengan isian teks
+ if: {q:"id", not:index} = tampil bila jawaban q bukan opsi ke-index */
+const O="Lainnya";
+const SURVEY={
+operator:{label:"Operator (Teknisi)",
+ title:"Survei Kondisi Penerapan “Hentikan, Panggil, Tunggu” pada Proses Produksi (Untuk Teknisi)",
+ extra:[{id:"masa",label:"Masa kerja",type:"select",opts:["< 1 tahun","1 ~ <3 tahun","3 ~ <5 tahun","5 ~ <10 tahun","10 ~ <15 tahun","≥ 15 tahun"]}],
+ sections:[
+ {h:"2. Mengenai “Hentikan”",qs:[
+  {id:"2-1",k:"s",t:"Apakah Anda dapat “menghentikan” pekerjaan atau line saat terjadi abnormalitas?",o:["Saya dapat menghentikannya kapan saja","Jika perlu dihentikan, pada umumnya saya dapat menghentikannya","Meskipun perlu dihentikan, saya sering ragu atau tidak dapat menghentikannya","Saya hampir tidak dapat menghentikannya"]},
+  {id:"2-2",k:"m",L:1,if:{q:"2-1",not:0},hint:"Bagi yang menjawab selain “Saya dapat menghentikannya kapan saja” pada 2-1. Boleh memilih lebih dari satu.",t:"Alasan Anda merasa “tidak dapat menghentikan”",o:["Khawatir rencana produksi menjadi terlambat","Khawatir dengan reaksi atasan dan orang di sekitar","Ragu apakah kondisi tersebut abnormalitas atau bukan","Cara pengoperasian dan prosedur untuk menghentikan sulit dipahami",O]},
+  {id:"2-3",k:"s",t:"Dibandingkan tahun lalu, apakah sekarang lebih mudah menghentikan pekerjaan saat terjadi abnormalitas?",o:["Jauh lebih mudah menghentikan","Sedikit lebih mudah menghentikan","Tidak berubah","Sedikit lebih sulit menghentikan","Jauh lebih sulit menghentikan"]}]},
+ {h:"3. Mengenai “Panggil”",qs:[
+  {id:"3-1",k:"s",t:"Apakah Anda dapat “memanggil” atasan atau penanggung jawab saat terjadi abnormalitas?",o:["Saya dapat memanggil mereka kapan saja","Tergantung situasi, saya ragu-ragu","Saya jarang dapat memanggil mereka"]},
+  {id:"3-2",k:"m",L:1,if:{q:"3-1",not:0},hint:"Bagi yang menjawab selain “kapan saja” pada 3-1. Boleh memilih lebih dari satu.",t:"Alasan Anda merasa “sulit memanggil”",o:["Mereka tampak sibuk sehingga sulit untuk didekati","Saya merasa seharusnya menyelesaikannya sendiri","Meskipun sudah dipanggil, penanganannya lambat/kurang memadai","Memanggil mereka sepertinya akan memengaruhi penilaian terhadap saya",O]},
+  {id:"3-3",k:"s",t:"Dibandingkan tahun lalu, apakah sekarang lebih mudah memanggil atasan atau penanggung jawab?",o:["Jauh lebih mudah memanggil","Sedikit lebih mudah memanggil","Tidak berubah","Sedikit lebih sulit memanggil","Jauh lebih sulit memanggil"]}]},
+ {h:"4. Mengenai “Tunggu”",qs:[
+  {id:"4-1",k:"s",t:"Apakah Anda dapat “menunggu” saat ada abnormalitas atau hal yang tidak jelas?",o:["Saya dapat menunggu kapan saja","Terkadang saya tidak dapat menunggu dan melanjutkan pekerjaan","Saya hampir tidak dapat menunggu"]},
+  {id:"4-2",k:"m",L:1,if:{q:"4-1",not:0},hint:"Bagi yang menjawab selain “kapan saja” pada 4-1. Boleh memilih lebih dari satu.",t:"Alasan Anda merasa “tidak dapat menunggu”",o:["Tidak ingin menghentikan produksi","Melanjutkan pekerjaan berdasarkan penilaian sendiri","Instruksi baru datang setelah menunggu lama","Sulit menunggu karena suasana di sekitar",O]},
+  {id:"4-3",k:"s",t:"Dibandingkan tahun lalu, apakah sekarang Anda sudah lebih terbiasa menunggu instruksi atau konfirmasi sebelum bekerja?",o:["Jauh lebih mudah menunggu","Sedikit lebih mudah menunggu","Tidak berubah","Sedikit lebih sulit menunggu","Jauh lebih sulit menunggu"]}]},
+ {h:"5. Mengenai Pendidikan dan Dukungan",qs:[
+  {id:"5-1",k:"s",t:"Dalam satu tahun terakhir, apakah Anda pernah menerima pendidikan atau penjelasan mengenai “Hentikan, Panggil, Tunggu”?",o:["Belum pernah menerima","Menerima penjelasan secara lisan","Menerima pendidikan 1 kali","Menerima pendidikan beberapa kali"]},
+  {id:"5-2",k:"s",if:{q:"5-1",not:0},hint:"Bagi yang menjawab selain “Belum pernah menerima” pada 5-1.",t:"Apakah pendidikan atau penjelasan tersebut berguna dalam pekerjaan Anda?",o:["Sangat berguna","Cukup berguna","Kurang berguna","Tidak berguna"]},
+  {id:"5-3",k:"m",L:1,hint:"Boleh memilih lebih dari satu.",t:"Dalam satu tahun terakhir, adakah hal yang Anda rasa berubah di lapangan?",o:["Menjadi lebih mudah menghentikan line saat terjadi abnormalitas","Menjadi lebih mudah memanggil atasan atau penanggung jawab","Menjadi lebih mudah menunggu sampai konfirmasi diperoleh","Respons atasan atau penanggung jawab menjadi lebih cepat","Kriteria penilaian dan prosedur menjadi lebih mudah dipahami","Lingkungan sekitar mulai mendukung penerapan “Hentikan, Panggil, Tunggu”","Tidak ada perubahan khusus","Menjadi lebih sulit dilakukan dibandingkan sebelumnya",O]}]},
+ {h:"6. Untuk Perbaikan",qs:[
+  {id:"6-1",k:"m",L:1,hint:"Boleh memilih lebih dari satu.",t:"Menurut Anda, apa yang diperlukan agar “Hentikan, Panggil, Tunggu” lebih mudah dijalankan?",o:["Respons cepat dari atasan dan manajer","Penyusunan aturan dan prosedur yang jelas","Penetapan kriteria yang membuat abnormalitas mudah dinilai","Diciptakannya suasana agar operator dapat menghentikan pekerjaan dengan tenang","Pendidikan dan pelatihan yang lebih memadai",O]}]},
+ {h:"7. Pendapat Bebas",qs:[
+  {id:"7-1",k:"t",t:"➀ Dukungan seperti apa yang menurut Anda diperlukan agar “Hentikan, Panggil, Tunggu” dapat diterapkan secara menyeluruh?"},
+  {id:"7-2",k:"t",t:"➁ Apa yang Anda maksud dengan “abnormalitas”?"}]}
+ ]},
+pengawas:{label:"Pengawas",
+ title:"Survei Kondisi Penerapan “Hentikan, Panggil, Tunggu” pada Proses Produksi (Untuk Pengawas)",
+ extra:[{id:"jabatan",label:"Jabatan",type:"text",ph:"Contoh: Foreman / Leader / Supervisor"},{id:"diawasi",label:"Jumlah orang yang diawasi",type:"number"}],
+ sections:[
+ {h:"2. Kondisi Aktual",qs:[
+  {id:"2-1",k:"s",t:"Apakah Anda merasa “Hentikan, Panggil, Tunggu” dijalankan dengan pasti di proses yang menjadi tanggung jawab Anda?",o:["Ya (hampir selalu dapat dijalankan)","Tidak (sebagian belum dapat dijalankan)","Hampir tidak dapat dijalankan"]},
+  {id:"2-2",k:"m",hint:"Boleh memilih lebih dari satu.",t:"Pada tindakan mana yang paling sering tidak dilaksanakan?",o:["Hentikan (tidak menghentikan line meskipun menemukan defect atau abnormalitas)","Panggil (tidak melapor/terlambat melapor kepada atasan atau pihak terkait)","Tunggu (melanjutkan pekerjaan tanpa menunggu instruksi atau konfirmasi)"]},
+  {id:"2-3",k:"s",t:"Dibandingkan tahun lalu, bagaimana perubahan kondisi penerapan di proses yang menjadi tanggung jawab Anda?",o:["Membaik secara signifikan","Sedikit membaik","Tidak berubah","Sedikit memburuk","Memburuk secara signifikan"]}]},
+ {h:"3. Mengenai Alasan",qs:[
+  {id:"3-1",k:"m",L:1,hint:"Boleh memilih lebih dari satu.",t:"Menurut Anda, apa alasan “Hentikan, Panggil, Tunggu” tidak dapat dilakukan/sulit dilakukan?",o:["Tekanan rencana produksi dan tenggat waktu pengiriman yang kuat","Mengkhawatirkan kerugian akibat line berhenti","Meskipun sudah melapor/berkonsultasi, penyelesaiannya lambat/tidak ditanggapi","Operator takut dimintai pertanggungjawaban","Lapangan sibuk, tidak ada waktu luang untuk memanggil/menunggu","Ada suasana bahwa “abnormalitas kecil boleh dibiarkan”","Sebagai pengawas pun, kriteria penilaian tidak jelas","Pendidikan dan pelatihan kurang",O]}]},
+ {h:"4. Mengenai Pendidikan",qs:[
+  {id:"4-1",k:"s",t:"Apakah Anda mendidik anggota tim mengenai prosedur “Hentikan, Panggil, Tunggu”?",o:["Tidak mendidik, dan juga belum pernah menyampaikannya","Tidak mendidik, tetapi sudah menyampaikannya","Kadang-kadang mendidik","Mendidik dengan sungguh-sungguh"]},
+  {id:"4-2",k:"m",L:1,if:{q:"4-1",not:3},hint:"Hanya untuk yang memilih jawaban selain “Mendidik dengan sungguh-sungguh” pada 4-1. Boleh memilih lebih dari satu.",t:"Menurut Anda, apa alasan pendidikan belum dapat dilakukan dengan baik?",o:["Tidak ada materi pendidikan (termasuk terjemahan dari bahasa lain)","Saya sendiri belum memahaminya dengan baik","Waktu untuk mendidik tidak cukup",O]},
+  {id:"4-3",k:"s",t:"Dibandingkan tahun lalu, bagaimana perubahan pelaksanaan pendidikan?",o:["Meningkat secara signifikan","Sedikit meningkat","Tidak berubah","Sedikit menurun","Menurun secara signifikan"]}]},
+ {h:"5. Mengenai Respons",qs:[
+  {id:"5-1",k:"s",t:"Apakah Anda dapat merespons dengan cepat ketika dipanggil?",o:["Ya (dapat merespons dengan cepat)","Tidak (tergantung situasi, terkadang tidak dapat merespons)","Hampir tidak dapat merespons"]},
+  {id:"5-2",k:"m",L:1,if:{q:"5-1",not:0},hint:"Bagi yang menjawab selain “Ya” pada 5-1. Boleh memilih lebih dari satu.",t:"Jika terkadang tidak dapat merespons dengan cepat, apa alasannya?",o:["Memprioritaskan pekerjaan/penanganan lain","Tidak menyadari panggilan/sarana komunikasi sulit digunakan","Sering berada jauh dari lapangan","Informasi dan kriteria yang diperlukan untuk menilai kurang","Tidak ada orang yang dapat menggantikan untuk merespons","Frekuensi dipanggil terlalu sering sehingga tidak dapat menangani semuanya",O]},
+  {id:"5-3",k:"s",t:"Dibandingkan tahun lalu, bagaimana perubahan kecepatan dan keandalan respons Anda?",o:["Membaik secara signifikan","Sedikit membaik","Tidak berubah","Sedikit memburuk","Memburuk secara signifikan"]}]},
+ {h:"6. Secara Keseluruhan",qs:[
+  {id:"6-1",k:"m",L:1,hint:"Boleh memilih lebih dari satu.",t:"Menurut Anda, apa yang diperlukan untuk perbaikan?",o:["Penguatan pendidikan dan pelatihan bagi pengawas","Menciptakan suasana agar operator dapat menghentikan line dengan tenang","Sistem untuk memperkecil dampak akibat line berhenti","Pembenahan sistem manajemen yang memungkinkan respons cepat","Memperjelas kriteria penilaian (manual/dokumen standar)","Pemahaman dan dukungan dari manajemen atas",O]},
+  {id:"6-2",k:"m",L:1,hint:"Boleh memilih lebih dari satu.",t:"Dalam satu tahun terakhir, adakah hal yang Anda rasa berubah di lapangan?",o:["Operator mulai menghentikan line saat terjadi abnormalitas","Panggilan dari operator semakin sering","Operator mulai menghentikan pekerjaan dan menunggu","Dapat merespons lebih cepat dibanding sebelumnya","Kriteria penilaian dan prosedur menjadi lebih mudah dipahami","Lingkungan sekitar mulai mendukung penerapan “Hentikan, Panggil, Tunggu”","Tidak ada perubahan khusus","Menjadi lebih sulit dilakukan dibandingkan sebelumnya",O]}]},
+ {h:"7. Pendapat Bebas",qs:[
+  {id:"7-1",k:"t",t:"➀ Tindakan apa yang menurut Anda diperlukan sebagai pengawas untuk menerapkan “Hentikan, Panggil, Tunggu” secara menyeluruh?"},
+  {id:"7-2",k:"t",t:"➁ Apa yang Anda maksud dengan “abnormalitas”?"}]}
+ ]}
+};
+
+
+/* ===== UTIL ===== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const show=id=>{["s1","s2","s3","s4"].forEach(s=>$(s).classList.toggle("hide",s!==id));scrollTo(0,0)};
+let REMOTE=null; // data dari Google Spreadsheet (bila APPS_SCRIPT_URL terisi)
+const DB=()=>REMOTE||JSON.parse(localStorage.getItem("scw_demo3")||"[]");
+const SAVE=d=>localStorage.setItem("scw_demo3",JSON.stringify(d));
+let jenis=null,who={},ans={};
+const fillDept=(sel,plant,allLabel)=>{
+  const list=plant?DEPT_BY_PLANT[plant]:[...new Set([].concat(...Object.values(DEPT_BY_PLANT)))];
+  sel.innerHTML=`<option value="">${allLabel}</option>`+list.map(d=>`<option>${d}</option>`).join("")};
+$("plant").onchange=()=>{const p=$("plant").value;$("dept").disabled=!p;fillDept($("dept"),p,p?"— Pilih departemen —":"— Pilih plant terlebih dahulu —")};
+
+/* QR bisa mengisi jenis & plant lewat alamat: ?jenis=operator|pengawas&plant=1|2 */
+const qp=new URLSearchParams(location.search);
+function pick(t){jenis=t;document.querySelectorAll(".type").forEach(e=>e.classList.toggle("on",e.dataset.t===t));$("tmsg").style.display="none";
+  $("extra").innerHTML=SURVEY[t].extra.map(x=>`<label class="f">${x.label} <span>*</span></label>`+(x.type==="select"
+    ?`<select id="x_${x.id}"><option value="">— Pilih —</option>${x.opts.map(o=>`<option>${esc(o)}</option>`).join("")}</select>`
+    :x.type==="number"?`<input type="number" id="x_${x.id}" min="0" inputmode="numeric" placeholder="Jumlah orang">`
+    :`<input type="text" id="x_${x.id}" placeholder="${x.ph||""}">`)+`<div class="msg">${x.label} wajib diisi.</div>`).join("")}
+document.querySelectorAll(".type").forEach(e=>e.onclick=()=>pick(e.dataset.t));
+if(SURVEY[qp.get("jenis")])pick(qp.get("jenis"));
+if(["1","2"].includes(qp.get("plant"))){$("plant").value="Plant "+qp.get("plant");$("plant").onchange()}
+
+/* ===== 1 -> 2 ===== */
+function validId(){
+  let ok=true;
+  const chk=(id,c)=>{const el=$(id);el.classList.toggle("err",!c);el.nextElementSibling.style.display=c?"none":"block";if(!c)ok=false};
+  chk("plant",!!$("plant").value);chk("dept",!!$("dept").value&&!$("dept").disabled);
+  chk("line",$("line").value.trim().length>=1);chk("tim",$("tim").value.trim().length>=1);
+  if(!jenis){$("tmsg").style.display="block";ok=false}
+  else SURVEY[jenis].extra.forEach(x=>chk("x_"+x.id,$("x_"+x.id).value.trim()!==""));
+  return ok;
+}
+$("go").onclick=()=>{
+  if(!validId()){(document.querySelector(".err")||$("tmsg")).scrollIntoView({block:"center"});return}
+  who={plant:$("plant").value,dept:$("dept").value,line:$("line").value.trim(),tim:$("tim").value.trim()};
+  SURVEY[jenis].extra.forEach(x=>who[x.id]=$("x_"+x.id).value.trim());
+  ans={};render();show("s2");
+};
+$("back").onclick=()=>show("s1");
+
+/* ===== RENDER SURVEI ===== */
+let ALL=[];
+function render(){
+  const S=SURVEY[jenis];ALL=[];
+  $("qtitle").textContent=S.title;
+  $("who").innerHTML=[who.plant,who.dept,"Line "+esc(who.line),"Tim "+esc(who.tim)].join(" · ")+" · "+S.extra.map(x=>x.label+": "+esc(who[x.id])).join(" · ");
+  let h="";
+  S.sections.forEach(sec=>{
+    h+=`<div class="sec-h">${sec.h}</div>`;
+    sec.qs.forEach(q=>{
+      ALL.push(q);
+      h+=`<div class="q" id="q-${q.id}"><p><b>${q.id}.</b> ${q.t}</p>`+(q.hint?`<div class="hint">※ ${q.hint}</div>`:q.k==="m"?`<div class="hint">※ Boleh memilih lebih dari satu.</div>`:"")+(q.k==="t"?`<div class="hint">※ Wajib diisi.</div>`:"");
+      if(q.k==="t")h+=`<textarea rows="4" data-t="${q.id}" placeholder="Tulis pendapat Anda…"></textarea>`;
+      else{
+        q.o.forEach((o,i)=>{
+          const isO=q.L&&i===q.o.length-1;
+          h+=`<label class="ch"><input type="${q.k==="s"?"radio":"checkbox"}" name="${q.id}" data-q="${q.id}" data-i="${i}"><span>${isO?"Lainnya (isi di bawah)":esc(o)}</span></label>`;
+        });
+        if(q.L)h+=`<div class="oth" id="o-${q.id}"><input type="text" data-o="${q.id}" placeholder="Tuliskan alasan/hal lainnya…"></div>`;
+      }
+      h+=`</div>`;
+    });
+  });
+  $("qs").innerHTML=h;
+  $("qs").querySelectorAll("input[data-q]").forEach(el=>el.onchange=()=>onPick(el));
+  $("qs").querySelectorAll("textarea[data-t]").forEach(t=>t.oninput=()=>ans[t.dataset.t]=t.value.trim());
+  $("qs").querySelectorAll("input[data-o]").forEach(t=>t.oninput=()=>{ans[t.dataset.o+"_o"]=t.value.trim();t.classList.remove("err")});
+  $("miss").classList.add("hide");refresh();
+}
+function onPick(el){
+  const q=ALL.find(x=>x.id===el.dataset.q),i=+el.dataset.i;
+  if(q.k==="s")ans[q.id]=i;
+  else{const a=new Set(ans[q.id]||[]);el.checked?a.add(i):a.delete(i);ans[q.id]=[...a].sort((x,y)=>x-y)}
+  document.querySelectorAll(`input[data-q="${q.id}"]`).forEach(x=>x.closest(".ch").classList.toggle("on",x.checked));
+  if(q.L){const last=q.o.length-1,sel=q.k==="s"?ans[q.id]===last:(ans[q.id]||[]).includes(last);$("o-"+q.id).classList.toggle("show",sel)}
+  $("q-"+q.id).classList.remove("miss");refresh();
+}
+const visible=q=>!q.if||(ans[q.if.q]!==undefined&&ans[q.if.q]!==q.if.not);
+function refresh(){
+  ALL.forEach(q=>{
+    const v=visible(q);$("q-"+q.id).classList.toggle("hide",!v);
+    if(!v&&(ans[q.id]!==undefined)){delete ans[q.id];delete ans[q.id+"_o"];
+      document.querySelectorAll(`input[data-q="${q.id}"]`).forEach(x=>{x.checked=false;x.closest(".ch").classList.remove("on")});if(q.L)$("o-"+q.id).classList.remove("show")}
+  });
+  const req=ALL.filter(visible),done=req.filter(answered).length;
+  $("bar").style.width=(req.length?done/req.length*100:0)+"%";$("plabel").textContent=`${done} dari ${req.length} pertanyaan wajib terjawab`;
+  if(done===req.length)$("miss").classList.add("hide");
+}
+function answered(q){
+  if(q.k==="t")return (ans[q.id]||"").trim().length>0;
+  const a=ans[q.id];if(a===undefined||(Array.isArray(a)&&!a.length))return false;
+  if(q.L){const last=q.o.length-1,sel=q.k==="s"?a===last:a.includes(last);if(sel&&!(ans[q.id+"_o"]||"").trim())return false}
+  return true;
+}
+
+/* ===== KIRIM ===== */
+$("submit").onclick=async()=>{
+  const bad=ALL.filter(q=>visible(q)&&!answered(q));
+  ALL.forEach(q=>{const m=visible(q)&&!answered(q);$("q-"+q.id).classList.toggle("miss",m);
+    if(m&&q.L&&ans[q.id]!==undefined)document.querySelector(`input[data-o="${q.id}"]`).classList.add("err")});
+  $("miss").classList.toggle("hide",!bad.length);
+  if(bad.length){$("q-"+bad[0].id).scrollIntoView({block:"center",behavior:"smooth"});return}
+  const jw={};
+  ALL.forEach(q=>{if(!visible(q))return;
+    if(q.k==="t"){jw[q.id]=ans[q.id]||"";return}
+    const last=q.o.length-1,txt=i=>(q.L&&i===last)?"Lainnya: "+ans[q.id+"_o"]:q.o[i];
+    jw[q.id]=q.k==="s"?txt(ans[q.id]):(ans[q.id]||[]).map(txt)});
+  const rec={ref:"SCW-"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),waktu:new Date().toISOString(),jenis,...who,jawaban:jw};
+  const btn=$("submit");btn.disabled=true;btn.textContent="Mengirim…";$("sendmsg").classList.add("hide");
+  if(APPS_SCRIPT_URL){
+    try{const r=await fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(rec)});
+      const j=await r.json();if(!j.ok)throw new Error(j.error||"ditolak server")}
+    catch(e){btn.disabled=false;btn.textContent="Kirim Survei";
+      $("sendmsg").textContent="Pengiriman gagal ("+e.message+"). Periksa koneksi lalu tekan Kirim lagi — jawaban Anda tidak hilang.";$("sendmsg").classList.remove("hide");return}
+  }else{const db=DB();db.push(rec);SAVE(db)}
+  btn.disabled=false;btn.textContent="Kirim Survei";show("s3");
+};
+$("again").onclick=()=>{["line","tim"].forEach(i=>$(i).value="");$("plant").value="";$("plant").onchange();jenis=null;$("extra").innerHTML="";document.querySelectorAll(".type").forEach(e=>e.classList.remove("on"));show("s1")};
+
+/* ===== DATA CONTOH (hanya untuk demo) ===== */
+const rnd=n=>Math.floor(Math.random()*n);
+function pickW(w){let t=w.reduce((a,b)=>a+b,0),r=Math.random()*t;for(let i=0;i<w.length;i++){if((r-=w[i])<0)return i}return 0}
+const SAMPLE=["Perlu kriteria abnormalitas yang jelas di setiap proses.","Atasan sebaiknya cepat merespons saat dipanggil.","Mohon ada pelatihan rutin tiap bulan.","Abnormalitas adalah kondisi di luar standar kerja.","Suara, bau, atau getaran mesin yang tidak biasa.","Produk NG atau dimensi di luar toleransi."];
+function genDemo(n){
+  const db=DB();
+  for(let k=0;k<n;k++){
+    const j=Math.random()<.65?"operator":"pengawas",S=SURVEY[j],plant=Math.random()<.55?"Plant 1":"Plant 2";
+    const rec={ref:"DEMO-"+Date.now().toString(36).toUpperCase()+k,waktu:new Date().toISOString(),jenis:j,plant,dept:DEPT_BY_PLANT[plant][rnd(5)],line:"Line "+(1+rnd(4)),tim:"Tim "+"ABC"[rnd(3)],demo:true,jawaban:{}};
+    S.extra.forEach(x=>rec[x.id]=x.type==="select"?x.opts[rnd(x.opts.length)]:x.type==="number"?String(5+rnd(25)):["Foreman","Leader","Supervisor"][rnd(3)]);
+    const jw=rec.jawaban,idx={};
+    S.sections.forEach(sec=>sec.qs.forEach(q=>{
+      if(q.if&&(idx[q.if.q]===undefined||idx[q.if.q]===q.if.not))return;
+      if(q.k==="t"){jw[q.id]=SAMPLE[rnd(SAMPLE.length)];return}
+      const last=q.o.length-1,txt=i=>(q.L&&i===last)?"Lainnya: alasan lain":q.o[i];
+      if(q.k==="s"){const w=q.o.map((_,i)=>q.o.length===5?[3,4,5,2,1][i]:[5,4,2,1][i]??1),i=pickW(w);idx[q.id]=i;jw[q.id]=txt(i)}
+      else{let s=q.o.map((_,i)=>Math.random()<(q.L&&i===last?.1:.28)?i:-1).filter(i=>i>=0);if(!s.length)s=[rnd(q.o.length)];jw[q.id]=s.map(txt)}
+    }));
+    db.push(rec);
+  }
+  SAVE(db);
+}
+
+/* ===== DASHBOARD HASIL (HSE) ===== */
+const TONE5=["#2e7d32","#8bc34a","#9e9e9e","#ff9800","#c62828"];
+const KPIS={
+ operator:[["Dapat “menghentikan” kapan saja","2-1",0],["Dapat “memanggil” kapan saja","3-1",0],["Dapat “menunggu” kapan saja","4-1",0],["Pernah menerima pendidikan","5-1",null]],
+ pengawas:[["Merasa penerapan dijalankan dengan pasti","2-1",0],["Mendidik dengan sungguh-sungguh","4-1",3],["Dapat merespons dengan cepat","5-1",0],["Operator takut dimintai pertanggungjawaban","3-1","Operator takut"]]};
+const has=(a,pred)=>Array.isArray(a)?a.some(pred):pred(a);
+async function loadRemote(){
+  const m=$("tokmsg");m.style.display="none";$("load").disabled=true;$("load").textContent="Memuat…";
+  try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&token="+encodeURIComponent($("tok").value.trim()));const j=await r.json();
+    if(!j.ok)throw new Error(j.error||"gagal");REMOTE=[].concat(j.data.operator||[],j.data.pengawas||[])}
+  catch(e){m.textContent="Gagal memuat data: "+e.message;m.style.display="block";REMOTE=null}
+  $("load").disabled=false;$("load").textContent="Muat ulang data dari Spreadsheet";rekap();
+}
+function rekap(){
+  if(APPS_SCRIPT_URL){$("tokrow").classList.remove("hide");$("demo").classList.add("hide");$("clr").classList.add("hide");
+    if(!REMOTE){$("rk").innerHTML=`<p class="sub">Masukkan token HSE lalu klik “Muat data dari Spreadsheet”.</p>`;show("s4");return}}
+  const j=$("rj").value,S=SURVEY[j];
+  const cur=$("rd").value;fillDept($("rd"),$("rp").value,"Semua dept.");if([...$("rd").options].some(o=>o.value===cur))$("rd").value=cur;
+  const base=DB().filter(r=>r.jenis===j),rows=base.filter(r=>(!$("rp").value||r.plant===$("rp").value)&&(!$("rd").value||r.dept===$("rd").value));
+  const N=rows.length;
+  if(!N){$("rk").innerHTML=`<p class="sub">Belum ada data untuk filter ini. Klik “Isi 40 data contoh” untuk melihat tampilan dashboard.</p>`;show("s4");return}
+  const get=id=>rows.filter(r=>r.jawaban[id]!==undefined&&r.jawaban[id]!==""&&!(Array.isArray(r.jawaban[id])&&!r.jawaban[id].length));
+  const q0=id=>S.sections.flatMap(s=>s.qs).find(q=>q.id===id);
+  let h=`<div class="kpis"><div class="kpi"><b>${N}</b><small>Responden (${S.label})${$("rp").value?" · "+$("rp").value:""}${$("rd").value?" · "+$("rd").value:""}</small></div>`;
+  KPIS[j].forEach(([lab,id,k])=>{const q=q0(id),resp=get(id);let c;
+    if(typeof k==="number")c=resp.filter(r=>r.jawaban[id]===q.o[k]).length;
+    else if(typeof k==="string")c=resp.filter(r=>has(r.jawaban[id],x=>x.startsWith(k))).length;
+    else c=resp.filter(r=>r.jawaban[id]!==q.o[0]).length;
+    h+=`<div class="kpi"><b>${resp.length?Math.round(c/resp.length*100):0}%</b><small>${lab} (n=${resp.length})</small></div>`});
+  h+=`</div>`;
+  /* tabel responden per plant & departemen */
+  h+=`<h3>Responden per plant &amp; departemen</h3><table><tr><th>Plant</th><th>Departemen</th><th style="width:70px">Jumlah</th></tr>`;
+  Object.entries(DEPT_BY_PLANT).forEach(([p,ds])=>ds.forEach(d=>{h+=`<tr><td>${p}</td><td>${d}</td><td>${rows.filter(r=>r.plant===p&&r.dept===d).length}</td></tr>`}));
+  h+=`</table>`;
+  /* grafik tiap pertanyaan */
+  S.sections.forEach(sec=>{
+    const cq=sec.qs.filter(q=>q.k!=="t");if(!cq.length)return;
+    h+=`<div class="sec-h">${sec.h}</div>`;
+    cq.forEach(q=>{
+      const resp=get(q.id),n=resp.length,scale=q.o.length===5&&/tahun lalu/i.test(q.t);
+      h+=`<div class="qc"><h4>${q.id}. ${q.t} <small>(n=${n}${q.k==="m"?", pilihan ganda":""})</small></h4>`;
+      q.o.forEach((o,i)=>{const isO=q.L&&i===q.o.length-1;
+        const c=resp.filter(r=>has(r.jawaban[q.id],isO?(x=>x.startsWith("Lainnya:")):(x=>x===o))).length,p=n?Math.round(c/n*100):0;
+        h+=`<div class="br"><div class="bl">${isO?"Lainnya":esc(o)}</div><div class="bt"><span class="tr"><i style="width:${p}%;background:${scale?TONE5[i]:"#2e75b6"}"></i></span><em>${c} · ${p}%</em></div></div>`});
+      h+=`</div>`});
+  });
+  /* pendapat bebas */
+  h+=`<div class="sec-h">7. Pendapat Bebas</div>`;
+  S.sections.flatMap(s=>s.qs).filter(q=>q.k==="t").forEach(q=>{
+    const t=rows.filter(r=>r.jawaban[q.id]);h+=`<div class="qc"><h4>${q.t} <small>(${t.length} jawaban)</small></h4>`+
+      t.slice(0,15).map(r=>`<div class="cm">${esc(r.jawaban[q.id])}<small>${r.plant} · ${esc(r.dept)} · ${esc(r.line)}</small></div>`).join("")+`</div>`});
+  $("rk").innerHTML=h;show("s4");
+}
+$("load").onclick=loadRemote;$("adm").onclick=rekap;["rj","rp","rd"].forEach(i=>$(i).onchange=rekap);$("close4").onclick=()=>show("s1");
+$("demo").onclick=()=>{genDemo(40);rekap()};
+$("clr").onclick=()=>{SAVE([]);rekap()};
+$("csv").onclick=()=>{
+  const j=$("rj").value,S=SURVEY[j],rows=DB().filter(r=>r.jenis===j);
+  const qids=S.sections.flatMap(s=>s.qs.map(q=>q.id));
+  const cols=["ref","waktu","plant","dept","line","tim"].concat(S.extra.map(x=>x.id));
+  const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+  const csv=[cols.concat(qids).join(",")].concat(rows.map(r=>cols.map(c=>q(r[c])).concat(qids.map(id=>{const a=r.jawaban[id];return q(Array.isArray(a)?a.join(" | "):a)})).join(","))).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="rekap_scw_"+j+".csv";a.click();
+};
+</script>
+</body>
+</html>
