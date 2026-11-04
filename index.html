@@ -103,22 +103,23 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:10px 0 24px}foo
 
 <section id="s4" class="hide">
   <div class="card">
-    <h2>Hasil survei (demo HSE)</h2>
-    <p class="sub">Di sistem sebenarnya halaman ini berada di balik login HSE dan membaca Google Spreadsheet.</p>
+    <h2>Hasil survei (HSE)</h2>
+    <p class="sub">Data dibaca langsung dari Google Spreadsheet.</p>
     <div class="flt"><select id="rj"><option value="operator">Operator (Teknisi)</option><option value="pengawas">Pengawas</option></select><select id="rp"><option value="">Semua plant</option><option>Plant 1</option><option>Plant 2</option></select><select id="rd"><option value="">Semua dept.</option></select></div>
-    <div id="tokrow" class="hide" style="margin-bottom:10px"><input type="password" id="tok" placeholder="Token HSE" autocomplete="off"><button class="btn sec" id="load" style="margin-top:8px">Muat data dari Spreadsheet</button><div class="msg" id="tokmsg"></div></div>
+    <div id="tokrow" class="hide" style="margin-bottom:10px"><input type="password" id="tok" placeholder="Token HSE" autocomplete="off" class="hide"><button class="btn sec" id="load" style="margin-top:8px">Muat ulang data dari Spreadsheet</button><div class="msg" id="tokmsg"></div></div>
     <div><button class="btn sec inl" id="demo">+ Isi 40 data contoh</button><button class="btn sec inl" id="csv">Unduh CSV</button><button class="btn sec inl" id="clr">Hapus semua data</button></div>
     <div id="rk" style="margin-top:14px"></div>
     <button class="btn" id="close4">← Kembali</button>
   </div>
 </section>
 
-<footer>Prototipe · <a id="adm">Lihat hasil survei (demo HSE)</a></footer>
+<footer>SCS · PT TJ Forge Indonesia · HSE<a id="adm" class="hide"></a></footer>
 </main>
 
 <script>
 /* ===== KONFIGURASI ===== */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";   // isi alamat /exec Apps Script agar data masuk ke Google Spreadsheet
+const BUTUH_TOKEN = false;   // samakan dengan BUTUH_TOKEN di Code.gs
 const DEPT_BY_PLANT = {
   "Plant 1":["Forging","Machining","Maintenance","PPIC","QA & QC"],
   "Plant 2":["Assembling","Machining","Maintenance","PPIC","QA & QC"]};
@@ -334,14 +335,17 @@ const KPIS={
 const has=(a,pred)=>Array.isArray(a)?a.some(pred):pred(a);
 async function loadRemote(){
   const m=$("tokmsg");m.style.display="none";$("load").disabled=true;$("load").textContent="Memuat…";
-  try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&token="+encodeURIComponent($("tok").value.trim()));const j=await r.json();
+  $("rk").innerHTML=`<p class="sub">Memuat data…</p>`;
+  try{const tk=BUTUH_TOKEN?"&token="+encodeURIComponent($("tok").value.trim()):"";
+    const r=await fetch(APPS_SCRIPT_URL+"?action=data"+tk);const j=await r.json();
     if(!j.ok)throw new Error(j.error||"gagal");REMOTE=[].concat(j.data.operator||[],j.data.pengawas||[])}
-  catch(e){m.textContent="Gagal memuat data: "+e.message;m.style.display="block";REMOTE=null}
-  $("load").disabled=false;$("load").textContent="Muat ulang data dari Spreadsheet";rekap();
+  catch(e){REMOTE=null;m.textContent="Gagal memuat data: "+e.message;m.style.display="block";$("rk").innerHTML=`<p class="sub">Data belum dapat dimuat. Periksa koneksi atau alamat Apps Script, lalu tekan “Muat ulang”.</p>`}
+  $("load").disabled=false;$("load").textContent="Muat ulang data dari Spreadsheet";
+  if(REMOTE)rekap();
 }
 function rekap(){
-  if(APPS_SCRIPT_URL){$("tokrow").classList.remove("hide");$("demo").classList.add("hide");$("clr").classList.add("hide");
-    if(!REMOTE){$("rk").innerHTML=`<p class="sub">Masukkan token HSE lalu klik “Muat data dari Spreadsheet”.</p>`;show("s4");return}}
+  if(APPS_SCRIPT_URL){$("tokrow").classList.remove("hide");$("tok").classList.toggle("hide",!BUTUH_TOKEN);$("demo").classList.add("hide");$("clr").classList.add("hide");
+    if(!REMOTE){show("s4");if(BUTUH_TOKEN)$("rk").innerHTML=`<p class="sub">Masukkan token HSE lalu klik “Muat ulang data dari Spreadsheet”.</p>`;else loadRemote();return}}
   const j=$("rj").value,S=SURVEY[j];
   const cur=$("rd").value;fillDept($("rd"),$("rp").value,"Semua dept.");if([...$("rd").options].some(o=>o.value===cur))$("rd").value=cur;
   const base=DB().filter(r=>r.jenis===j),rows=base.filter(r=>(!$("rp").value||r.plant===$("rp").value)&&(!$("rd").value||r.dept===$("rd").value));
@@ -390,6 +394,7 @@ $("csv").onclick=()=>{
   const csv=[cols.concat(qids).join(",")].concat(rows.map(r=>cols.map(c=>q(r[c])).concat(qids.map(id=>{const a=r.jawaban[id];return q(Array.isArray(a)?a.join(" | "):a)})).join(","))).join("\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="rekap_scw_"+j+".csv";a.click();
 };
+if(qp.has("hasil"))rekap(); // halaman hasil: alamat halaman survei + ?hasil
 </script>
 </body>
 </html>
