@@ -102,12 +102,20 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:10px 0 24px}foo
 </section>
 
 <section id="s4" class="hide">
-  <div class="card">
+  <div class="card hide" id="lg">
+    <h2>Masuk HSE</h2>
+    <p class="sub">Hasil survei hanya dapat dibuka oleh petugas HSE.</p>
+    <label class="f">Username</label><input type="text" id="lu" autocomplete="username" autocapitalize="off" spellcheck="false">
+    <label class="f">Password</label><input type="password" id="lp" autocomplete="current-password">
+    <div class="msg" id="lmsg"></div>
+    <button class="btn" id="dologin">Masuk</button>
+    <button class="btn sec" id="lback">← Kembali ke survei</button>
+  </div>
+  <div class="card hide" id="rs">
     <h2>Hasil survei (HSE)</h2>
     <p class="sub">Data dibaca langsung dari Google Spreadsheet.</p>
     <div class="flt"><select id="rj"><option value="operator">Operator (Teknisi)</option><option value="pengawas">Pengawas</option></select><select id="rp"><option value="">Semua plant</option><option>Plant 1</option><option>Plant 2</option></select><select id="rd"><option value="">Semua dept.</option></select></div>
-    <div id="tokrow" class="hide" style="margin-bottom:10px"><input type="password" id="tok" placeholder="Token HSE" autocomplete="off" class="hide"><button class="btn sec" id="load" style="margin-top:8px">Muat ulang data dari Spreadsheet</button><div class="msg" id="tokmsg"></div></div>
-    <div><button class="btn sec inl" id="demo">+ Isi 40 data contoh</button><button class="btn sec inl" id="csv">Unduh CSV</button><button class="btn sec inl" id="clr">Hapus semua data</button></div>
+    <div><button class="btn sec inl" id="load">Muat ulang</button><button class="btn sec inl" id="demo">+ Isi 40 data contoh</button><button class="btn sec inl" id="csv">Unduh CSV</button><button class="btn sec inl" id="clr">Hapus semua data</button><button class="btn sec inl" id="logout">Keluar</button></div>
     <div id="rk" style="margin-top:14px"></div>
     <button class="btn" id="close4">← Kembali</button>
   </div>
@@ -119,7 +127,6 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:10px 0 24px}foo
 <script>
 /* ===== KONFIGURASI ===== */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";   // isi alamat /exec Apps Script agar data masuk ke Google Spreadsheet
-const BUTUH_TOKEN = false;   // samakan dengan BUTUH_TOKEN di Code.gs
 const DEPT_BY_PLANT = {
   "Plant 1":["Forging","Machining","Maintenance","PPIC","QA & QC"],
   "Plant 2":["Assembling","Machining","Maintenance","PPIC","QA & QC"]};
@@ -333,21 +340,37 @@ const KPIS={
  operator:[["Dapat “menghentikan” kapan saja","2-1",0],["Dapat “memanggil” kapan saja","3-1",0],["Dapat “menunggu” kapan saja","4-1",0],["Pernah menerima pendidikan","5-1",null]],
  pengawas:[["Merasa penerapan dijalankan dengan pasti","2-1",0],["Mendidik dengan sungguh-sungguh","4-1",3],["Dapat merespons dengan cepat","5-1",0],["Operator takut dimintai pertanggungjawaban","3-1","Operator takut"]]};
 const has=(a,pred)=>Array.isArray(a)?a.some(pred):pred(a);
-async function loadRemote(){
-  const m=$("tokmsg");m.style.display="none";$("load").disabled=true;$("load").textContent="Memuat…";
-  $("rk").innerHTML=`<p class="sub">Memuat data…</p>`;
-  try{const tk=BUTUH_TOKEN?"&token="+encodeURIComponent($("tok").value.trim()):"";
-    const r=await fetch(APPS_SCRIPT_URL+"?action=data"+tk);const j=await r.json();
-    if(!j.ok)throw new Error(j.error||"gagal");REMOTE=[].concat(j.data.operator||[],j.data.pengawas||[])}
-  catch(e){REMOTE=null;m.textContent="Gagal memuat data: "+e.message;m.style.display="block";$("rk").innerHTML=`<p class="sub">Data belum dapat dimuat. Periksa koneksi atau alamat Apps Script, lalu tekan “Muat ulang”.</p>`}
-  $("load").disabled=false;$("load").textContent="Muat ulang data dari Spreadsheet";
-  if(REMOTE)rekap();
+let SESSION=null;try{SESSION=sessionStorage.getItem("scw_sesi")}catch(e){}
+const clearSess=()=>{SESSION=null;REMOTE=null;try{sessionStorage.removeItem("scw_sesi")}catch(e){}};
+const post=o=>fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
+function showLogin(msg){$("lg").classList.remove("hide");$("rs").classList.add("hide");$("lmsg").textContent=msg||"";$("lmsg").style.display=msg?"block":"none";show("s4")}
+async function doLogin(){
+  const b=$("dologin");b.disabled=true;b.textContent="Memeriksa…";$("lmsg").style.display="none";
+  try{const j=await post({action:"login",u:$("lu").value.trim(),p:$("lp").value});
+    if(!j.ok)throw new Error(j.error||"Gagal masuk");
+    SESSION=j.session;try{sessionStorage.setItem("scw_sesi",SESSION)}catch(e){}
+    $("lp").value="";b.disabled=false;b.textContent="Masuk";await loadRemote();return}
+  catch(e){showLogin(e.message)}
+  b.disabled=false;b.textContent="Masuk";
 }
+async function loadRemote(){
+  $("load").disabled=true;
+  try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&session="+encodeURIComponent(SESSION||""));const j=await r.json();
+    if(!j.ok){if(j.code==="AUTH"){clearSess();showLogin(j.error);return}throw new Error(j.error||"gagal")}
+    REMOTE=[].concat(j.data.operator||[],j.data.pengawas||[]);$("load").disabled=false;rekap();return}
+  catch(e){$("lg").classList.add("hide");$("rs").classList.remove("hide");show("s4");
+    $("rk").innerHTML=`<p class="sub">Data belum dapat dimuat (${esc(e.message)}). Periksa koneksi lalu tekan “Muat ulang”.</p>`}
+  $("load").disabled=false;
+}
+async function logout(){const s=SESSION;clearSess();if(s){try{await post({action:"logout",session:s})}catch(e){}}showLogin("")}
 function rekap(){
-  if(APPS_SCRIPT_URL){$("tokrow").classList.remove("hide");$("tok").classList.toggle("hide",!BUTUH_TOKEN);$("demo").classList.add("hide");$("clr").classList.add("hide");
-    if(!REMOTE){show("s4");if(BUTUH_TOKEN)$("rk").innerHTML=`<p class="sub">Masukkan token HSE lalu klik “Muat ulang data dari Spreadsheet”.</p>`;else loadRemote();return}}
-  const j=$("rj").value,S=SURVEY[j];
+  if(APPS_SCRIPT_URL){$("demo").classList.add("hide");$("clr").classList.add("hide");
+    if(!SESSION){showLogin();return}
+    $("lg").classList.add("hide");$("rs").classList.remove("hide");
+    if(!REMOTE){$("rk").innerHTML=`<p class="sub">Memuat data…</p>`;show("s4");loadRemote();return}
+  }else{$("load").classList.add("hide");$("logout").classList.add("hide");$("lg").classList.add("hide");$("rs").classList.remove("hide")}
   const cur=$("rd").value;fillDept($("rd"),$("rp").value,"Semua dept.");if([...$("rd").options].some(o=>o.value===cur))$("rd").value=cur;
+  const j=$("rj").value,S=SURVEY[j];
   const base=DB().filter(r=>r.jenis===j),rows=base.filter(r=>(!$("rp").value||r.plant===$("rp").value)&&(!$("rd").value||r.dept===$("rd").value));
   const N=rows.length;
   if(!N){$("rk").innerHTML=`<p class="sub">Belum ada data untuk filter ini. Klik “Isi 40 data contoh” untuk melihat tampilan dashboard.</p>`;show("s4");return}
@@ -383,7 +406,7 @@ function rekap(){
       t.slice(0,15).map(r=>`<div class="cm">${esc(r.jawaban[q.id])}<small>${r.plant} · ${esc(r.dept)} · ${esc(r.line)}</small></div>`).join("")+`</div>`});
   $("rk").innerHTML=h;show("s4");
 }
-$("load").onclick=loadRemote;$("adm").onclick=rekap;["rj","rp","rd"].forEach(i=>$(i).onchange=rekap);$("close4").onclick=()=>show("s1");
+$("load").onclick=loadRemote;$("dologin").onclick=doLogin;$("lp").onkeydown=e=>{if(e.key==="Enter")doLogin()};$("logout").onclick=logout;$("lback").onclick=()=>show("s1");$("adm").onclick=rekap;["rj","rp","rd"].forEach(i=>$(i).onchange=rekap);$("close4").onclick=()=>show("s1");
 $("demo").onclick=()=>{genDemo(40);rekap()};
 $("clr").onclick=()=>{SAVE([]);rekap()};
 $("csv").onclick=()=>{
@@ -394,7 +417,7 @@ $("csv").onclick=()=>{
   const csv=[cols.concat(qids).join(",")].concat(rows.map(r=>cols.map(c=>q(r[c])).concat(qids.map(id=>{const a=r.jawaban[id];return q(Array.isArray(a)?a.join(" | "):a)})).join(","))).join("\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="rekap_scw_"+j+".csv";a.click();
 };
-if(qp.has("hasil"))rekap(); // halaman hasil: alamat halaman survei + ?hasil
+if(qp.has("hasil"))location.replace("dashboard-scw.html"); // alamat lama ?hasil diarahkan ke dashboard baru // halaman hasil: alamat halaman survei + ?hasil
 </script>
 </body>
 </html>
