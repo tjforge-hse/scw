@@ -353,10 +353,14 @@ function setPeriod(){
   else if(v==="month"){$("fd1").value=ymd(new Date(now.getFullYear(),now.getMonth(),1));$("fd2").value=ymd(now)}
   else if(v==="year"){$("fd1").value=now.getFullYear()+"-01-01";$("fd2").value=ymd(now)}
 }
+/* waktu bisa berupa teks "2026-11-09 08:15:00", ISO "…T…Z", atau tanggal bergaya Sheets: samakan ke WIB "yyyy-mm-dd hh:mm:ss" */
+function wkt(w){w=String(w==null?"":w).trim();if(/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(w)&&!/Z$|[+-]\d{2}:?\d{2}$/.test(w))return w.replace("T"," ").slice(0,19);
+  const d=new Date(w);if(isNaN(d))return w;const t=new Date(d.getTime()+7*36e5),p=n=>String(n).padStart(2,"0");
+  return t.getUTCFullYear()+"-"+p(t.getUTCMonth()+1)+"-"+p(t.getUTCDate())+" "+p(t.getUTCHours())+":"+p(t.getUTCMinutes())+":"+p(t.getUTCSeconds())}
 function rowsAll(){
   const d1=$("fd1").value,d2=$("fd2").value,pl=$("fpl").value,dp=$("fdp").value,q=$("fq").value.trim().toLowerCase();
   return DATA.filter(r=>{
-    const day=String(r.waktu||"").slice(0,10);
+    const day=wkt(r.waktu).slice(0,10);
     if(d1&&day<d1)return false;if(d2&&day>d2)return false;
     if(pl&&r.plant!==pl)return false;if(dp&&r.dept!==dp)return false;
     if(q&&!((r.line||"")+" "+(r.tim||"")).toLowerCase().includes(q))return false;
@@ -461,8 +465,8 @@ function voices(){
   const key=$("vq").value,s=$("vs").value.trim().toLowerCase(),[j,id]=key.split("|"),items=[];
   [j?[j]:["operator","pengawas"]][0].forEach(jj=>{if(!inc(jj))return;by(jj).forEach(r=>{
     Object.keys(r.jawaban||{}).forEach(k=>{const q=qOf(jj,k);if(!q||q.k!=="t")return;if(id&&k!==id)return;const t=r.jawaban[k];if(t&&(!s||String(t).toLowerCase().includes(s)))items.push({r,q,t,jj})})})});
-  items.sort((a,b)=>String(b.r.waktu).localeCompare(String(a.r.waktu)));
-  $("vl").innerHTML=items.length?items.slice(0,vlimit).map(x=>`<div class="cm"><p>${esc(x.t)}</p><div class="m"><span class="j">${J[x.jj]} · ${x.q.id}</span><span>${esc(x.r.plant)}</span><span>${esc(x.r.dept)}</span><span>${esc(x.r.line)}</span><span>${esc(x.r.tim)}</span><span>${esc(String(x.r.waktu||"").slice(0,10))}</span></div></div>`).join(""):`<div class="mute">Tidak ada pendapat yang cocok.</div>`;
+  items.sort((a,b)=>wkt(b.r.waktu).localeCompare(wkt(a.r.waktu)));
+  $("vl").innerHTML=items.length?items.slice(0,vlimit).map(x=>`<div class="cm"><p>${esc(x.t)}</p><div class="m"><span class="j">${J[x.jj]} · ${x.q.id}</span><span>${esc(x.r.plant)}</span><span>${esc(x.r.dept)}</span><span>${esc(x.r.line)}</span><span>${esc(x.r.tim)}</span><span>${esc(wkt(x.r.waktu).slice(0,10))}</span></div></div>`).join(""):`<div class="mute">Tidak ada pendapat yang cocok.</div>`;
   $("vmore").classList.toggle("hide",items.length<=vlimit);
 }
 function fillVq(){
@@ -571,9 +575,9 @@ function renderForm(a){
 /* --- Data responden (admin) --- */
 function renderResp(){
   if(!isAdmin()){$("rtab").innerHTML="";return}
-  const rows=R.filter(r=>inc(r.jenis)).slice().sort((a,b)=>String(b.waktu).localeCompare(String(a.waktu)));
+  const rows=R.filter(r=>inc(r.jenis)).slice().sort((a,b)=>wkt(b.waktu).localeCompare(wkt(a.waktu)));
   $("rtab").innerHTML=`<tr><th>Waktu</th><th>Jenis</th><th>Plant</th><th>Departemen</th><th>Line</th><th>Tim</th><th></th></tr>`+
-   (rows.slice(0,rlimit).map(r=>`<tr><td style="white-space:nowrap">${esc(String(r.waktu||"").slice(0,16).replace("T"," "))}</td><td>${J[r.jenis]}</td><td>${esc(r.plant)}</td><td>${esc(r.dept)}</td><td>${esc(r.line)}</td><td>${esc(r.tim)}</td><td style="text-align:right;white-space:nowrap"><button class="btn sm" data-ed="${esc(r.ref)}">Ubah</button> <button class="btn sm dng" data-del="${esc(r.ref)}">Hapus</button></td></tr>`).join("")||`<tr><td colspan="7" style="text-align:center;color:var(--muted)">Tidak ada data.</td></tr>`);
+   (rows.slice(0,rlimit).map(r=>`<tr><td style="white-space:nowrap">${esc(wkt(r.waktu).slice(0,16))}</td><td>${J[r.jenis]}</td><td>${esc(r.plant)}</td><td>${esc(r.dept)}</td><td>${esc(r.line)}</td><td>${esc(r.tim)}</td><td style="text-align:right;white-space:nowrap"><button class="btn sm" data-ed="${esc(r.ref)}">Ubah</button> <button class="btn sm dng" data-del="${esc(r.ref)}">Hapus</button></td></tr>`).join("")||`<tr><td colspan="7" style="text-align:center;color:var(--muted)">Tidak ada data.</td></tr>`);
   $("rnote").textContent=`${Math.min(rlimit,rows.length)} dari ${rows.length} respons (mengikuti filter di atas).`;
   $("rmore").classList.toggle("hide",rows.length<=rlimit);
   $("rtab").querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>editResp(b.dataset.ed));
@@ -597,7 +601,7 @@ function editResp(ref){
 }
 function delResp(ref){
   const r=findR(ref);if(!r)return;
-  openModal("Hapus respons?",`<p style="margin:0 0 10px">Respons <b>${J[r.jenis]}</b> dari <b>${esc(r.plant)} · ${esc(r.dept)} · ${esc(r.line)} · ${esc(r.tim)}</b> (${esc(String(r.waktu||"").slice(0,10))}) akan dihapus dari dashboard.</p><p class="hint" style="margin:0">Datanya dipindahkan ke sheet “Dihapus” di Spreadsheet, jadi masih bisa dipulihkan secara manual.</p>
+  openModal("Hapus respons?",`<p style="margin:0 0 10px">Respons <b>${J[r.jenis]}</b> dari <b>${esc(r.plant)} · ${esc(r.dept)} · ${esc(r.line)} · ${esc(r.tim)}</b> (${esc(wkt(r.waktu).slice(0,10))}) akan dihapus dari dashboard.</p><p class="hint" style="margin:0">Datanya dipindahkan ke sheet “Dihapus” di Spreadsheet, jadi masih bisa dipulihkan secara manual.</p>
   <div class="err hide" id="drm"></div><div class="mact"><button class="btn dng" id="dgo">Ya, hapus</button><button class="btn" id="dcn">Batal</button></div>`,true);
   $("dcn").onclick=closeModal;
   $("dgo").onclick=async()=>{$("dgo").disabled=true;const j=await call("respons_hapus",{jenis:r.jenis,ref:r.ref});
@@ -640,7 +644,7 @@ $("csv").onclick=()=>{
   const qk=j=>allQs(j).filter(q=>q.k!=="x").map(q=>({j,id:q.id}));
   const cols=["ref","waktu","jenis","plant","dept","line","tim","masa","jabatan","diawasi"],qc=[...qk("operator"),...qk("pengawas")];
   const q=v=>{let s=String(v??"");if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
-  const lines=[cols.concat(qc.map(x=>(x.j==="operator"?"T-":"P-")+x.id)).map(q).join(",")].concat(rows.map(r=>cols.map(c=>q(r[c])).concat(qc.map(x=>{if(r.jenis!==x.j)return q("");const a=r.jawaban[x.id];return q(Array.isArray(a)?a.join(" | "):a)})).join(",")));
+  const lines=[cols.concat(qc.map(x=>(x.j==="operator"?"T-":"P-")+x.id)).map(q).join(",")].concat(rows.map(r=>cols.map(c=>q(c==="waktu"?wkt(r[c]):r[c])).concat(qc.map(x=>{if(r.jenis!==x.j)return q("");const a=r.jawaban[x.id];return q(Array.isArray(a)?a.join(" | "):a)})).join(",")));
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv"}));a.download="rekap_scw"+(MODE==="demo"?"_simulasi":"")+".csv";a.click();
 };
 /* awal */
