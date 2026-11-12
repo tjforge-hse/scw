@@ -412,7 +412,7 @@ function renderCmp(){
   const rate=(n,t)=>{if(!t)return'<td class="rate">–</td>';const p=Math.round(n/t*100),w=Math.min(p,100),c=p>=100?'#2e7d32':p>=70?'#ef8f00':'#c62828';return `<td class="rate"><b>${p}%</b><span class="bar"><i style="width:${w}%;background:${c}"></i></span></td>`};
   const row=(name,rt,rp,cls,tg)=>{const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
     const a=share(rp,"2-1",optIs("pengawas","2-1",0)),b=share(rp,"5-1",optIs("pengawas","5-1",0));
-    return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${rate(rt.length,tg)}${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
+    return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${rate(rt.length+rp.length,tg)}${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
   let body="";
   const sumT=o=>Object.values(o).reduce((a,b)=>a+b,0),allT=Object.values(TARGET_RESP).reduce((a,o)=>a+sumT(o),0);
   body+=row("Keseluruhan (Plant 1 + Plant 2)",T,P,"grp tot",allT);
@@ -425,7 +425,7 @@ function renderCmp(){
     [...pt,...pp].forEach(r=>{const d=norm(r.dept);if(d&&!ds.includes(d))ds.push(d)});
     ds.forEach(d=>{const a=pt.filter(r=>norm(r.dept)===d),b=pp.filter(r=>norm(r.dept)===d);body+=row("&nbsp;&nbsp;"+esc(d),a,b,a.length||b.length?"":"nod",(TARGET_RESP[pl]||{})[d])});
   });
-  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Rate responden</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi yang ditargetkan mengisi survei. Rate responden = n Teknisi ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.</div>`:`<div class="mute">Belum ada data.</div>`;
+  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Rate responden</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi + Pengawas yang ditargetkan mengisi survei. Rate responden = (n Teknisi + n Pengawas) ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.</div>`:`<div class="mute">Belum ada data.</div>`;
   /* masa kerja */
   const masa=SURVEY.operator.extra[0].opts;
   const mrows=masa.map(m=>{const rt=T.filter(r=>r.masa===m);if(!rt.length)return "";const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
