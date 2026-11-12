@@ -84,6 +84,15 @@ td.hm{font-weight:700;font-variant-numeric:tabular-nums}td.lo{color:var(--muted)
 .voice{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.voice select,.voice input{height:40px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#fff}.voice input{flex:1;min-width:180px}
 .cm{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fff;margin-bottom:10px}.cm p{margin:0 0 8px;overflow-wrap:anywhere}.cm .m{display:flex;gap:6px;flex-wrap:wrap}.cm .m span{font-size:11.5px;background:#EEF2F7;border-radius:999px;padding:2px 9px;color:#41536a}.cm .m span.j{background:#FFEBD2;color:#8A4A00;font-weight:700}
 .q2{font-size:12.5px;font-weight:700;color:var(--muted);margin:16px 0 8px}
+/* loading */
+#busy{position:fixed;inset:0;z-index:9999;background:rgba(244,247,252,.86);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px}
+#busy .sp{width:56px;height:56px;border-radius:50%;border:5px solid #dbe5f3;border-top-color:var(--accent);animation:bspin .9s linear infinite}
+#busy .bt{font-weight:700;font-size:15px;color:var(--ink)}#busy .bs{font-size:12.5px;color:var(--muted);min-height:18px;max-width:300px}
+#busy .bb{width:200px;height:4px;border-radius:2px;background:#dbe5f3;overflow:hidden}#busy .bb i{display:block;height:100%;width:40%;background:var(--accent);border-radius:2px;animation:bslide 1.3s ease-in-out infinite}
+.btn.ld::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;animation:bspin .8s linear infinite}
+.btn:not(.pri).ld::before{border-color:#c9d4e4;border-top-color:var(--accent)}
+@keyframes bspin{to{transform:rotate(360deg)}}@keyframes bslide{0%{margin-left:-40%}100%{margin-left:100%}}
+@media(prefers-reduced-motion:reduce){#busy .sp,#busy .bb i,.btn.ld::before{animation-duration:3s}}
 #login{max-width:420px;margin:12vh auto;padding:0 18px}
 #login .card{padding:26px}#login h2{font-size:20px;margin-bottom:4px}
 #login label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 5px}
@@ -153,6 +162,8 @@ body.nolog aside,body.nolog .top .btn,body.nolog .top .pill{display:none}
   <button class="btn pri" id="refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4M4 4v4h4M4 13a8 8 0 0 0 14 4M20 20v-4h-4"/></svg><span>Segarkan</span></button>
   <button class="btn" id="logout"><svg viewBox="0 0 24 24"><path d="M10 5H5v14h5M15 8l4 4-4 4M19 12H9"/></svg><span>Keluar</span></button>
  </header>
+
+ <div id="busy" class="hide" role="status" aria-live="polite"><div class="sp"></div><div class="bt" id="bt">Memeriksa akun…</div><div class="bb"><i></i></div><div class="bs" id="bs"></div></div>
 
  <div id="login" class="hide">
   <div class="card">
@@ -289,34 +300,40 @@ function view(v){ // login | dash
   $("csv").classList.toggle("hide",v!=="dash");$("acct").classList.toggle("hide",v!=="dash");$("who").classList.toggle("hide",v!=="dash");
   scrollTo(0,0);
 }
+let _bt1,_bt2;
+function busy(on,msg){const e=$("busy");clearTimeout(_bt1);clearTimeout(_bt2);
+  if(!on){e.classList.add("hide");return}
+  $("bt").textContent=msg||"Memuat…";$("bs").textContent="";e.classList.remove("hide");
+  _bt1=setTimeout(()=>{$("bs").textContent="Server sedang menyiapkan data, mohon tunggu sebentar…"},4000);
+  _bt2=setTimeout(()=>{$("bs").textContent="Masih memuat. Koneksi atau server sedang lambat, harap jangan tutup halaman."},12000)}
 function showLogin(msg){MODE="";ME=null;closeModal();view("login");$("lerr").textContent=msg||"";$("lerr").classList.toggle("hide",!msg)}
 async function doLogin(){
-  const b=$("dologin");b.disabled=true;b.textContent="Memeriksa…";$("lerr").classList.add("hide");
+  const b=$("dologin");b.disabled=true;b.textContent="Memeriksa…";b.classList.add("ld");$("lerr").classList.add("hide");busy(true,"Memeriksa akun…");
   try{const j=await post({action:"login",u:$("lu").value.trim(),p:$("lp").value});
     if(!j.ok)throw new Error(j.error||"Gagal masuk");
     SESSION=j.session;ME={user:j.user,nama:j.nama,peran:j.peran};try{sessionStorage.setItem("scw_sesi",SESSION)}catch(e){}
-    $("lp").value="";await load()}
+    $("lp").value="";busy(true,"Memuat data survei…");await load()}
   catch(e){showLogin(e.message==="Failed to fetch"?"Tidak dapat terhubung ke server. Periksa koneksi.":e.message)}
-  b.disabled=false;b.textContent="Masuk";
+  busy(false);b.classList.remove("ld");b.disabled=false;b.textContent="Masuk";
 }
 async function doGuest(){
-  const b=$("guest");b.disabled=true;$("lerr").classList.add("hide");
+  const b=$("guest");b.disabled=true;b.classList.add("ld");$("lerr").classList.add("hide");busy(true,"Masuk sebagai tamu…");
   try{const j=await post({action:"login_tamu"});
     if(!j.ok)throw new Error(j.error||"Gagal masuk sebagai tamu");
     SESSION=j.session;ME={user:j.user,nama:j.nama,peran:"tamu",guest:true};try{sessionStorage.setItem("scw_sesi",SESSION)}catch(e){}
-    await load()}
+    busy(true,"Memuat data survei…");await load()}
   catch(e){showLogin(e.message==="Failed to fetch"?"Tidak dapat terhubung ke server. Periksa koneksi.":e.message)}
-  b.disabled=false;
+  busy(false);b.classList.remove("ld");b.disabled=false;
 }
 async function load(){
   if(!APPS_SCRIPT_URL){return preview()}
   if(!SESSION){return showLogin()}
-  $("refresh").disabled=true;
+  $("refresh").disabled=true;if($("busy").classList.contains("hide"))busy(true,"Memuat data survei…");
   try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&session="+encodeURIComponent(SESSION));const j=await r.json();
     if(!j.ok){if(j.code==="AUTH"){clearSess();showLogin(j.error);return}throw new Error(j.error||"gagal memuat")}
     DATA=[].concat(j.data.operator||[],j.data.pengawas||[]);if(j.target&&Object.keys(j.target).length)TARGET_RESP=j.target;MODE="live";ME=j.me||ME;start()}
   catch(e){MODE="live";DATA=[];start();$("src").textContent="Data belum dapat dimuat ("+e.message+"). Tekan Segarkan."}
-  $("refresh").disabled=false;
+  busy(false);$("refresh").disabled=false;
 }
 async function logout(){const s=SESSION;clearSess();if(s){try{await post({action:"logout",session:s})}catch(e){}}showLogin("")}
 
