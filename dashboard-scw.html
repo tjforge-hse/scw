@@ -207,6 +207,8 @@ body.nolog aside,body.nolog .top .btn,body.nolog .top .pill{display:none}
 <script>
 /* ===== KONFIGURASI ===== */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec"; // alamat /exec Apps Script (sama dengan halaman survei)
+/* Target jumlah responden (Teknisi) per plant dan departemen */
+let TARGET_RESP = {"Plant 1":{"Forging":54,"PPIC":9,"Machining":71,"Maintenance":15,"QA & QC":20},"Plant 2":{"Assembling":63,"Machining":14,"Maintenance":10,"PPIC":17,"QA & QC":24}};
 const DEPT_BY_PLANT = {
   "Plant 1":["Forging","Machining","Maintenance","PPIC","QA & QC"],
   "Plant 2":["Assembling","Machining","Maintenance","PPIC","QA & QC"]};
@@ -312,7 +314,7 @@ async function load(){
   $("refresh").disabled=true;
   try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&session="+encodeURIComponent(SESSION));const j=await r.json();
     if(!j.ok){if(j.code==="AUTH"){clearSess();showLogin(j.error);return}throw new Error(j.error||"gagal memuat")}
-    DATA=[].concat(j.data.operator||[],j.data.pengawas||[]);MODE="live";ME=j.me||ME;start()}
+    DATA=[].concat(j.data.operator||[],j.data.pengawas||[]);if(j.target&&Object.keys(j.target).length)TARGET_RESP=j.target;MODE="live";ME=j.me||ME;start()}
   catch(e){MODE="live";DATA=[];start();$("src").textContent="Data belum dapat dimuat ("+e.message+"). Tekan Segarkan."}
   $("refresh").disabled=false;
 }
@@ -407,21 +409,22 @@ function heat(p,n){if(p===null)return `<td class="lo">–</td>`;const a=.08+p/10
   return `<td class="hm${lo?" lo":""}" style="background:rgba(21,154,91,${a.toFixed(2)})">${p}%${lo?"*":""}</td>`}
 function renderCmp(){
   const T=by("operator"),P=by("pengawas");
-  const row=(name,rt,rp,cls)=>{const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
+  const row=(name,rt,rp,cls,tg)=>{const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
     const a=share(rp,"2-1",optIs("pengawas","2-1",0)),b=share(rp,"5-1",optIs("pengawas","5-1",0));
-    return `<tr class="${cls||""}"><td>${name}</td><td>${rt.length}</td>${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
+    return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
   let body="";
-  body+=row("Keseluruhan (Plant 1 + Plant 2)",T,P,"grp tot");
+  const sumT=o=>Object.values(o).reduce((a,b)=>a+b,0),allT=Object.values(TARGET_RESP).reduce((a,o)=>a+sumT(o),0);
+  body+=row("Keseluruhan (Plant 1 + Plant 2)",T,P,"grp tot",allT);
   const norm=x=>String(x==null?"":x).trim(),plants=Object.keys(DEPT_BY_PLANT);
   [...T,...P].forEach(r=>{const p=norm(r.plant);if(p&&!plants.includes(p))plants.push(p)});
   plants.forEach(pl=>{
     const pt=T.filter(r=>norm(r.plant)===pl),pp=P.filter(r=>norm(r.plant)===pl);
-    body+=row(pl,pt,pp,"grp");
+    body+=row(pl,pt,pp,"grp",TARGET_RESP[pl]?sumT(TARGET_RESP[pl]):null);
     const ds=(DEPT_BY_PLANT[pl]||[]).slice();
     [...pt,...pp].forEach(r=>{const d=norm(r.dept);if(d&&!ds.includes(d))ds.push(d)});
-    ds.forEach(d=>{const a=pt.filter(r=>norm(r.dept)===d),b=pp.filter(r=>norm(r.dept)===d);body+=row("&nbsp;&nbsp;"+esc(d),a,b,a.length||b.length?"":"nod")});
+    ds.forEach(d=>{const a=pt.filter(r=>norm(r.dept)===d),b=pp.filter(r=>norm(r.dept)===d);body+=row("&nbsp;&nbsp;"+esc(d),a,b,a.length||b.length?"":"nod",(TARGET_RESP[pl]||{})[d])});
   });
-  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>n Teknisi</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden.</div>`:`<div class="mute">Belum ada data.</div>`;
+  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi yang ditargetkan mengisi survei.</div>`:`<div class="mute">Belum ada data.</div>`;
   /* masa kerja */
   const masa=SURVEY.operator.extra[0].opts;
   const mrows=masa.map(m=>{const rt=T.filter(r=>r.masa===m);if(!rt.length)return "";const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
