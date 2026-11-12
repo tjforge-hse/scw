@@ -70,7 +70,7 @@ section.blk>.lead{margin:3px 0 16px;font-size:13px}
 .br .t{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;margin-bottom:5px}.br .t em{font-style:normal;white-space:nowrap}.br .t em small{color:var(--muted);font-weight:500}
 .tr{display:block;height:9px;border-radius:5px;background:#EDF1F6;overflow:hidden}.tr i{display:block;height:100%;border-radius:5px;background:#3C5E86}
 .mute{color:var(--muted);font-size:13px;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:center}
-.tw{overflow-x:auto;max-height:none}table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}tr.nod td{color:#9aa4b2}tr.tot td{background:#e8eef7!important;border-top:2px solid #1f4e78}
+.tw{overflow-x:auto;max-height:none}table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}td.rate{min-width:96px}td.rate b{display:block;font-size:13px}td.rate .bar{display:block;height:5px;background:#e5eaf3;border-radius:3px;margin:4px auto 0;width:70px;overflow:hidden}td.rate .bar i{display:block;height:100%}tr.nod td{color:#9aa4b2}tr.tot td{background:#e8eef7!important;border-top:2px solid #1f4e78}
 th,td{padding:10px 10px;text-align:center;border-bottom:1px solid var(--line)}th{font-size:11.5px;color:var(--muted);font-weight:700;background:#FAFBFD}
 td:first-child,th:first-child{text-align:left}tr.grp td{font-weight:800;background:#F5F8FC}
 td.hm{font-weight:700;font-variant-numeric:tabular-nums}td.lo{color:var(--muted);font-weight:600}
@@ -409,9 +409,10 @@ function heat(p,n){if(p===null)return `<td class="lo">–</td>`;const a=.08+p/10
   return `<td class="hm${lo?" lo":""}" style="background:rgba(21,154,91,${a.toFixed(2)})">${p}%${lo?"*":""}</td>`}
 function renderCmp(){
   const T=by("operator"),P=by("pengawas");
+  const rate=(n,t)=>{if(!t)return'<td class="rate">–</td>';const p=Math.round(n/t*100),w=Math.min(p,100),c=p>=100?'#2e7d32':p>=70?'#ef8f00':'#c62828';return `<td class="rate"><b>${p}%</b><span class="bar"><i style="width:${w}%;background:${c}"></i></span></td>`};
   const row=(name,rt,rp,cls,tg)=>{const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
     const a=share(rp,"2-1",optIs("pengawas","2-1",0)),b=share(rp,"5-1",optIs("pengawas","5-1",0));
-    return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
+    return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${rate(rt.length,tg)}${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
   let body="";
   const sumT=o=>Object.values(o).reduce((a,b)=>a+b,0),allT=Object.values(TARGET_RESP).reduce((a,o)=>a+sumT(o),0);
   body+=row("Keseluruhan (Plant 1 + Plant 2)",T,P,"grp tot",allT);
@@ -424,7 +425,7 @@ function renderCmp(){
     [...pt,...pp].forEach(r=>{const d=norm(r.dept);if(d&&!ds.includes(d))ds.push(d)});
     ds.forEach(d=>{const a=pt.filter(r=>norm(r.dept)===d),b=pp.filter(r=>norm(r.dept)===d);body+=row("&nbsp;&nbsp;"+esc(d),a,b,a.length||b.length?"":"nod",(TARGET_RESP[pl]||{})[d])});
   });
-  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi yang ditargetkan mengisi survei.</div>`:`<div class="mute">Belum ada data.</div>`;
+  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Rate responden</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi yang ditargetkan mengisi survei. Rate responden = n Teknisi ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.</div>`:`<div class="mute">Belum ada data.</div>`;
   /* masa kerja */
   const masa=SURVEY.operator.extra[0].opts;
   const mrows=masa.map(m=>{const rt=T.filter(r=>r.masa===m);if(!rt.length)return "";const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
