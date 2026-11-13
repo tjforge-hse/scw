@@ -13,6 +13,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--font);-w
 button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .hide{display:none!important}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;flex:none}.lang button{border:0;background:#fff;padding:9px 12px;font-weight:700;font-size:12.5px;color:var(--muted);cursor:pointer}.lang button.on{background:var(--ink);color:#fff}
 body.ro .adm,body:not(.isadmin) .adm{display:none!important}
 h1,h2,h3,h4{margin:0}
 .app{display:flex;min-height:100vh}
@@ -161,6 +162,7 @@ body.nolog aside,body.nolog .top .btn,body.nolog .top .pill{display:none}
   <button class="btn adm" id="csv"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>Ekspor CSV</span></button>
   <button class="btn pri" id="refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4M4 4v4h4M4 13a8 8 0 0 0 14 4M20 20v-4h-4"/></svg><span>Segarkan</span></button>
   <button class="btn" id="logout"><svg viewBox="0 0 24 24"><path d="M10 5H5v14h5M15 8l4 4-4 4M19 12H9"/></svg><span>Keluar</span></button>
+  <div class="lang" id="lang" role="group" aria-label="Language / 言語"><button type="button" data-l="id" class="on">ID</button><button type="button" data-l="ja">日本語</button></div>
  </header>
 
  <div id="busy" class="hide" role="status" aria-live="polite"><div class="sp"></div><div class="bt" id="bt">Memeriksa akun…</div><div class="bb"><i></i></div><div class="bs" id="bs"></div></div>
@@ -280,7 +282,23 @@ pengawas:{label:"Pengawas",
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const J={operator:"Teknisi",pengawas:"Pengawas"};
+/* ===== BAHASA (ID / 日本語) ===== */
+const JA={"Ringkasan": "サマリー", "Indikator SCW": "SCW指標", "Perbandingan": "比較", "Kendala Utama": "主な課題", "Analisis Pertanyaan": "設問別分析", "Suara Lapangan": "現場の声", "TAUTAN": "リンク", "Kembali ke Portal": "ポータルに戻る", "SCS · PT TJForge Indonesia": "SCS · PT TJForge Indonesia", "Data survei Hentikan – Panggil – Tunggu.": "「止める・呼ぶ・待つ」の調査データ。", "Grafik memakai respons yang tersimpan di Spreadsheet.": "グラフはスプレッドシートに保存された回答を使用しています。", "Akun": "アカウント", "Segarkan": "更新", "Keluar": "ログアウト", "Masuk Petugas HSE": "HSE担当者ログイン", "Masuk dengan akun, atau lihat hasil survei sebagai tamu (hanya melihat).": "アカウントでログインするか、ゲストとして調査結果を閲覧できます（閲覧のみ）。", "Username": "ユーザー名", "Kata sandi": "パスワード", "Masuk": "ログイン", "atau": "または", "Masuk sebagai Tamu (hanya lihat)": "ゲストとしてログイン（閲覧のみ）", "PRATINJAU DATA SIMULASI — Angka di sini hanya contoh pengujian desain, bukan hasil survei sesungguhnya.": "シミュレーションデータのプレビュー — ここに表示される数値はデザイン確認用のサンプルであり、実際の調査結果ではありません。", "Filter Hasil Survei": "調査結果フィルター", "Periode": "期間", "Dari tanggal": "開始日", "Sampai tanggal": "終了日", "Plant": "プラント", "Departemen": "部署", "Line / Tim": "ライン／チーム", "Semua waktu": "全期間", "7 hari terakhir": "直近7日間", "30 hari terakhir": "直近30日間", "Bulan ini": "今月", "Tahun ini": "今年", "Rentang kustom": "期間を指定", "Semua Responden": "全回答者", "Teknisi": "作業者", "Pengawas": "監督者", "Reset Filter": "フィルターをリセット", "Persentase memakai jumlah jawaban valid pada pertanyaan terkait.": "割合は、該当する設問の有効回答数を基に算出しています。", "Cari line / tim": "ライン／チームを検索", "Cari kata kunci…": "キーワードで検索…", "Semua Plant": "すべてのプラント", "Semua Departemen": "すべての部署", "Semua pertanyaan pendapat bebas": "すべての自由記述設問", "Ringkasan Responden": "回答者サマリー", "Jumlah respons dan indikator penerapan menurut jawaban responden": "回答数と、回答に基づく実施状況の指標", "Indikator Hentikan · Panggil · Tunggu": "「止める・呼ぶ・待つ」指標", "Persentase Teknisi yang memilih jawaban paling positif. Pengawas dianalisis secara terpisah.": "最も前向きな回答を選んだ作業者の割合。監督者は別に分析しています。", "Menurut plant, departemen, masa kerja, serta perubahan dibanding tahun lalu.": "プラント別、部署別、勤続年数別、および前年との変化。", "Alasan yang paling sering dipilih (hanya dari responden yang menjawab pertanyaan alasan, boleh lebih dari satu).": "最も多く選ばれた理由（理由の設問に回答した人のみ、複数選択可）。", "Sebaran jawaban untuk setiap pertanyaan pilihan.": "選択式の各設問の回答分布。", "Tampilkan lebih banyak": "さらに表示", "Total Respons": "総回答数", "Jawaban sesuai filter": "フィルター条件に一致する回答", "Survei operator / teknisi": "オペレーター／作業者の調査", "Foreman, leader, supervisor": "フォアマン・リーダー・スーパーバイザー", "Hentikan": "止める", "Panggil": "呼ぶ", "Tunggu": "待つ", "Teknisi: mampu selalu berhenti": "作業者：いつでも止められる", "Teknisi: mampu selalu memanggil": "作業者：いつでも呼べる", "Teknisi: mampu selalu menunggu": "作業者：いつでも待てる", "kapan saja": "いつでも", "Kesiapan pelaksanaan di lapangan": "現場での実施状況", "Berdasarkan pertanyaan Teknisi 2-1, 3-1, 4-1.": "作業者の設問 2-1、3-1、4-1 に基づく。", "Pandangan Pengawas": "監督者の見解", "Kondisi penerapan, pelatihan, dan kecepatan respons.": "実施状況、教育、対応の速さ。", "Penerapan hampir selalu dijalankan": "ほぼ常に実施されている", "Mendidik dengan sungguh-sungguh": "しっかり教育している", "Dapat merespons dengan cepat": "迅速に対応できる", "Menilai operator takut dimintai pertanggungjawaban": "作業者が責任追及を恐れていると見ている", "Teknisi tidak termasuk dalam filter responden.": "作業者はフィルター対象に含まれていません。", "Pengawas tidak termasuk dalam filter responden.": "監督者はフィルター対象に含まれていません。", " tidak termasuk dalam filter responden.": "はフィルター対象に含まれていません。", "Keseluruhan (Plant 1 + Plant 2)": "全体（Plant 1 + Plant 2）", "Plant / Departemen": "プラント／部署", "Target responden": "目標回答者数", "n Teknisi": "作業者 n", "Rate responden": "回答率", "n Pengawas": "監督者 n", "Dijalankan pasti": "確実に実施", "Respons cepat": "迅速な対応", "Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi + Pengawas yang ditargetkan mengisi survei. Rate responden = (n Teknisi + n Pengawas) ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.": "割合＝最も前向きな回答の割合。「*」は回答が5件未満のため、解釈にご注意ください。「–」は回答者がまだいないことを示します。目標回答者数＝調査への回答を目標とする作業者＋監督者の人数。回答率＝（作業者 n＋監督者 n）÷ 目標（緑 ≥100%、黄 ≥70%、赤 &lt;70%）。現在のフィルターに連動します。", "Belum ada data.": "データはまだありません。", "Menurut plant dan departemen": "プラント・部署別", "Teknisi: persentase menjawab “kapan saja”. Pengawas: dijalankan dengan pasti &amp; respons cepat.": "作業者：「いつでも」と答えた割合。監督者：確実に実施・迅速な対応。", "Menurut masa kerja (Teknisi)": "勤続年数別（作業者）", "Apakah pengalaman memengaruhi kemampuan Hentikan, Panggil, Tunggu?": "経験は「止める・呼ぶ・待つ」の実践に影響しているか？", "Masa kerja Teknisi": "作業者の勤続年数", "Belum ada data Teknisi.": "作業者のデータはまだありません。", "Perubahan dibanding tahun lalu": "前年との変化", "Sebaran jawaban pertanyaan perbandingan tahunan.": "前年比較の設問の回答分布。", "Jauh lebih baik": "大幅に良くなった", "Sedikit lebih baik": "やや良くなった", "Tidak berubah": "変わらない", "Sedikit lebih buruk": "やや悪くなった", "Jauh lebih buruk": "大幅に悪くなった", "Lebih mudah menghentikan": "止めやすくなった", "Lebih mudah memanggil": "呼びやすくなった", "Lebih terbiasa menunggu": "待つことに慣れた", "Kondisi penerapan": "実施状況", "Pelaksanaan pendidikan": "教育の実施", "Kecepatan &amp; keandalan respons": "対応の速さと確実さ", "Tidak termasuk filter.": "フィルター対象外。", "Alasan sulit Menghentikan": "止めにくい理由", "Alasan sulit Memanggil": "呼びにくい理由", "Alasan tidak dapat Menunggu": "待てない理由", "Alasan Hentikan·Panggil·Tunggu sulit dilakukan": "「止める・呼ぶ・待つ」が難しい理由", "Alasan pendidikan belum baik": "教育が十分でない理由", "Alasan respons tidak cepat": "迅速に対応できない理由", "Belum ada jawaban.": "回答はまだありません。", "Tidak ada data.": "データがありません。", ", pilihan ganda": "、複数選択", "Tidak ada pendapat yang cocok.": "該当する意見はありません。", "Memeriksa akun…": "アカウントを確認中…", "Memeriksa…": "確認中…", "Masuk sebagai tamu…": "ゲストとしてログイン中…", "Memuat data survei…": "調査データを読み込み中…", "Memuat…": "読み込み中…", "Server sedang menyiapkan data, mohon tunggu sebentar…": "サーバーがデータを準備しています。しばらくお待ちください…", "Masih memuat. Koneksi atau server sedang lambat, harap jangan tutup halaman.": "まだ読み込み中です。接続またはサーバーが遅くなっています。ページを閉じずにお待ちください。", "Gagal masuk": "ログインに失敗しました", "Gagal masuk sebagai tamu": "ゲストログインに失敗しました", "Username atau password salah.": "ユーザー名またはパスワードが違います。", "Terlalu banyak percobaan. Coba lagi 15 menit lagi.": "試行回数が多すぎます。15分後にもう一度お試しください。", "Masuk sebagai tamu tidak diaktifkan.": "ゲストログインは有効になっていません。", "Sesi berakhir, silakan masuk lagi.": "セッションが終了しました。もう一度ログインしてください。", "Tidak dapat terhubung ke server. Periksa koneksi.": "サーバーに接続できません。接続を確認してください。", "DATA SIMULASI": "シミュレーションデータ", "DATA LIVE · ": "ライブデータ · ", "ADMIN": "管理者", "TAMU · LIHAT SAJA": "ゲスト · 閲覧のみ", "Pratinjau dengan data simulasi<br>Periode &amp; lokasi dapat difilter": "シミュレーションデータによるプレビュー<br>期間・場所でフィルターできます", "Sumber: Google Spreadsheet SCS SCW<br>Periode &amp; lokasi dapat difilter": "出典：Google スプレッドシート SCS SCW<br>期間・場所でフィルターできます", "Akun saya": "マイアカウント", "Tamu": "ゲスト", "TAMU": "ゲスト", "Anda masuk tanpa akun, jadi hanya dapat melihat dashboard. Tidak dapat mengekspor, mengubah, atau menghapus data. Sesi tamu berlaku 2 jam. Untuk akses lebih, minta admin membuatkan akun.": "アカウントなしでログインしているため、ダッシュボードの閲覧のみ可能です。データの出力・変更・削除はできません。ゲストのセッションは2時間有効です。より多くの権限が必要な場合は、管理者にアカウントの作成を依頼してください。", "Operator (Teknisi)": "オペレーター（作業者）", "Survei Kondisi Penerapan “Hentikan, Panggil, Tunggu” pada Proses Produksi (Untuk Teknisi)": "生産工程における「止める・呼ぶ・待つ」の実施状況調査（作業者向け）", "Masa kerja": "勤続年数", "< 1 tahun": "1年未満", "1 ~ <3 tahun": "1年以上3年未満", "3 ~ <5 tahun": "3年以上5年未満", "5 ~ <10 tahun": "5年以上10年未満", "10 ~ <15 tahun": "10年以上15年未満", "≥ 15 tahun": "15年以上", "2. Mengenai “Hentikan”": "2. 「止める」について", "Apakah Anda dapat “menghentikan” pekerjaan atau line saat terjadi abnormalitas?": "異常が発生したとき、作業やラインを「止める」ことができますか？", "Saya dapat menghentikannya kapan saja": "いつでも止めることができる", "Jika perlu dihentikan, pada umumnya saya dapat menghentikannya": "止める必要があるときは、たいてい止めることができる", "Meskipun perlu dihentikan, saya sering ragu atau tidak dapat menghentikannya": "止める必要があっても、迷ったり止められなかったりすることが多い", "Saya hampir tidak dapat menghentikannya": "ほとんど止めることができない", "Alasan Anda merasa “tidak dapat menghentikan”": "「止められない」と感じる理由", "Bagi yang menjawab selain “Saya dapat menghentikannya kapan saja” pada 2-1. Boleh memilih lebih dari satu.": "2-1で「いつでも止めることができる」以外を選んだ方が対象です。複数選択可。", "Khawatir rencana produksi menjadi terlambat": "生産計画が遅れることが心配", "Khawatir dengan reaksi atasan dan orang di sekitar": "上司や周囲の反応が心配", "Ragu apakah kondisi tersebut abnormalitas atau bukan": "異常かどうか判断に迷う", "Cara pengoperasian dan prosedur untuk menghentikan sulit dipahami": "止めるための操作方法や手順が分かりにくい", "Lainnya": "その他", "Dibandingkan tahun lalu, apakah sekarang lebih mudah menghentikan pekerjaan saat terjadi abnormalitas?": "昨年と比べて、異常が発生したときに作業を止めやすくなりましたか？", "Jauh lebih mudah menghentikan": "とても止めやすくなった", "Sedikit lebih mudah menghentikan": "少し止めやすくなった", "Sedikit lebih sulit menghentikan": "少し止めにくくなった", "Jauh lebih sulit menghentikan": "とても止めにくくなった", "3. Mengenai “Panggil”": "3. 「呼ぶ」について", "Apakah Anda dapat “memanggil” atasan atau penanggung jawab saat terjadi abnormalitas?": "異常が発生したとき、上司や担当者を「呼ぶ」ことができますか？", "Saya dapat memanggil mereka kapan saja": "いつでも呼ぶことができる", "Tergantung situasi, saya ragu-ragu": "状況によって、ためらうことがある", "Saya jarang dapat memanggil mereka": "ほとんど呼ぶことができない", "Alasan Anda merasa “sulit memanggil”": "「呼びにくい」と感じる理由", "Bagi yang menjawab selain “kapan saja” pada 3-1. Boleh memilih lebih dari satu.": "3-1で「いつでも」以外を選んだ方が対象です。複数選択可。", "Mereka tampak sibuk sehingga sulit untuk didekati": "忙しそうで声をかけにくい", "Saya merasa seharusnya menyelesaikannya sendiri": "自分で解決すべきだと感じる", "Meskipun sudah dipanggil, penanganannya lambat/kurang memadai": "呼んでも対応が遅い・不十分である", "Memanggil mereka sepertinya akan memengaruhi penilaian terhadap saya": "呼ぶと自分の評価に影響しそうだ", "Dibandingkan tahun lalu, apakah sekarang lebih mudah memanggil atasan atau penanggung jawab?": "昨年と比べて、上司や担当者を呼びやすくなりましたか？", "Jauh lebih mudah memanggil": "とても呼びやすくなった", "Sedikit lebih mudah memanggil": "少し呼びやすくなった", "Sedikit lebih sulit memanggil": "少し呼びにくくなった", "Jauh lebih sulit memanggil": "とても呼びにくくなった", "4. Mengenai “Tunggu”": "4. 「待つ」について", "Apakah Anda dapat “menunggu” saat ada abnormalitas atau hal yang tidak jelas?": "異常や不明な点があるとき、「待つ」ことができますか？", "Saya dapat menunggu kapan saja": "いつでも待つことができる", "Terkadang saya tidak dapat menunggu dan melanjutkan pekerjaan": "待てずに作業を続けてしまうことがある", "Saya hampir tidak dapat menunggu": "ほとんど待つことができない", "Alasan Anda merasa “tidak dapat menunggu”": "「待てない」と感じる理由", "Bagi yang menjawab selain “kapan saja” pada 4-1. Boleh memilih lebih dari satu.": "4-1で「いつでも」以外を選んだ方が対象です。複数選択可。", "Tidak ingin menghentikan produksi": "生産を止めたくない", "Melanjutkan pekerjaan berdasarkan penilaian sendiri": "自分の判断で作業を続ける", "Instruksi baru datang setelah menunggu lama": "長く待ってからようやく指示が来る", "Sulit menunggu karena suasana di sekitar": "周囲の雰囲気で待ちにくい", "Dibandingkan tahun lalu, apakah sekarang Anda sudah lebih terbiasa menunggu instruksi atau konfirmasi sebelum bekerja?": "昨年と比べて、作業前に指示や確認を待つことに慣れましたか？", "Jauh lebih mudah menunggu": "とても待ちやすくなった", "Sedikit lebih mudah menunggu": "少し待ちやすくなった", "Sedikit lebih sulit menunggu": "少し待ちにくくなった", "Jauh lebih sulit menunggu": "とても待ちにくくなった", "5. Mengenai Pendidikan dan Dukungan": "5. 教育とサポートについて", "Dalam satu tahun terakhir, apakah Anda pernah menerima pendidikan atau penjelasan mengenai “Hentikan, Panggil, Tunggu”?": "この1年間に、「止める・呼ぶ・待つ」についての教育や説明を受けたことがありますか？", "Belum pernah menerima": "受けたことがない", "Menerima penjelasan secara lisan": "口頭で説明を受けた", "Menerima pendidikan 1 kali": "教育を1回受けた", "Menerima pendidikan beberapa kali": "教育を複数回受けた", "Apakah pendidikan atau penjelasan tersebut berguna dalam pekerjaan Anda?": "その教育や説明は、仕事に役立ちましたか？", "Bagi yang menjawab selain “Belum pernah menerima” pada 5-1.": "5-1で「受けたことがない」以外を選んだ方が対象です。", "Sangat berguna": "とても役立った", "Cukup berguna": "まあまあ役立った", "Kurang berguna": "あまり役立たなかった", "Tidak berguna": "役立たなかった", "Dalam satu tahun terakhir, adakah hal yang Anda rasa berubah di lapangan?": "この1年間に、現場で変わったと感じることはありますか？", "Boleh memilih lebih dari satu.": "複数選択可。", "Menjadi lebih mudah menghentikan line saat terjadi abnormalitas": "異常発生時にラインを止めやすくなった", "Menjadi lebih mudah memanggil atasan atau penanggung jawab": "上司や担当者を呼びやすくなった", "Menjadi lebih mudah menunggu sampai konfirmasi diperoleh": "確認が取れるまで待ちやすくなった", "Respons atasan atau penanggung jawab menjadi lebih cepat": "上司や担当者の対応が早くなった", "Kriteria penilaian dan prosedur menjadi lebih mudah dipahami": "判断基準や手順が分かりやすくなった", "Lingkungan sekitar mulai mendukung penerapan “Hentikan, Panggil, Tunggu”": "周囲が「止める・呼ぶ・待つ」の実践を支えてくれるようになった", "Tidak ada perubahan khusus": "特に変化はない", "Menjadi lebih sulit dilakukan dibandingkan sebelumnya": "以前より実施しにくくなった", "6. Untuk Perbaikan": "6. 改善のために", "Menurut Anda, apa yang diperlukan agar “Hentikan, Panggil, Tunggu” lebih mudah dijalankan?": "「止める・呼ぶ・待つ」を実践しやすくするために、何が必要だと思いますか？", "Respons cepat dari atasan dan manajer": "上司・管理者の迅速な対応", "Penyusunan aturan dan prosedur yang jelas": "明確なルールと手順の整備", "Penetapan kriteria yang membuat abnormalitas mudah dinilai": "異常を判断しやすい基準の設定", "Diciptakannya suasana agar operator dapat menghentikan pekerjaan dengan tenang": "作業者が安心して作業を止められる雰囲気づくり", "Pendidikan dan pelatihan yang lebih memadai": "より充実した教育・訓練", "7. Pendapat Bebas": "7. 自由意見", "➀ Dukungan seperti apa yang menurut Anda diperlukan agar “Hentikan, Panggil, Tunggu” dapat diterapkan secara menyeluruh?": "➀ 「止める・呼ぶ・待つ」を全体に定着させるために、どのような支援が必要だと思いますか？", "➁ Apa yang Anda maksud dengan “abnormalitas”?": "➁ あなたにとって「異常」とは何ですか？", "Survei Kondisi Penerapan “Hentikan, Panggil, Tunggu” pada Proses Produksi (Untuk Pengawas)": "生産工程における「止める・呼ぶ・待つ」の実施状況調査（監督者向け）", "Jabatan": "役職", "Contoh: Foreman / Leader / Supervisor": "例：フォアマン／リーダー／スーパーバイザー", "Jumlah orang yang diawasi": "監督している人数", "2. Kondisi Aktual": "2. 実施の実態", "Apakah Anda merasa “Hentikan, Panggil, Tunggu” dijalankan dengan pasti di proses yang menjadi tanggung jawab Anda?": "ご自身が担当する工程で、「止める・呼ぶ・待つ」が確実に実施されていると感じますか？", "Ya (hampir selalu dapat dijalankan)": "はい（ほぼ常に実施できている）", "Tidak (sebagian belum dapat dijalankan)": "いいえ（一部は実施できていない）", "Hampir tidak dapat dijalankan": "ほとんど実施できていない", "Pada tindakan mana yang paling sering tidak dilaksanakan?": "どの行動が最も実施されていませんか？", "Hentikan (tidak menghentikan line meskipun menemukan defect atau abnormalitas)": "止める（不良や異常を見つけてもラインを止めない）", "Panggil (tidak melapor/terlambat melapor kepada atasan atau pihak terkait)": "呼ぶ（上司や関係者に報告しない・報告が遅れる）", "Tunggu (melanjutkan pekerjaan tanpa menunggu instruksi atau konfirmasi)": "待つ（指示や確認を待たずに作業を続ける）", "Dibandingkan tahun lalu, bagaimana perubahan kondisi penerapan di proses yang menjadi tanggung jawab Anda?": "昨年と比べて、ご自身の担当工程の実施状況はどう変わりましたか？", "Membaik secara signifikan": "大きく改善した", "Sedikit membaik": "少し改善した", "Sedikit memburuk": "少し悪化した", "Memburuk secara signifikan": "大きく悪化した", "3. Mengenai Alasan": "3. 理由について", "Menurut Anda, apa alasan “Hentikan, Panggil, Tunggu” tidak dapat dilakukan/sulit dilakukan?": "「止める・呼ぶ・待つ」ができない・難しい理由は何だと思いますか？", "Tekanan rencana produksi dan tenggat waktu pengiriman yang kuat": "生産計画や納期のプレッシャーが強い", "Mengkhawatirkan kerugian akibat line berhenti": "ラインが止まることによる損失が心配", "Meskipun sudah melapor/berkonsultasi, penyelesaiannya lambat/tidak ditanggapi": "報告・相談しても解決が遅い、または対応されない", "Operator takut dimintai pertanggungjawaban": "作業者が責任を問われることを恐れている", "Lapangan sibuk, tidak ada waktu luang untuk memanggil/menunggu": "現場が忙しく、呼ぶ・待つ余裕がない", "Ada suasana bahwa “abnormalitas kecil boleh dibiarkan”": "「小さな異常は見逃してもよい」という雰囲気がある", "Sebagai pengawas pun, kriteria penilaian tidak jelas": "監督者自身も判断基準が分からない", "Pendidikan dan pelatihan kurang": "教育・訓練が不足している", "4. Mengenai Pendidikan": "4. 教育について", "Apakah Anda mendidik anggota tim mengenai prosedur “Hentikan, Panggil, Tunggu”?": "チームメンバーに「止める・呼ぶ・待つ」の手順を教育していますか？", "Tidak mendidik, dan juga belum pernah menyampaikannya": "教育しておらず、伝えたこともない", "Tidak mendidik, tetapi sudah menyampaikannya": "教育はしていないが、伝えたことはある", "Kadang-kadang mendidik": "ときどき教育している", "Menurut Anda, apa alasan pendidikan belum dapat dilakukan dengan baik?": "教育が十分にできていない理由は何だと思いますか？", "Hanya untuk yang memilih jawaban selain “Mendidik dengan sungguh-sungguh” pada 4-1. Boleh memilih lebih dari satu.": "4-1で「しっかり教育している」以外を選んだ方のみが対象です。複数選択可。", "Tidak ada materi pendidikan (termasuk terjemahan dari bahasa lain)": "教育資料がない（他言語への翻訳を含む）", "Saya sendiri belum memahaminya dengan baik": "自分自身がよく理解できていない", "Waktu untuk mendidik tidak cukup": "教育する時間が足りない", "Dibandingkan tahun lalu, bagaimana perubahan pelaksanaan pendidikan?": "昨年と比べて、教育の実施状況はどう変わりましたか？", "Meningkat secara signifikan": "大きく増えた", "Sedikit meningkat": "少し増えた", "Sedikit menurun": "少し減った", "Menurun secara signifikan": "大きく減った", "5. Mengenai Respons": "5. 対応について", "Apakah Anda dapat merespons dengan cepat ketika dipanggil?": "呼ばれたとき、迅速に対応できますか？", "Ya (dapat merespons dengan cepat)": "はい（迅速に対応できる）", "Tidak (tergantung situasi, terkadang tidak dapat merespons)": "いいえ（状況によっては対応できないことがある）", "Hampir tidak dapat merespons": "ほとんど対応できない", "Jika terkadang tidak dapat merespons dengan cepat, apa alasannya?": "ときどき迅速に対応できない場合、その理由は何ですか？", "Bagi yang menjawab selain “Ya” pada 5-1. Boleh memilih lebih dari satu.": "5-1で「はい」以外を選んだ方が対象です。複数選択可。", "Memprioritaskan pekerjaan/penanganan lain": "他の仕事・対応を優先している", "Tidak menyadari panggilan/sarana komunikasi sulit digunakan": "呼び出しに気づかない・連絡手段が使いにくい", "Sering berada jauh dari lapangan": "現場から離れていることが多い", "Informasi dan kriteria yang diperlukan untuk menilai kurang": "判断に必要な情報や基準が不足している", "Tidak ada orang yang dapat menggantikan untuk merespons": "代わりに対応できる人がいない", "Frekuensi dipanggil terlalu sering sehingga tidak dapat menangani semuanya": "呼ばれる頻度が多すぎて、すべてに対応できない", "Dibandingkan tahun lalu, bagaimana perubahan kecepatan dan keandalan respons Anda?": "昨年と比べて、ご自身の対応の速さと確実さはどう変わりましたか？", "6. Secara Keseluruhan": "6. 全体を通して", "Menurut Anda, apa yang diperlukan untuk perbaikan?": "改善のために何が必要だと思いますか？", "Penguatan pendidikan dan pelatihan bagi pengawas": "監督者への教育・訓練の強化", "Menciptakan suasana agar operator dapat menghentikan line dengan tenang": "作業者が安心してラインを止められる雰囲気づくり", "Sistem untuk memperkecil dampak akibat line berhenti": "ラインが止まる影響を小さくする仕組み", "Pembenahan sistem manajemen yang memungkinkan respons cepat": "迅速な対応を可能にする管理体制の整備", "Memperjelas kriteria penilaian (manual/dokumen standar)": "判断基準（マニュアル・標準書）の明確化", "Pemahaman dan dukungan dari manajemen atas": "上位の管理者の理解と支援", "Operator mulai menghentikan line saat terjadi abnormalitas": "作業者が異常発生時にラインを止め始めた", "Panggilan dari operator semakin sering": "作業者からの呼び出しが増えた", "Operator mulai menghentikan pekerjaan dan menunggu": "作業者が作業を止めて待つようになった", "Dapat merespons lebih cepat dibanding sebelumnya": "以前より迅速に対応できるようになった", "➀ Tindakan apa yang menurut Anda diperlukan sebagai pengawas untuk menerapkan “Hentikan, Panggil, Tunggu” secara menyeluruh?": "➀ 「止める・呼ぶ・待つ」を全体に定着させるために、監督者として何が必要だと思いますか？"};
+const MIX={".head h1": ["Dashboard Survey <span>SCW</span>", "<span>SCW</span> 調査ダッシュボード"], ".head .lead": ["Analisis penerapan <b>Hentikan · Panggil · Tunggu</b> berdasarkan jawaban survei Teknisi dan Pengawas.", "作業者と監督者の調査回答に基づく、<b>止める・呼ぶ・待つ</b>の実施状況の分析。"], "#suara .lead": ["Pendapat bebas responden (bagian 7). Teks ditampilkan apa adanya, tanpa nama.", "回答者の自由意見（第7部）。原文のまま、氏名なしで表示しています。<br>※自由記述はインドネシア語の原文のまま表示されます。"]};
+let LANG="id";try{LANG=new URLSearchParams(location.search).get("lang")||localStorage.getItem("scw_lang")||"id"}catch(e){}
+if(LANG!=="ja")LANG="id";
+const tx=s=>(LANG==="ja"&&JA[s])||s;
+const _o=new WeakMap();
+function applyStatic(){
+  const skip="script,style,#kpis,#ind,#cmp,#ken,#ana,#vl,#rtab,#mdl,#busy,.adm,[data-mix]";
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement&&!n.parentElement.closest(skip)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}),ns=[];
+  while(w.nextNode())ns.push(w.currentNode);
+  ns.forEach(n=>{const o=_o.has(n)?_o.get(n):n.nodeValue,k=o.trim();
+    if(JA[k]!==undefined&&k){_o.set(n,o);n.nodeValue=LANG==="ja"?o.replace(k,JA[k]):o}});
+  [["#fq","placeholder","Cari line / tim"],["#vs","placeholder","Cari kata kunci…"]].forEach(([sel,at,k])=>{const e=document.querySelector(sel);if(e)e.setAttribute(at,tx(k))});
+  Object.keys(MIX).forEach(sel=>{const e=document.querySelector(sel);if(!e)return;e.setAttribute("data-mix","1");e.innerHTML=LANG==="ja"?MIX[sel][1]:MIX[sel][0]});
+}
+const J={get operator(){return tx("Teknisi")},get pengawas(){return tx("Pengawas")}};
 const COL={h:"#D64545",p:"#FF8200",t:"#159A5B"};
 const TONE5=["#159A5B","#8CC152","#9AA7B8","#FF9F43","#D64545"];
 const allQs=j=>SURVEY[j].sections.flatMap(s=>s.qs);
@@ -303,18 +321,18 @@ function view(v){ // login | dash
 let _bt1,_bt2;
 function busy(on,msg){const e=$("busy");clearTimeout(_bt1);clearTimeout(_bt2);
   if(!on){e.classList.add("hide");return}
-  $("bt").textContent=msg||"Memuat…";$("bs").textContent="";e.classList.remove("hide");
-  _bt1=setTimeout(()=>{$("bs").textContent="Server sedang menyiapkan data, mohon tunggu sebentar…"},4000);
-  _bt2=setTimeout(()=>{$("bs").textContent="Masih memuat. Koneksi atau server sedang lambat, harap jangan tutup halaman."},12000)}
-function showLogin(msg){MODE="";ME=null;closeModal();view("login");$("lerr").textContent=msg||"";$("lerr").classList.toggle("hide",!msg)}
+  $("bt").textContent=tx(msg||"Memuat…");$("bs").textContent="";e.classList.remove("hide");
+  _bt1=setTimeout(()=>{$("bs").textContent=tx("Server sedang menyiapkan data, mohon tunggu sebentar…")},4000);
+  _bt2=setTimeout(()=>{$("bs").textContent=tx("Masih memuat. Koneksi atau server sedang lambat, harap jangan tutup halaman.")},12000)}
+function showLogin(msg){MODE="";ME=null;closeModal();view("login");$("lerr").textContent=tx(msg||"");$("lerr").classList.toggle("hide",!msg)}
 async function doLogin(){
-  const b=$("dologin");b.disabled=true;b.textContent="Memeriksa…";b.classList.add("ld");$("lerr").classList.add("hide");busy(true,"Memeriksa akun…");
+  const b=$("dologin");b.disabled=true;b.textContent=tx("Memeriksa…");b.classList.add("ld");$("lerr").classList.add("hide");busy(true,"Memeriksa akun…");
   try{const j=await post({action:"login",u:$("lu").value.trim(),p:$("lp").value});
     if(!j.ok)throw new Error(j.error||"Gagal masuk");
     SESSION=j.session;ME={user:j.user,nama:j.nama,peran:j.peran};try{sessionStorage.setItem("scw_sesi",SESSION)}catch(e){}
     $("lp").value="";busy(true,"Memuat data survei…");await load()}
   catch(e){showLogin(e.message==="Failed to fetch"?"Tidak dapat terhubung ke server. Periksa koneksi.":e.message)}
-  busy(false);b.classList.remove("ld");b.disabled=false;b.textContent="Masuk";
+  busy(false);b.classList.remove("ld");b.disabled=false;b.textContent=tx("Masuk");
 }
 async function doGuest(){
   const b=$("guest");b.disabled=true;b.classList.add("ld");$("lerr").classList.add("hide");busy(true,"Masuk sebagai tamu…");
@@ -331,8 +349,8 @@ async function load(){
   $("refresh").disabled=true;if($("busy").classList.contains("hide"))busy(true,"Memuat data survei…");
   try{const r=await fetch(APPS_SCRIPT_URL+"?action=data&session="+encodeURIComponent(SESSION));const j=await r.json();
     if(!j.ok){if(j.code==="AUTH"){clearSess();showLogin(j.error);return}throw new Error(j.error||"gagal memuat")}
-    DATA=[].concat(j.data.operator||[],j.data.pengawas||[]);if(j.target&&Object.keys(j.target).length)TARGET_RESP=j.target;MODE="live";ME=j.me||ME;start()}
-  catch(e){MODE="live";DATA=[];start();$("src").textContent="Data belum dapat dimuat ("+e.message+"). Tekan Segarkan."}
+    DATA=[].concat(j.data.operator||[],j.data.pengawas||[]);if(j.target&&Object.keys(j.target).length)TARGET_RESP=j.target;MODE="live";ME=j.me||ME;delete $("src").dataset.err;start()}
+  catch(e){MODE="live";DATA=[];start();$("src").dataset.err="1";$("src").textContent=(LANG==="ja"?"データを読み込めません（"+e.message+"）。「更新」を押してください。":"Data belum dapat dimuat ("+e.message+"). Tekan Segarkan.")}
   busy(false);$("refresh").disabled=false;
 }
 async function logout(){const s=SESSION;clearSess();if(s){try{await post({action:"logout",session:s})}catch(e){}}showLogin("")}
@@ -363,7 +381,7 @@ let DEMO_AKUN=[];
 /* ===== FILTER ===== */
 const f={per:"all",d1:"",d2:"",plant:"",dept:"",q:""};
 const fillDept=()=>{const p=$("fpl").value,list=p?DEPT_BY_PLANT[p]:[...new Set(Object.values(DEPT_BY_PLANT).flat())],cur=$("fdp").value;
-  $("fdp").innerHTML='<option value="">Semua Departemen</option>'+list.map(d=>`<option>${esc(d)}</option>`).join("");if(list.includes(cur))$("fdp").value=cur};
+  $("fdp").innerHTML='<option value="">'+tx("Semua Departemen")+'</option>'+list.map(d=>`<option>${esc(d)}</option>`).join("");if(list.includes(cur))$("fdp").value=cur};
 const ymd=d=>d.toISOString().slice(0,10);
 function setPeriod(){
   const v=$("fper").value,now=new Date();
@@ -408,19 +426,19 @@ function renderKpi(){
   const T=by("operator"),P=by("pengawas"),tot=(inc("operator")?T.length:0)+(inc("pengawas")?P.length:0);
   const h=share(T,"2-1",optIs("operator","2-1",0)),p=share(T,"3-1",optIs("operator","3-1",0)),t=share(T,"4-1",optIs("operator","4-1",0));
   const c=(l,v,s,col)=>`<div class="kpi"><small>${l}</small><b>${v}</b><span>${s}</span><i style="${col?"background:"+col:""}"></i></div>`;
-  $("kpis").innerHTML=c("Total Respons",tot,"Jawaban sesuai filter")+c("Teknisi",inc("operator")?T.length:"–","Survei operator / teknisi")+c("Pengawas",inc("pengawas")?P.length:"–","Foreman, leader, supervisor")
-   +c("Hentikan",fmt(h.p),"Teknisi: mampu selalu berhenti",COL.h)+c("Panggil",fmt(p.p),"Teknisi: mampu selalu memanggil",COL.p)+c("Tunggu",fmt(t.p),"Teknisi: mampu selalu menunggu",COL.t);
+  $("kpis").innerHTML=c(tx("Total Respons"),tot,tx("Jawaban sesuai filter"))+c(tx("Teknisi"),inc("operator")?T.length:"–",tx("Survei operator / teknisi"))+c(tx("Pengawas"),inc("pengawas")?P.length:"–",tx("Foreman, leader, supervisor"))
+   +c(tx("Hentikan"),fmt(h.p),tx("Teknisi: mampu selalu berhenti"),COL.h)+c(tx("Panggil"),fmt(p.p),tx("Teknisi: mampu selalu memanggil"),COL.p)+c(tx("Tunggu"),fmt(t.p),tx("Teknisi: mampu selalu menunggu"),COL.t);
 }
 function renderInd(){
   const T=by("operator"),P=by("pengawas");let l,r;
   if(inc("operator")){
-    l=`<div class="gauges">${gauge("Hentikan",share(T,"2-1",optIs("operator","2-1",0)),COL.h,"kapan saja")+gauge("Panggil",share(T,"3-1",optIs("operator","3-1",0)),COL.p,"kapan saja")+gauge("Tunggu",share(T,"4-1",optIs("operator","4-1",0)),COL.t,"kapan saja")}</div>`;
-  }else l=`<div class="mute">Teknisi tidak termasuk dalam filter responden.</div>`;
+    l=`<div class="gauges">${gauge(tx("Hentikan"),share(T,"2-1",optIs("operator","2-1",0)),COL.h,tx("kapan saja"))+gauge(tx("Panggil"),share(T,"3-1",optIs("operator","3-1",0)),COL.p,tx("kapan saja"))+gauge(tx("Tunggu"),share(T,"4-1",optIs("operator","4-1",0)),COL.t,tx("kapan saja"))}</div>`;
+  }else l=`<div class="mute">${tx("Teknisi tidak termasuk dalam filter responden.")}</div>`;
   if(inc("pengawas")){
     const a=share(P,"2-1",optIs("pengawas","2-1",0)),b=share(P,"4-1",optIs("pengawas","4-1",3)),c=share(P,"5-1",optIs("pengawas","5-1",0)),d=share(P,"3-1",x=>x.startsWith("Operator takut"));
-    r=`<div class="brs">${[["Penerapan hampir selalu dijalankan",a],["Mendidik dengan sungguh-sungguh",b],["Dapat merespons dengan cepat",c],["Menilai operator takut dimintai pertanggungjawaban",d]].map(([n,s])=>bar(n,s.c,s.n)).join("")}</div>`;
-  }else r=`<div class="mute">Pengawas tidak termasuk dalam filter responden.</div>`;
-  $("ind").innerHTML=`<div class="card"><h3>Kesiapan pelaksanaan di lapangan</h3><div class="sub">Berdasarkan pertanyaan Teknisi 2-1, 3-1, 4-1.</div>${l}</div><div class="card"><h3>Pandangan Pengawas</h3><div class="sub">Kondisi penerapan, pelatihan, dan kecepatan respons.</div>${r}</div>`;
+    r=`<div class="brs">${[["Penerapan hampir selalu dijalankan",a],["Mendidik dengan sungguh-sungguh",b],["Dapat merespons dengan cepat",c],["Menilai operator takut dimintai pertanggungjawaban",d]].map(([n,s])=>bar(tx(n),s.c,s.n)).join("")}</div>`;
+  }else r=`<div class="mute">${tx("Pengawas tidak termasuk dalam filter responden.")}</div>`;
+  $("ind").innerHTML=`<div class="card"><h3>${tx("Kesiapan pelaksanaan di lapangan")}</h3><div class="sub">${tx("Berdasarkan pertanyaan Teknisi 2-1, 3-1, 4-1.")}</div>${l}</div><div class="card"><h3>${tx("Pandangan Pengawas")}</h3><div class="sub">${tx("Kondisi penerapan, pelatihan, dan kecepatan respons.")}</div>${r}</div>`;
 }
 function heat(p,n){if(p===null)return `<td class="lo">–</td>`;const a=.08+p/100*.38,lo=n<5;
   return `<td class="hm${lo?" lo":""}" style="background:rgba(21,154,91,${a.toFixed(2)})">${p}%${lo?"*":""}</td>`}
@@ -432,7 +450,7 @@ function renderCmp(){
     return `<tr class="${cls||""}"><td>${name}</td><td>${tg==null?"–":tg}</td><td>${rt.length}</td>${rate(rt.length+rp.length,tg)}${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}<td>${rp.length}</td>${heat(a.p,a.n)}${heat(b.p,b.n)}</tr>`};
   let body="";
   const sumT=o=>Object.values(o).reduce((a,b)=>a+b,0),allT=Object.values(TARGET_RESP).reduce((a,o)=>a+sumT(o),0);
-  body+=row("Keseluruhan (Plant 1 + Plant 2)",T,P,"grp tot",allT);
+  body+=row(tx("Keseluruhan (Plant 1 + Plant 2)"),T,P,"grp tot",allT);
   const norm=x=>String(x==null?"":x).trim(),plants=Object.keys(DEPT_BY_PLANT);
   [...T,...P].forEach(r=>{const p=norm(r.plant);if(p&&!plants.includes(p))plants.push(p)});
   plants.forEach(pl=>{
@@ -442,22 +460,22 @@ function renderCmp(){
     [...pt,...pp].forEach(r=>{const d=norm(r.dept);if(d&&!ds.includes(d))ds.push(d)});
     ds.forEach(d=>{const a=pt.filter(r=>norm(r.dept)===d),b=pp.filter(r=>norm(r.dept)===d);body+=row("&nbsp;&nbsp;"+esc(d),a,b,a.length||b.length?"":"nod",(TARGET_RESP[pl]||{})[d])});
   });
-  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>Plant / Departemen</th><th>Target responden</th><th>n Teknisi</th><th>Rate responden</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th><th>n Pengawas</th><th>Dijalankan pasti</th><th>Respons cepat</th></tr>${body}</table></div><div class="note">Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi + Pengawas yang ditargetkan mengisi survei. Rate responden = (n Teknisi + n Pengawas) ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.</div>`:`<div class="mute">Belum ada data.</div>`;
+  const plantTbl=(T.length||P.length)?`<div class="tw"><table><tr><th>${tx("Plant / Departemen")}</th><th>${tx("Target responden")}</th><th>${tx("n Teknisi")}</th><th>${tx("Rate responden")}</th><th>${tx("Hentikan")}</th><th>${tx("Panggil")}</th><th>${tx("Tunggu")}</th><th>${tx("n Pengawas")}</th><th>${tx("Dijalankan pasti")}</th><th>${tx("Respons cepat")}</th></tr>${body}</table></div><div class="note">${tx("Persentase = jawaban paling positif. Tanda * berarti kurang dari 5 jawaban, tafsirkan dengan hati-hati. Tanda – berarti belum ada responden. Target responden = jumlah Teknisi + Pengawas yang ditargetkan mengisi survei. Rate responden = (n Teknisi + n Pengawas) ÷ target (hijau ≥100%, kuning ≥70%, merah &lt;70%); mengikuti filter yang aktif.")}</div>`:`<div class="mute">${tx("Belum ada data.")}</div>`;
   /* masa kerja */
   const masa=SURVEY.operator.extra[0].opts;
   const mrows=masa.map(m=>{const rt=T.filter(r=>r.masa===m);if(!rt.length)return "";const h=share(rt,"2-1",optIs("operator","2-1",0)),p=share(rt,"3-1",optIs("operator","3-1",0)),t=share(rt,"4-1",optIs("operator","4-1",0));
-    return `<tr><td>${esc(m)}</td><td>${rt.length}</td>${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}</tr>`}).join("");
-  const masaTbl=mrows?`<div class="tw"><table style="min-width:420px"><tr><th>Masa kerja Teknisi</th><th>n</th><th>Hentikan</th><th>Panggil</th><th>Tunggu</th></tr>${mrows}</table></div>`:`<div class="mute">Belum ada data Teknisi.</div>`;
+    return `<tr><td>${esc(tx(m))}</td><td>${rt.length}</td>${heat(h.p,h.n)}${heat(p.p,p.n)}${heat(t.p,t.n)}</tr>`}).join("");
+  const masaTbl=mrows?`<div class="tw"><table style="min-width:420px"><tr><th>${tx("Masa kerja Teknisi")}</th><th>n</th><th>${tx("Hentikan")}</th><th>${tx("Panggil")}</th><th>${tx("Tunggu")}</th></tr>${mrows}</table></div>`:`<div class="mute">${tx("Belum ada data Teknisi.")}</div>`;
   /* dibanding tahun lalu */
   const trend=(j,rows,items)=>items.map(([id,lab])=>{const v=valid(rows,id),q=qOf(j,id),n=v.length;
     const cnt=q.o.map(o=>v.filter(r=>r.jawaban[id]===o).length);
-    const seg5=cnt.map((c,i)=>`<i style="width:${n?c/n*100:0}%;background:${TONE5[i]}" title="${esc(q.o[i])}: ${c}"></i>`).join("");
+    const seg5=cnt.map((c,i)=>`<i style="width:${n?c/n*100:0}%;background:${TONE5[i]}" title="${esc(tx(q.o[i]))}: ${c}"></i>`).join("");
     const good=cnt[0]+cnt[1],bad=cnt[3]+cnt[4];
-    return `<div class="br"><div class="t"><span>${lab}</span><em><small>membaik ${n?Math.round(good/n*100):0}% · memburuk ${n?Math.round(bad/n*100):0}% (n=${n})</small></em></div><div class="stk">${seg5}</div></div>`}).join("");
-  const leg=`<div class="legend"><span style="--c:${TONE5[0]}">Jauh lebih baik</span><span style="--c:${TONE5[1]}">Sedikit lebih baik</span><span style="--c:${TONE5[2]}">Tidak berubah</span><span style="--c:${TONE5[3]}">Sedikit lebih buruk</span><span style="--c:${TONE5[4]}">Jauh lebih buruk</span></div>`;
-  const tr=`${leg}<div class="grid2"><div><div class="q2">Teknisi</div><div class="brs">${inc("operator")?trend("operator",T,[["2-3","Lebih mudah menghentikan"],["3-3","Lebih mudah memanggil"],["4-3","Lebih terbiasa menunggu"]]):'<div class="mute">Tidak termasuk filter.</div>'}</div></div><div><div class="q2">Pengawas</div><div class="brs">${inc("pengawas")?trend("pengawas",P,[["2-3","Kondisi penerapan"],["4-3","Pelaksanaan pendidikan"],["5-3","Kecepatan &amp; keandalan respons"]]):'<div class="mute">Tidak termasuk filter.</div>'}</div></div></div>`;
-  $("cmp").innerHTML=`<div class="card" style="margin-bottom:18px"><h3>Menurut plant dan departemen</h3><div class="sub">Teknisi: persentase menjawab “kapan saja”. Pengawas: dijalankan dengan pasti &amp; respons cepat.</div>${plantTbl}</div>
-   <div class="grid2"><div class="card"><h3>Menurut masa kerja (Teknisi)</h3><div class="sub">Apakah pengalaman memengaruhi kemampuan Hentikan, Panggil, Tunggu?</div>${masaTbl}</div><div class="card"><h3>Perubahan dibanding tahun lalu</h3><div class="sub">Sebaran jawaban pertanyaan perbandingan tahunan.</div>${tr}</div></div>`;
+    return `<div class="br"><div class="t"><span>${lab}</span><em><small>${LANG==="ja"?"改善":"membaik"} ${n?Math.round(good/n*100):0}% · ${LANG==="ja"?"悪化":"memburuk"} ${n?Math.round(bad/n*100):0}%${LANG==="ja"?"（":" ("}n=${n}${LANG==="ja"?"）":")"}</small></em></div><div class="stk">${seg5}</div></div>`}).join("");
+  const leg=`<div class="legend"><span style="--c:${TONE5[0]}">${tx("Jauh lebih baik")}</span><span style="--c:${TONE5[1]}">${tx("Sedikit lebih baik")}</span><span style="--c:${TONE5[2]}">${tx("Tidak berubah")}</span><span style="--c:${TONE5[3]}">${tx("Sedikit lebih buruk")}</span><span style="--c:${TONE5[4]}">${tx("Jauh lebih buruk")}</span></div>`;
+  const tr=`${leg}<div class="grid2"><div><div class="q2">${tx("Teknisi")}</div><div class="brs">${inc("operator")?trend("operator",T,[["2-3",tx("Lebih mudah menghentikan")],["3-3",tx("Lebih mudah memanggil")],["4-3",tx("Lebih terbiasa menunggu")]]):'<div class="mute">'+tx("Tidak termasuk filter.")+'</div>'}</div></div><div><div class="q2">${tx("Pengawas")}</div><div class="brs">${inc("pengawas")?trend("pengawas",P,[["2-3",tx("Kondisi penerapan")],["4-3",tx("Pelaksanaan pendidikan")],["5-3",tx("Kecepatan &amp; keandalan respons")]]):'<div class="mute">'+tx("Tidak termasuk filter.")+'</div>'}</div></div></div>`;
+  $("cmp").innerHTML=`<div class="card" style="margin-bottom:18px"><h3>${tx("Menurut plant dan departemen")}</h3><div class="sub">${tx("Teknisi: persentase menjawab “kapan saja”. Pengawas: dijalankan dengan pasti &amp; respons cepat.")}</div>${plantTbl}</div>
+   <div class="grid2"><div class="card"><h3>${tx("Menurut masa kerja (Teknisi)")}</h3><div class="sub">${tx("Apakah pengalaman memengaruhi kemampuan Hentikan, Panggil, Tunggu?")}</div>${masaTbl}</div><div class="card"><h3>${tx("Perubahan dibanding tahun lalu")}</h3><div class="sub">${tx("Sebaran jawaban pertanyaan perbandingan tahunan.")}</div>${tr}</div></div>`;
 }
 function optCounts(j,rows,id){
   const q=qOf(j,id),v=valid(rows,id),n=v.length;
@@ -465,20 +483,20 @@ function optCounts(j,rows,id){
   return{q,n,o};
 }
 function renderKen(){
-  const sets=[["operator",[["2-2","Alasan sulit Menghentikan"],["3-2","Alasan sulit Memanggil"],["4-2","Alasan tidak dapat Menunggu"]]],["pengawas",[["3-1","Alasan Hentikan·Panggil·Tunggu sulit dilakukan"],["4-2","Alasan pendidikan belum baik"],["5-2","Alasan respons tidak cepat"]]]];
+  const sets=[["operator",[["2-2",tx("Alasan sulit Menghentikan")],["3-2",tx("Alasan sulit Memanggil")],["4-2",tx("Alasan tidak dapat Menunggu")]]],["pengawas",[["3-1",tx("Alasan Hentikan·Panggil·Tunggu sulit dilakukan")],["4-2",tx("Alasan pendidikan belum baik")],["5-2",tx("Alasan respons tidak cepat")]]]];
   let h="";
   sets.forEach(([j,items])=>{ if(!inc(j))return;
     items.forEach(([id,title])=>{const {q,n,o}=optCounts(j,by(j),id),top=o.slice().sort((a,b)=>b.c-a.c).slice(0,5);
-      h+=`<div class="card"><div class="eyebrow" style="font-size:10px">${J[j].toUpperCase()}</div><h3 style="margin:4px 0 2px;font-size:15px">${title}</h3><div class="sub">${id} · n=${n}</div><div class="brs">${n?top.map(x=>bar(esc(x.lab),x.c,n,COL.p)).join(""):'<div class="mute">Belum ada jawaban.</div>'}</div></div>`})});
-  $("ken").innerHTML=h||`<div class="mute" style="grid-column:1/-1">Tidak ada data.</div>`;
+      h+=`<div class="card"><div class="eyebrow" style="font-size:10px">${J[j].toUpperCase()}</div><h3 style="margin:4px 0 2px;font-size:15px">${tx(title)}</h3><div class="sub">${id} · n=${n}</div><div class="brs">${n?top.map(x=>bar(esc(tx(x.lab)),x.c,n,COL.p)).join(""):'<div class="mute">'+tx("Belum ada jawaban.")+'</div>'}</div></div>`})});
+  $("ken").innerHTML=h||`<div class="mute" style="grid-column:1/-1">${tx("Tidak ada data.")}</div>`;
 }
 function renderAna(){
   const j=atab;let h="";
-  if(!inc(j)){$("ana").innerHTML=`<div class="mute">${J[j]} tidak termasuk dalam filter responden.</div>`;return}
+  if(!inc(j)){$("ana").innerHTML=`<div class="mute">${J[j]}${tx(" tidak termasuk dalam filter responden.")}</div>`;return}
   SURVEY[j].sections.forEach(sec=>{const qs=sec.qs.filter(q=>q.k!=="t");if(!qs.length)return;
-    h+=`<div class="sech">${esc(sec.h)}</div><div class="grid2">`;
+    h+=`<div class="sech">${esc(tx(sec.h))}</div><div class="grid2">`;
     qs.forEach(q=>{const {n,o}=optCounts(j,by(j),q.id),sc=q.o.length===5&&/tahun lalu/i.test(q.t);
-      h+=`<div class="card qcard"><h4>${q.id}. ${esc(q.t)} <small>(n=${n}${q.k==="m"?", pilihan ganda":""})</small></h4><div class="brs">${o.map(x=>bar(esc(x.lab),x.c,n,sc?TONE5[x.i]:null)).join("")}</div></div>`});
+      h+=`<div class="card qcard"><h4>${q.id}. ${esc(tx(q.t))} <small>(n=${n}${q.k==="m"?tx(", pilihan ganda"):""})</small></h4><div class="brs">${o.map(x=>bar(esc(tx(x.lab)),x.c,n,sc?TONE5[x.i]:null)).join("")}</div></div>`});
     h+=`</div>`});
   $("ana").innerHTML=h;
 }
@@ -487,17 +505,17 @@ function voices(){
   [j?[j]:["operator","pengawas"]][0].forEach(jj=>{if(!inc(jj))return;by(jj).forEach(r=>{
     Object.keys(r.jawaban||{}).forEach(k=>{const q=qOf(jj,k);if(!q||q.k!=="t")return;if(id&&k!==id)return;const t=r.jawaban[k];if(t&&(!s||String(t).toLowerCase().includes(s)))items.push({r,q,t,jj})})})});
   items.sort((a,b)=>wkt(b.r.waktu).localeCompare(wkt(a.r.waktu)));
-  $("vl").innerHTML=items.length?items.slice(0,vlimit).map(x=>`<div class="cm"><p>${esc(x.t)}</p><div class="m"><span class="j">${J[x.jj]} · ${x.q.id}</span><span>${esc(x.r.plant)}</span><span>${esc(x.r.dept)}</span><span>${esc(x.r.line)}</span><span>${esc(x.r.tim)}</span><span>${esc(wkt(x.r.waktu).slice(0,10))}</span></div></div>`).join(""):`<div class="mute">Tidak ada pendapat yang cocok.</div>`;
+  $("vl").innerHTML=items.length?items.slice(0,vlimit).map(x=>`<div class="cm"><p>${esc(x.t)}</p><div class="m"><span class="j">${J[x.jj]} · ${x.q.id}</span><span>${esc(x.r.plant)}</span><span>${esc(x.r.dept)}</span><span>${esc(x.r.line)}</span><span>${esc(x.r.tim)}</span><span>${esc(wkt(x.r.waktu).slice(0,10))}</span></div></div>`).join(""):`<div class="mute">${tx("Tidak ada pendapat yang cocok.")}</div>`;
   $("vmore").classList.toggle("hide",items.length<=vlimit);
 }
-function fillVq(){
-  const o=['<option value="">Semua pertanyaan pendapat bebas</option>'];
-  ["operator","pengawas"].forEach(j=>allQs(j).filter(q=>q.k==="t").forEach(q=>o.push(`<option value="${j}|${q.id}">${J[j]} ${q.id}: ${esc(q.t.replace(/^[➀➁]\s*/,"").slice(0,60))}…</option>`)));
-  $("vq").innerHTML=o.join("");
+function fillVq(){const _v=$("vq")?$("vq").value:"";
+  const o=['<option value="">'+tx("Semua pertanyaan pendapat bebas")+'</option>'];
+  ["operator","pengawas"].forEach(j=>allQs(j).filter(q=>q.k==="t").forEach(q=>o.push(`<option value="${j}|${q.id}">${J[j]} ${q.id}: ${esc(tx(q.t).replace(/^[➀➁]\s*/,"").slice(0,60))}…</option>`)));
+  $("vq").innerHTML=o.join("");try{$("vq").value=_v}catch(e){}
 }
 function renderAll(){
   R=rowsAll();
-  $("fcount").textContent=`${R.length} dari ${DATA.length} respons ditampilkan`;
+  $("fcount").textContent=LANG==="ja"?`${DATA.length}件中${R.length}件を表示`:`${R.length} dari ${DATA.length} respons ditampilkan`;
   renderKpi();renderInd();renderCmp();renderKen();renderAna();voices();renderResp();
 }
 
@@ -534,13 +552,13 @@ const msg=(id,t,ok)=>{const e=$(id);if(!e)return;e.textContent=t;e.className=ok?
 /* --- Akun --- */
 let amTab="saya",editUser=null;
 function openAkun(tab){amTab=tab||"saya";
-  const tabs=`<div class="tabs"><button data-t="saya" class="${amTab==="saya"?"on":""}">Akun saya</button>${isAdmin()?`<button data-t="kelola" class="${amTab==="kelola"?"on":""}">Kelola akun</button>`:""}</div><div id="amb"></div>`;
-  openModal("Akun",tabs);
+  const tabs=`<div class="tabs"><button data-t="saya" class="${amTab==="saya"?"on":""}">${tx("Akun saya")}</button>${isAdmin()?`<button data-t="kelola" class="${amTab==="kelola"?"on":""}">Kelola akun</button>`:""}</div><div id="amb"></div>`;
+  openModal(tx("Akun"),tabs);
   $("mb").querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>openAkun(b.dataset.t));
   amTab==="saya"?viewSaya():viewKelola();
 }
 function viewSaya(){
-  if(ME.guest){$("amb").innerHTML=`<div class="rolebox"><b>Tamu</b> · <span class="rolepill r-tamu">TAMU</span><br>Anda masuk tanpa akun, jadi hanya dapat melihat dashboard. Tidak dapat mengekspor, mengubah, atau menghapus data. Sesi tamu berlaku 2 jam. Untuk akses lebih, minta admin membuatkan akun.</div><div class="mact"><button class="btn" id="gout">Keluar</button></div>`;$("gout").onclick=()=>{closeModal();logout()};return}
+  if(ME.guest){$("amb").innerHTML=`<div class="rolebox"><b>${tx("Tamu")}</b> · <span class="rolepill r-tamu">${tx("TAMU")}</span><br>${tx("Anda masuk tanpa akun, jadi hanya dapat melihat dashboard. Tidak dapat mengekspor, mengubah, atau menghapus data. Sesi tamu berlaku 2 jam. Untuk akses lebih, minta admin membuatkan akun.")}</div><div class="mact"><button class="btn" id="gout">${tx("Keluar")}</button></div>`;$("gout").onclick=()=>{closeModal();logout()};return}
   $("amb").innerHTML=`<div class="rolebox"><b>${esc(ME.nama)}</b> (${esc(ME.user)}) · <span class="rolepill ${isAdmin()?"r-admin":"r-tamu"}">${isAdmin()?"ADMIN":"TAMU"}</span><br>${isAdmin()?"Admin dapat melihat semua data, mengekspor CSV, mengoreksi atau menghapus respons, dan mengelola akun.":"Tamu hanya dapat melihat dashboard. Tidak dapat mengekspor, mengubah, atau menghapus data."}</div>
   <h4 style="margin:0 0 4px">Ganti kata sandi</h4>
   <div class="fld"><label for="pw0">Kata sandi lama</label><input id="pw0" type="password" autocomplete="current-password"></div>
@@ -632,20 +650,35 @@ function delResp(ref){
 $("rmore").onclick=()=>{rlimit+=15;renderResp()};$("acct").onclick=()=>openAkun("saya");
 
 /* ===== MULAI ===== */
+function hdr(){
+  if(!ME)return;const demo=MODE==="demo";
+  $("whon").textContent=ME.nama||"";$("whor").textContent=tx(isAdmin()?"ADMIN":"TAMU · LIHAT SAJA");$("whor").className="rolepill "+(isAdmin()?"r-admin":"r-tamu");
+  $("pilltx").textContent=demo?tx("DATA SIMULASI"):tx("DATA LIVE · ")+DATA.length;
+  if(!$("src").dataset.err)$("src").innerHTML=tx(demo?"Pratinjau dengan data simulasi<br>Periode &amp; lokasi dapat difilter":"Sumber: Google Spreadsheet SCS SCW<br>Periode &amp; lokasi dapat difilter");
+}
+function setLang(l){
+  LANG=l==="ja"?"ja":"id";try{localStorage.setItem("scw_lang",LANG)}catch(e){}
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("#lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===LANG));
+  applyStatic();
+  const pv=$("fpl").value;$("fpl").innerHTML='<option value="">'+tx("Semua Plant")+'</option>'+Object.keys(DEPT_BY_PLANT).map(p=>`<option>${p}</option>`).join("");$("fpl").value=pv;fillDept();fillVq();
+  if(!$("login").classList.contains("hide")){$("lerr").textContent=""}
+  if(!$("dash").classList.contains("hide")){hdr();renderAll()}
+  closeModal();
+}
 function start(){
   view("dash");
   document.body.classList.toggle("isadmin",isAdmin());document.body.classList.toggle("ro",!isAdmin());
-  $("whon").textContent=ME?ME.nama:"";$("whor").textContent=isAdmin()?"ADMIN":"TAMU · LIHAT SAJA";$("whor").className="rolepill "+(isAdmin()?"r-admin":"r-tamu");
+  hdr();
   const demo=MODE==="demo";
   $("demoBanner").classList.toggle("hide",!demo);
-  $("pill").classList.toggle("live",!demo);$("pilltx").textContent=demo?"DATA SIMULASI":"DATA LIVE · "+DATA.length;
-  $("src").innerHTML=demo?"Pratinjau dengan data simulasi<br>Periode &amp; lokasi dapat difilter":"Sumber: Google Spreadsheet SCS SCW<br>Periode &amp; lokasi dapat difilter";
+  $("pill").classList.toggle("live",!demo);hdr();
   renderAll();
 }
 function resetFilters(){$("fper").value="all";setPeriod();$("fpl").value="";fillDept();$("fdp").value="";$("fq").value="";seg="all";setSeg()}
 function setSeg(){document.querySelectorAll("#seg button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===seg));if(seg!=="all")atab=seg;setTabs()}
 function setTabs(){document.querySelectorAll("#atabs button").forEach(b=>b.classList.toggle("on",b.dataset.j===atab))}
-$("fpl").innerHTML='<option value="">Semua Plant</option>'+Object.keys(DEPT_BY_PLANT).map(p=>`<option>${p}</option>`).join("");fillDept();fillVq();
+$("fpl").innerHTML='<option value="">'+tx("Semua Plant")+'</option>'+Object.keys(DEPT_BY_PLANT).map(p=>`<option>${p}</option>`).join("");fillDept();fillVq();
 ["fper"].forEach(i=>$(i).onchange=()=>{setPeriod();renderAll()});
 ["fd1","fd2"].forEach(i=>$(i).onchange=()=>{$("fper").value="custom";renderAll()});
 $("fpl").onchange=()=>{fillDept();renderAll()};$("fdp").onchange=renderAll;$("fq").oninput=renderAll;
@@ -668,7 +701,9 @@ $("csv").onclick=()=>{
   const lines=[cols.concat(qc.map(x=>(x.j==="operator"?"T-":"P-")+x.id)).map(q).join(",")].concat(rows.map(r=>cols.map(c=>q(c==="waktu"?wkt(r[c]):r[c])).concat(qc.map(x=>{if(r.jenis!==x.j)return q("");const a=r.jawaban[x.id];return q(Array.isArray(a)?a.join(" | "):a)})).join(",")));
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv"}));a.download="rekap_scw"+(MODE==="demo"?"_simulasi":"")+".csv";a.click();
 };
+$("lang").onclick=e=>{const b=e.target.closest("button[data-l]");if(b&&b.dataset.l!==LANG)setLang(b.dataset.l)};
 /* awal */
+if(LANG==="ja")setLang("ja");
 if(!APPS_SCRIPT_URL){$("guest").classList.add("hide")}
 if(!APPS_SCRIPT_URL)preview("admin");else if(SESSION)load();else showLogin();
 </script>
