@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111e2d">
+<meta name="robots" content="noindex,nofollow">
+<title>Training SCW (DEMO) | PT TJForge Indonesia</title>
+<link rel="icon" href="scs-icon.png" type="image/png">
+<style>
+:root{
+  --bg:#f5f7fb;--ink:#1a293c;--sub:#718095;--line:#e5eaf1;--white:#fff;--navy:#121e2d;
+  --navy2:#1c2e43;--orange:#ff8200;--orange-light:#fff0df;--red:#d95750;--green:#15976a;--blue:#4a7ade;
+  --shadow:0 5px 24px rgba(31,44,68,.04);--radius:15px;font-family:Inter,Segoe UI,system-ui,Arial,sans-serif
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid rgba(255,130,0,.5);outline-offset:2px}
+a{color:#db780b;text-decoration:none}a:hover{text-decoration:underline}
+.hidden{display:none!important}.muted{color:var(--sub)}.small{font-size:12px}.tiny{font-size:11px}.bold{font-weight:800}.numeric{font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.105em;text-transform:uppercase;color:#e67d00}
+.btn{border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);padding:10px 15px;font-weight:750;display:inline-flex;gap:8px;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.015)}
+.btn:hover{background:#f9fbfd}.btn.orange{background:var(--orange);border-color:var(--orange);color:white}.btn.orange:hover{background:#ec7900}.btn.dark{background:#192b41;border-color:#192b41;color:white}.btn.ghost{background:transparent}.btn.sm{padding:7px 11px;font-size:12px}.btn.red{color:#a9332f;border-color:#edc5c3}.btn.full{width:100%}
+.btn-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.align-right{justify-content:flex-end}
+.input,.select,.textarea{background:white;border:1px solid #dce4ef;min-height:44px;border-radius:10px;padding:10px 12px;width:100%;outline:0;color:var(--ink)}
+.textarea{resize:vertical;min-height:85px}.input:focus,.select:focus,.textarea:focus{border-color:#ffab4e;box-shadow:0 0 0 3px rgba(255,130,0,.10)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;font-weight:800;color:#4a5b72}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.span-2{grid-column:1/-1}
+.card{border:1px solid var(--line);border-radius:var(--radius);background:var(--white);box-shadow:var(--shadow);padding:21px;min-width:0}
+.card h2,.card h3{margin:0}.card h2{font-size:17px}.card h3{font-size:15px}.card-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:17px}
+.card-title p{margin:4px 0 0;color:var(--sub);font-size:12px}.section-gap{margin-top:16px}.top-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.top-h h1{font-size:26px;line-height:1.15;margin:4px 0 6px;letter-spacing:-.04em}.top-h p{margin:0;color:var(--sub);font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:#edf1f6;color:#5f6d80;font-size:11px;font-weight:800;padding:5px 10px;white-space:nowrap}
+.pill.orange{background:#fff0db;color:#ac600a}.pill.green{background:#e1f7ed;color:#158351}.pill.blue{background:#e7f0ff;color:#285bc7}.pill.red{background:#fff0f0;color:#b9433d}
+.hint{background:#eff5ff;border:1px solid #d7e5fd;color:#45628c;padding:12px 14px;border-radius:12px;font-size:12px;line-height:1.55}
+.hint.warn{background:#fff7e9;border-color:#ffe2b5;color:#91611a}.hint.red{background:#fff0f0;border-color:#f5d1d1;color:#a63a35}
+.sep{border:0;border-top:1px solid var(--line);margin:18px 0}
+#toast{position:fixed;bottom:22px;right:24px;z-index:140;max-width:min(460px,90vw);padding:13px 19px;background:#203149;color:white;box-shadow:0 14px 36px rgba(20,35,50,.25);border-radius:12px;font-size:13px;pointer-events:none}
+#toast.error{background:#a52f33}
+
+/* public login */
+.auth-shell{min-height:100vh;display:grid;grid-template-columns:46% 54%;background:#fff}
+.auth-art{background:radial-gradient(circle at 14% 14%,rgba(255,130,0,.20),transparent 28%),linear-gradient(145deg,#121e2b,#1b3047);color:#fff;padding:54px 55px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.auth-art::after{content:"";width:460px;height:460px;position:absolute;right:-160px;bottom:-130px;border:1px solid rgba(255,255,255,.11);border-radius:100%;box-shadow:0 0 0 90px rgba(255,255,255,.018),0 0 0 170px rgba(255,255,255,.012)}
+.auth-logo{background:white;border-radius:11px;padding:12px 18px;display:inline-flex;align-items:center;width:max-content;max-width:100%}.auth-logo img{height:44px;max-width:100%;object-fit:contain}
+.auth-art .eyebrow{color:#ffad59}.auth-art h1{font-size:48px;letter-spacing:-.06em;line-height:1.06;margin:20px 0 18px}.auth-art p{max-width:450px;color:#c2cede;font-size:15px;line-height:1.7}
+.scw-steps{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.scw-step{padding:16px 19px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.055);border-radius:15px}.scw-step strong{font-size:24px;color:#ffb365}
+.auth-content{padding:45px;display:grid;place-items:center;overflow:auto}.auth-box{width:min(480px,100%)}.auth-box .header{margin-bottom:25px}.auth-box h2{font-size:27px;margin:7px 0}.auth-box .field{margin-bottom:14px}.auth-bottom{font-size:12px;color:var(--sub);margin-top:18px}
+.switcher{display:grid;grid-template-columns:1fr 1fr;padding:4px;background:#f0f3f7;border-radius:12px;margin-bottom:18px}.switcher button{padding:10px;border:0;border-radius:9px;background:transparent;color:#6c798b;font-weight:800}.switcher button.active{background:white;color:#17283c;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+
+/* app */
+.shell{display:flex;min-height:100vh}.sidebar{width:248px;flex:0 0 248px;background:var(--navy);color:white;position:sticky;top:0;height:100vh;padding:23px 15px;display:flex;flex-direction:column;z-index:30}
+.brand{padding:2px 8px 20px;border-bottom:1px solid rgba(255,255,255,.12)}.brand-logo{background:white;border-radius:9px;padding:8px 12px;display:inline-flex;width:100%;justify-content:center}.brand-logo img{height:40px;object-fit:contain;max-width:100%}.brand-caption{margin:12px 4px 0;font-size:11px;font-weight:800;letter-spacing:.07em;color:#f4b16b}
+.nav-head{color:#8394aa;font-size:10px;font-weight:800;letter-spacing:.1em;margin:25px 12px 8px}.nav-btn{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;color:#acbacd;background:transparent;border-radius:11px;padding:12px 13px;font-weight:700;margin:2px 0}
+.nav-btn:hover,.nav-btn.active{background:#283a52;color:#fff}.nav-btn.active{box-shadow:inset 3px 0 0 var(--orange)}.nav-btn svg{width:19px;height:19px;flex:none}
+.side-bottom{margin-top:auto;padding:16px 12px;color:#98a8ba;font-size:11px;border-top:1px solid rgba(255,255,255,.11)}.side-bottom strong{display:block;color:#f8c28a;margin-bottom:6px}
+.main{min-width:0;flex:1}.topbar{height:75px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 33px;gap:20px}
+.topbar h2{font-size:15px;margin:0}.topbar small{color:var(--sub);font-size:10px;font-weight:750;letter-spacing:.09em;text-transform:uppercase}
+.topbar-right{display:flex;gap:10px;align-items:center}.circle{width:34px;height:34px;border-radius:50%;background:var(--orange-light);color:#b36400;display:grid;place-items:center;font-weight:900}
+.content{padding:30px 34px 60px;max-width:1600px;margin:auto}.hamb{display:none}.footer{margin:30px 0 0;font-size:11px;color:#8995a4}.footer a{color:#b76400}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.kpi{padding:20px 21px}.kpi .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.kpi label{font-size:12px;color:#69788b;font-weight:650}.kpi strong{display:block;font-size:34px;letter-spacing:-.06em;line-height:1.2;margin:9px 0 3px}.kpi small{font-size:11px;color:#8a98a7}.kpi i{width:35px;height:35px;border-radius:11px;background:var(--orange-light);color:var(--orange);display:grid;place-items:center;font-style:normal}
+.hero{border-radius:19px;background:linear-gradient(120deg,#172439,#263b54 74%,#3b3b3c);color:#fff;padding:28px 30px;display:grid;grid-template-columns:1fr 240px;align-items:center;gap:16px;overflow:hidden;position:relative}.hero::before{content:"";width:400px;height:400px;border-radius:100%;position:absolute;right:-120px;top:-180px;border:75px solid rgba(255,255,255,.025)}
+.hero h2{font-size:25px;letter-spacing:-.04em;margin:8px 0}.hero p{font-size:13px;color:#c2ccda;max-width:630px;line-height:1.6;margin:0 0 16px}.hero-letters{display:flex;gap:10px;justify-content:center}.hero-letters b{display:grid;place-items:center;width:69px;height:88px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:29px;color:#ffae57;transform:rotate(-5deg)}.hero-letters b:nth-child(2){transform:rotate(4deg)}.hero-letters b:nth-child(3){transform:rotate(-2deg)}
+.cols-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.cols-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.cols-2-1{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:16px}.stat-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.stat-row:last-child{border:0}.stat-row span{font-size:12px;color:var(--sub)}.stat-row b{font-size:13px}
+.radar-svg{width:min(100%,515px);height:auto;display:block;margin:auto}.radar-legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:2px}.radar-legend .key{display:flex;gap:6px;align-items:center;font-size:12px;color:#5e7085}.radar-legend .sw{width:9px;height:9px;border-radius:2px}
+.chart-empty{display:grid;place-items:center;min-height:170px;color:#8a99a8;font-size:13px;text-align:center}
+.bar-chart{display:grid;gap:15px}.bar-line{display:grid;grid-template-columns:minmax(98px,36%) 1fr 42px;align-items:center;gap:9px;font-size:12px}.bar-line span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--sub)}.bar-line b{text-align:right;font-variant-numeric:tabular-nums}.bar-track{height:10px;background:#e9eff5;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#ffb257,var(--orange));border-radius:99px}
+.timeline{display:grid;gap:11px}.timeline-item{display:flex;gap:12px;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff}.timeline-num{width:37px;height:37px;display:grid;place-items:center;border-radius:10px;background:var(--orange-light);color:#cc7100;font-weight:900;flex:none}.timeline-item h3{margin:0 0 4px;font-size:13px}.timeline-item p{margin:0;color:var(--sub);font-size:12px;line-height:1.6}
+.step-card{padding:18px;background:#fbfcfe;border:1px solid var(--line);border-radius:13px}.step-card .index{color:var(--orange);font-weight:900;font-size:25px}.step-card h3{margin:7px 0}.step-card p{font-size:12px;color:var(--sub)}
+.question-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.q-grid{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:5px}.q-grid button{border:1px solid #e1e7ee;border-radius:8px;height:35px;background:white;color:#718095;font-weight:800;font-size:12px;padding:0}.q-grid button.active{background:#193047;color:white;border-color:#193047}.q-grid button.done{background:#fff0df;border-color:#ffc783;color:#b2670c}.q-grid button.active.done{background:#193047;color:white}
+.question{font-size:19px;line-height:1.55;font-weight:750;margin:17px 0 19px}.answer{width:100%;display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px;text-align:left;margin-bottom:10px;color:#253448}.answer:hover{border-color:#ffbd71;background:#fffcf8}.answer.selected{border-color:#ff8200;background:#fff6eb;box-shadow:inset 0 0 0 1px rgba(255,130,0,.25)}.answer .letter{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:#eef2f7;font-size:13px;font-weight:900;flex:none}.answer.selected .letter{background:#ff8200;color:#fff}
+.progress{height:10px;background:#e8edf4;border-radius:99px;overflow:hidden}.progress>span{display:block;height:100%;background:linear-gradient(90deg,#ffab4d,var(--orange));border-radius:99px}.progress-sm{height:7px}
+.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:760px}thead th{background:#f8fafc;color:#768498;text-transform:uppercase;letter-spacing:.06em;font-size:10px;text-align:left;padding:13px}tbody td{padding:13px;border-top:1px solid var(--line);font-size:12px;vertical-align:top}tbody tr:hover{background:#fafcff}td b{font-size:12px}
+.filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.choice-list{display:grid;gap:8px}.choice-list label{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;border:1px solid var(--line)}.choice-list label.checked{background:#fff6ec;border-color:#ffba68}.choice-list input{accent-color:var(--orange)}
+.review-item{padding:15px;border:1px solid var(--line);border-radius:12px;margin:10px 0}.review-item p{margin:8px 0;font-size:13px}.review-item .explanation{color:#6f7e90;font-size:12px}
+.select-course{min-width:195px;max-width:330px}
+.modal-bg{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:center;z-index:90;padding:20px}.modal{background:white;border-radius:20px;padding:25px;width:min(750px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 85px rgba(0,0,0,.2)}
+.cert-sheet{width:min(960px,100%);margin:0 auto;padding:50px;background:#fff;border:14px solid #15243a;text-align:center;min-height:550px;position:relative}.cert-sheet::before{content:"";position:absolute;inset:11px;border:2px solid #f9a340;pointer-events:none}.cert-sheet .logo{height:55px;max-width:250px;object-fit:contain}.cert-sheet h1{font-size:34px;letter-spacing:.08em;text-transform:uppercase;margin:30px 0 12px}.cert-sheet .name{font-size:30px;font-weight:800;color:#e68002;margin:20px 0}.cert-sheet p{line-height:1.9}.cert-sheet .code{font-size:12px;color:#637085;font-family:ui-monospace,monospace}
+#certPrint{display:none}
+@media(max-width:1250px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr 180px}.hero-letters b{width:49px;height:68px;font-size:22px}.content{padding:25px}}
+@media(max-width:950px){.sidebar{position:fixed;left:0;top:0;height:100dvh;transform:translateX(-110%);transition:transform .2s;box-shadow:12px 0 45px rgba(0,0,0,.1)}.sidebar.open{transform:translateX(0)}.hamb{display:inline-flex}.topbar{padding:12px 18px}.content{padding:18px 17px 40px}.cols-2,.cols-3,.cols-2-1{grid-template-columns:1fr}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.auth-shell{grid-template-columns:1fr}.auth-art{display:none}.auth-content{min-height:100vh}}
+@media(max-width:620px){.auth-content{padding:26px 16px}.form-grid,.filter-grid{grid-template-columns:1fr}.topbar .user-details{display:none}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px}.kpi strong{font-size:25px}.hero{grid-template-columns:1fr;padding:20px}.hero-letters{display:none}.top-h h1{font-size:23px}.card{padding:16px}.q-grid{grid-template-columns:repeat(5,1fr)}.select-course{min-width:130px}.topbar-right{gap:6px}}
+@media print{body{background:white}.sidebar,.topbar,.content,.auth-shell,.modal-bg,#toast{display:none!important}#certPrint{display:block!important}.cert-sheet{margin:0;box-shadow:none;page-break-inside:avoid}@page{size:A4 landscape;margin:12mm}}
+
+.brand-logo.scs{justify-content:flex-start;gap:12px;padding:8px 14px}.brand-logo.scs img{height:46px;width:46px;flex:none}.brand-logo.scs b{display:block;font-size:17px;color:#142132;line-height:1.1}.brand-logo.scs small{display:block;font-size:11px;color:#5b677a;margin-top:2px}
+.brand-caption{letter-spacing:.14em}
+.top-ic{width:40px;height:40px;flex:none}
+.pill.live{display:inline-flex;align-items:center;gap:7px;background:#F1F4F8;color:#142132;border:1px solid #e1e8f0;font-size:11px;font-weight:800;letter-spacing:.05em;padding:7px 12px;border-radius:999px}.pill.live i{width:7px;height:7px;border-radius:50%;background:#16a34a}
+.auth-logo{gap:14px}.auth-logo img.scs{height:48px;width:48px;padding-right:14px;border-right:1px solid #e1e8f0;box-sizing:content-box}
+
+a.nav-btn{display:flex;align-items:center;gap:10px}
+
+#busy{position:fixed;inset:0;z-index:9999;background:rgba(17,30,45,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;color:#fff}
+#busy.on{display:flex}
+#busy .sp{width:58px;height:58px;border-radius:50%;border:5px solid rgba(255,255,255,.22);border-top-color:#ff8200;animation:bspin .9s linear infinite}
+#busy .bt{font-weight:800;font-size:16px;letter-spacing:.02em}
+#busy .bs{font-size:13px;color:#cbd5e1;min-height:18px;max-width:320px}
+#busy .bb{width:210px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
+#busy .bb i{display:block;height:100%;width:40%;background:#ff8200;border-radius:2px;animation:bslide 1.3s ease-in-out infinite}
+@keyframes bspin{to{transform:rotate(360deg)}}@keyframes bslide{0%{margin-left:-40%}100%{margin-left:100%}}
+@media(prefers-reduced-motion:reduce){#busy .sp,#busy .bb i{animation-duration:3s}}
+
+.demo-box{margin-top:18px;padding:14px;border:1px dashed #ff8200;border-radius:12px;background:#fff8ef}
+.demo-box b{display:block;margin-bottom:8px;font-size:13px}.demo-btns{display:grid;gap:8px}.demo-box small{display:block;margin-top:10px;color:#5b677a}
+#demoBadge{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:60;background:#ff8200;color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.06em;padding:6px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.18);display:flex;gap:10px;align-items:center;white-space:nowrap}
+#demoBadge button{border:0;background:rgba(255,255,255,.25);color:#fff;font-weight:800;border-radius:999px;padding:3px 10px;cursor:pointer;font-size:11px}
+@media(max-width:760px){#demoBadge{bottom:8px;font-size:10.5px}}
+
+</style>
+</head>
+<body>
+<div id="root"><div style="padding:40px;font:600 15px system-ui">Memuat...</div></div><div id="toast" class="hidden" role="status" aria-live="polite"></div><div id="modalRoot"></div><div id="certPrint"></div><div id="busy" role="alert" aria-live="polite"><div class="sp"></div><div class="bt">Memuat…</div><div class="bb"><i></i></div><div class="bs" id="busyMsg"></div></div>
+<div id="demoBadge">MODE DEMO · data contoh, tidak tersimpan <button onclick="location.reload()">Reset</button></div>
+<script>
+
+(function(){
+const sheets={};
+function mkSheet(name){const rows=[];const s={name,rows,getLastRow:()=>rows.length,getMaxRows:()=>1000,
+ getRange:(r,c,nr=1,nc=1)=>{const rg={getValues:()=>Array.from({length:nr},(_,i)=>Array.from({length:nc},(_,j)=>(rows[r-1+i]||[])[c-1+j]??'')),
+  getValue:()=>(rows[r-1]||[])[c-1]??'',setValue:x=>{rows[r-1]=rows[r-1]||[];rows[r-1][c-1]=x;return px},
+  setValues:v=>{v.forEach((row,i)=>{rows[r-1+i]=rows[r-1+i]||[];row.forEach((x,j)=>rows[r-1+i][c-1+j]=x)});return px}};
+  const px=new Proxy(rg,{get:(t,p)=>p in t?t[p]:()=>px});return px},
+ appendRow:r=>{rows.push(r.slice())},setFrozenRows(){}};return s}
+const _c={};
+const CacheService={getScriptCache:()=>({get:k=>_c[k]??null,put:(k,v)=>{_c[k]=v},remove:k=>{delete _c[k]}})};
+const SpreadsheetApp={getActiveSpreadsheet:()=>({getSheetByName:n=>sheets[n]||null,insertSheet:n=>sheets[n]=mkSheet(n)})};
+const LockService={getScriptLock:()=>({waitLock(){},releaseLock(){}})};
+const Utilities={getUuid:()=>crypto.randomUUID(),formatDate:()=>new Date().toISOString()};
+const TZ='Asia/Jakarta',MAKS_GAGAL=5,KUNCI_DETIK=900;
+const DEMO_AKUN={'demo-admin':{p:'DemoAdmin123',n:'Admin Demo',r:'admin'},'demo-tamu':{p:'DemoTamu123',n:'Tamu Demo',r:'tamu'}};
+const json_=x=>x,clean_=s=>String(s),safeEq_=(a,b)=>a===b,hash_=(s,p)=>'h'+btoa(unescape(encodeURIComponent(s+p)));
+const ensureAkunSheet_=()=>null,akunRow_=(sh,u)=>DEMO_AKUN[u]?1:0;
+function login_(u,p){const a=DEMO_AKUN[String(u).toLowerCase()];if(!a||a.p!==p)return{ok:false,error:'Username atau password tidak sesuai.'};
+ const sid=crypto.randomUUID().replace(/-/g,'')+crypto.randomUUID().replace(/-/g,'');_c['sesi_'+sid]=JSON.stringify({user:u.toLowerCase(),nama:a.n,peran:a.r,guest:false});return{ok:true,session:sid}}
+function loginTamu_(){const sid=crypto.randomUUID().replace(/-/g,'')+crypto.randomUUID().replace(/-/g,'');_c['sesi_'+sid]=JSON.stringify({user:'tamu',nama:'Tamu',peran:'tamu',guest:true});return{ok:true,session:sid}}
+function sesi_(sid){const v=_c['sesi_'+sid];return v?JSON.parse(v):null}
+function aksi_(){return{ok:true}}
+const TR_DEPTS={"Plant 1": ["HRGA & IT", "Accounting", "Purchasing", "Sales", "Machining", "Maintenance", "PPIC", "QA & QC", "Forging"], "Plant 2": ["HRGA", "Assembling", "Machining", "Maintenance", "PPIC", "Purchasing", "QA & QC"]};const TR_DIMS=[["detect", "Deteksi Abnormal"], ["stop", "STOP"], ["call", "CALL"], ["wait", "WAIT"], ["restart", "Restart Aman"]];const TR_SKENARIO={"HRGA & IT": {"pre": {"issue": "akses panel data personalia tidak sesuai otorisasi yang diberikan", "stop": "kunci akses sementara untuk data terkait", "contact": "atasan HRGA & IT dan petugas keamanan informasi", "hold": "akses yang diduga bermasalah tetap dibatasi", "restart": "hak akses telah diverifikasi dan disetujui ulang"}, "post": {"issue": "server absensi menunjukkan perubahan data tanpa jejak persetujuan", "stop": "hentikan perubahan data dan batasi akses sistem yang terdampak", "contact": "PIC HRGA & IT dan pemilik proses absensi", "hold": "data terkait tidak diubah atau diekspor", "restart": "penyebab perubahan terverifikasi, kontrol akses dipulihkan, dan PIC mengizinkan"}}, "Accounting": {"pre": {"issue": "terjadi selisih nilai invoice dengan bukti penerimaan barang", "stop": "tahan proses posting atau pembayaran transaksi tersebut", "contact": "supervisor Accounting dan pemilik dokumen terkait", "hold": "dokumen transaksi yang meragukan tetap ditahan", "restart": "invoice, bukti terima, dan otorisasi berhasil direkonsiliasi"}, "post": {"issue": "nomor rekening vendor pada instruksi pembayaran berbeda dari data master resmi", "stop": "hentikan proses pembayaran yang terdampak", "contact": "atasan Accounting serta Purchasing atau pihak verifikasi vendor", "hold": "pembayaran tidak dijalankan dan bukti disimpan", "restart": "rekening vendor diverifikasi melalui jalur resmi dan perubahan disahkan"}}, "Purchasing": {"pre": {"issue": "spesifikasi material pada PO berbeda dari permintaan yang sudah disetujui", "stop": "tahan penerbitan atau perubahan PO terkait", "contact": "atasan Purchasing dan pemohon kebutuhan material", "hold": "PO terkait tidak dikirim kepada pemasok", "restart": "spesifikasi dan persetujuan pembelian sudah cocok"}, "post": {"issue": "pemasok mengirim pemberitahuan perubahan grade material tanpa persetujuan teknis", "stop": "tahan instruksi penerimaan atau pemakaian material terdampak", "contact": "pimpinan Purchasing, QA & QC, dan pemohon teknis", "hold": "material perubahan belum dilepas untuk pemakaian", "restart": "pengganti material dinilai, disetujui, dan terdokumentasi"}}, "Sales": {"pre": {"issue": "permintaan pelanggan memiliki revisi drawing yang belum tercatat pada konfirmasi pesanan", "stop": "tahan konfirmasi komitmen pengiriman terkait", "contact": "atasan Sales dan PIC Engineering/QA terkait", "hold": "komitmen terhadap revisi belum diterbitkan", "restart": "revisi drawing dan persetujuan customer terkonfirmasi"}, "post": {"issue": "permintaan expedite shipment bertentangan dengan status inspeksi produk yang belum selesai", "stop": "hentikan pelepasan informasi siap kirim atas lot tersebut", "contact": "atasan Sales, PPIC, dan QA & QC", "hold": "janji pengiriman ditahan sampai status produk jelas", "restart": "status inspeksi terverifikasi dan persetujuan pelepasan diperoleh"}}, "Machining": {"pre": {"issue": "dimensi produk hasil machining berada di luar toleransi drawing", "stop": "hentikan proses mesin secara aman dan tahan hasil lot terkait", "contact": "leader Machining dan QA & QC", "hold": "produk yang dicurigai NG dipisahkan dan diberi identifikasi", "restart": "setting mesin dan hasil first-piece lolos verifikasi sesuai standar"}, "post": {"issue": "terdengar suara spindle yang tidak normal saat cutting berlangsung", "stop": "hentikan mesin sesuai prosedur tanpa mendekati bagian bergerak", "contact": "leader Machining dan Maintenance", "hold": "mesin dan part terkait tetap dalam kondisi aman/tertahan", "restart": "penyebab suara diperiksa dan trial proses dinyatakan aman"}}, "Maintenance": {"pre": {"issue": "ditemukan potensi energi tersisa ketika inspeksi perbaikan peralatan", "stop": "hentikan pekerjaan dan gunakan prosedur isolasi energi yang berlaku", "contact": "leader Maintenance dan HSE jika risikonya memerlukan eskalasi", "hold": "pekerjaan tetap dihentikan dan energi tidak dipulihkan", "restart": "isolasi energi, verifikasi zero energy, dan otorisasi kerja selesai"}, "post": {"issue": "indikator tekanan hidrolik masih terbaca saat komponen hendak dilepas", "stop": "hentikan pembongkaran dan amankan sumber energi menurut LOTO", "contact": "leader Maintenance dan PIC area mesin", "hold": "tekanan tidak dilepas dengan cara improvisasi", "restart": "verifikasi bebas energi dan rencana kerja telah disetujui"}}, "PPIC": {"pre": {"issue": "rencana produksi menggunakan lot material yang berstatus HOLD dari QA", "stop": "hentikan pelepasan jadwal atau instruksi penggunaan lot tersebut", "contact": "leader PPIC, Warehouse, dan QA & QC", "hold": "lot HOLD tetap tidak dijadwalkan untuk dipakai", "restart": "status material dibebaskan secara sah dan jadwal diperbarui"}, "post": {"issue": "nomor lot pada instruksi produksi tidak sama dengan nomor lot fisik material", "stop": "tahan distribusi instruksi kerja untuk lot terkait", "contact": "atasan PPIC, pemilik area material, dan QA & QC", "hold": "material tidak ditransfer untuk proses berikutnya", "restart": "identitas dan ketertelusuran lot dikonfirmasi"}}, "QA & QC": {"pre": {"issue": "hasil inspeksi menunjukkan dimensi penting produk di luar toleransi", "stop": "hentikan pelepasan hasil inspeksi atau lot terkait", "contact": "leader QA & QC dan pemilik proses produksi", "hold": "produk tidak diluluskan dan lot diberi status HOLD", "restart": "disposisi kualitas, perbaikan, dan verifikasi hasil sudah disahkan"}, "post": {"issue": "alat ukur ditemukan melewati tanggal kalibrasi saat inspeksi final", "stop": "hentikan penggunaan alat ukur dan evaluasi hasil ukur terdampak", "contact": "leader QA & QC dan penanggung jawab kalibrasi", "hold": "hasil inspeksi terkait belum diterbitkan", "restart": "status alat ukur dan validitas hasil inspeksi dipastikan"}}, "Forging": {"pre": {"issue": "muncul retakan pada dies saat proses forging berlangsung", "stop": "hentikan proses forging secara aman dan jauhkan orang dari zona bahaya", "contact": "leader Forging dan Maintenance", "hold": "dies dan produk yang berpotensi terdampak tetap ditahan", "restart": "kondisi dies, mesin, dan hasil trial diverifikasi"}, "post": {"issue": "temperatur billet terbaca di luar batas proses yang ditetapkan", "stop": "hentikan proses sesuai prosedur dan tahan billet terkait", "contact": "leader Forging dan QA & QC", "hold": "billet dan produk terkait tidak dilanjutkan prosesnya", "restart": "parameter pemanasan dan mutu hasil trial telah sesuai"}}, "HRGA": {"pre": {"issue": "jalur evakuasi di area kerja tertutup material sementara", "stop": "hentikan aktivitas yang menghalangi akses evakuasi secara aman", "contact": "atasan HRGA, PIC area, dan HSE", "hold": "jalur tetap dibatasi dari aktivitas sampai dipulihkan", "restart": "jalur evakuasi kembali terbuka dan diverifikasi"}, "post": {"issue": "data akses kontraktor ke area kerja tidak cocok dengan daftar yang telah disetujui", "stop": "tahan izin masuk kontraktor yang belum terverifikasi", "contact": "atasan HRGA dan PIC area/HSE sesuai prosedur", "hold": "akses belum diberikan sampai identitas dan persyaratan sah", "restart": "dokumen identitas, izin, dan otorisasi telah cocok"}}, "Assembling": {"pre": {"issue": "torsi baut saat assembling berada di luar spesifikasi standar kerja", "stop": "hentikan assembling dan tahan unit yang terdampak", "contact": "leader Assembling dan QA & QC", "hold": "unit yang dicurigai tidak diteruskan ke proses berikutnya", "restart": "setting tool, torsi, dan hasil verifikasi produk telah sesuai"}, "post": {"issue": "komponen yang dipasang tidak sesuai part number pada instruksi kerja", "stop": "hentikan perakitan dan identifikasi seluruh unit berisiko", "contact": "leader Assembling, PPIC, dan QA & QC", "hold": "unit terdampak tetap HOLD dan tidak dipindahkan", "restart": "part number dan hasil rework/inspeksi diverifikasi"}}};const TR_Q=[{"d": "detect", "q": "Operator melihat suhu mesin naik di atas batas normal pada panel. Langkah pertama yang tepat adalah...", "o": ["Anggap normal karena mesin masih berjalan", "Kenali sebagai kondisi abnormal dan siap menghentikan pekerjaan sesuai SOP", "Tunggu sampai shift berikutnya", "Turunkan batas alarm agar tidak berbunyi"], "c": 1, "e": "Kondisi di luar batas harus dikenali sebagai abnormal sejak awal.", "l": "general", "s": "Contoh demo"}, {"d": "detect", "q": "Terdengar suara tidak biasa dari mesin yang biasanya halus. Sikap yang benar adalah...", "o": ["Tunggu laporan dari shift lain", "Abaikan jika produk masih lolos", "Matikan speaker area kerja", "Anggap itu sinyal abnormal dan periksa dengan aman"], "c": 3, "e": "Perubahan suara adalah sinyal dini abnormalitas.", "l": "general", "s": "Contoh demo"}, {"d": "detect", "q": "Hasil ukur sebuah part berada tepat di batas toleransi dan cenderung bergeser. Penilaian yang tepat adalah...", "o": ["Hapus data ukur yang meragukan", "Tunggu audit bulanan", "Selama belum NG, berarti aman", "Tren yang bergeser perlu dikenali sebagai potensi abnormal"], "c": 3, "e": "Tren menuju batas adalah tanda yang perlu ditindaklanjuti.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Setelah menemukan abnormal yang berisiko, tindakan STOP yang benar adalah...", "o": ["Hentikan pekerjaan dengan aman dan amankan area", "Hanya mencatat tanpa menghentikan", "Pindahkan produk ke mesin lain diam-diam", "Lanjutkan dulu sampai lot selesai"], "c": 0, "e": "STOP berarti menghentikan kegiatan dengan aman.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Guarding mesin terlihat longgar dan bagian bergerak masih berputar. Cara STOP terbaik adalah...", "o": ["Pegang guarding dengan tangan", "Hentikan mesin lewat prosedur dan jangan mendekati bagian bergerak", "Percepat produksi agar cepat selesai", "Tutup dengan kain"], "c": 1, "e": "Berhenti tidak boleh menambah risiko.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Peralatan terlihat berbahaya dan belum terisolasi. STOP yang tepat adalah...", "o": ["Tunggu orang lain menanganinya", "Tetap bekerja di sekitarnya", "Hentikan pekerjaan, jangan memasuki zona bahaya, ikuti isolasi yang diwajibkan", "Matikan alarm"], "c": 2, "e": "Keselamatan lebih utama daripada target.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Laporan CALL yang efektif memuat...", "o": ["Opini tentang siapa yang salah", "Foto tanpa keterangan", "Hanya kata 'ada masalah'", "Lokasi, gejala, waktu, dan tindakan penahanan yang sudah dilakukan"], "c": 3, "e": "Fakta yang jelas membantu respons cepat.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Kepada siapa abnormal dilaporkan pertama kali?", "o": ["Leader atau pihak berwenang sesuai alur eskalasi", "Hanya dicatat di buku pribadi", "Tidak perlu dilaporkan jika kecil", "Rekan satu line saja"], "c": 0, "e": "Gunakan jalur eskalasi yang berlaku.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Abnormal berpotensi berdampak ke departemen lain. CALL yang tepat adalah...", "o": ["Cukup lapor ke satu orang", "Laporkan lewat rantai eskalasi dan jelaskan potensi dampak lintas fungsi", "Tunggu mereka menyadari sendiri", "Kirim pesan tanpa detail"], "c": 1, "e": "Komunikasi lintas fungsi mencegah risiko menyebar.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Saat menunggu arahan setelah STOP, unit yang bermasalah harus...", "o": ["Dibuang tanpa dicatat", "Dipindahkan ke proses berikutnya", "Tetap HOLD dan diidentifikasi", "Dicampur dengan produk baik"], "c": 2, "e": "WAIT menjaga kondisi tetap terkendali.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Rekan menawarkan untuk 'mencoba sekali lagi' sebelum ada keputusan. Respons yang benar adalah...", "o": ["Mencoba diam-diam", "Mengganti parameter sendiri", "Setuju agar cepat selesai", "Menahan dan menunggu instruksi serta persetujuan"], "c": 3, "e": "Jangan mengubah kondisi sebelum ada keputusan.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Selama WAIT, area kerja sebaiknya...", "o": ["Dibatasi dan dijaga sampai ada arahan", "Ditinggalkan tanpa tanda", "Dibersihkan sebelum diperiksa", "Dibiarkan terbuka untuk semua orang"], "c": 0, "e": "Pembatasan area menjaga bukti dan keselamatan.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Mesin boleh dijalankan kembali setelah...", "o": ["Satu orang merasa sudah aman", "Tindakan korektif diverifikasi dan ada otorisasi dari PIC berwenang", "Target produksi mendesak", "Jam istirahat selesai"], "c": 1, "e": "Restart membutuhkan verifikasi dan otorisasi.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Sebelum restart, hal yang perlu dipastikan adalah...", "o": ["Operator lain sudah pulang", "Tidak ada yang melihat", "Checklist start-up dan hasil awal sesuai standar", "Mesin sudah dingin saja"], "c": 2, "e": "Verifikasi menutup risiko berulang.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Setelah perbaikan, masalah muncul lagi pada trial. Tindakan yang tepat adalah...", "o": ["Sembunyikan hasil trial", "Turunkan kecepatan lalu lanjut", "Lanjut karena sudah diperbaiki", "Tetap STOP, laporkan ulang, dan ulangi verifikasi sebelum restart"], "c": 3, "e": "Masalah berulang berarti belum aman untuk restart.", "l": "general", "s": "Contoh demo"}, {"d": "detect", "q": "Operator melihat suhu mesin naik di atas batas normal pada panel. Langkah pertama yang tepat adalah...", "o": ["Turunkan batas alarm agar tidak berbunyi", "Anggap normal karena mesin masih berjalan", "Kenali sebagai kondisi abnormal dan siap menghentikan pekerjaan sesuai SOP", "Tunggu sampai shift berikutnya"], "c": 2, "e": "Kondisi di luar batas harus dikenali sebagai abnormal sejak awal.", "l": "general", "s": "Contoh demo"}, {"d": "detect", "q": "Terdengar suara tidak biasa dari mesin yang biasanya halus. Sikap yang benar adalah...", "o": ["Anggap itu sinyal abnormal dan periksa dengan aman", "Tunggu laporan dari shift lain", "Abaikan jika produk masih lolos", "Matikan speaker area kerja"], "c": 0, "e": "Perubahan suara adalah sinyal dini abnormalitas.", "l": "general", "s": "Contoh demo"}, {"d": "detect", "q": "Hasil ukur sebuah part berada tepat di batas toleransi dan cenderung bergeser. Penilaian yang tepat adalah...", "o": ["Tren yang bergeser perlu dikenali sebagai potensi abnormal", "Hapus data ukur yang meragukan", "Tunggu audit bulanan", "Selama belum NG, berarti aman"], "c": 0, "e": "Tren menuju batas adalah tanda yang perlu ditindaklanjuti.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Setelah menemukan abnormal yang berisiko, tindakan STOP yang benar adalah...", "o": ["Lanjutkan dulu sampai lot selesai", "Hentikan pekerjaan dengan aman dan amankan area", "Hanya mencatat tanpa menghentikan", "Pindahkan produk ke mesin lain diam-diam"], "c": 1, "e": "STOP berarti menghentikan kegiatan dengan aman.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Guarding mesin terlihat longgar dan bagian bergerak masih berputar. Cara STOP terbaik adalah...", "o": ["Tutup dengan kain", "Pegang guarding dengan tangan", "Hentikan mesin lewat prosedur dan jangan mendekati bagian bergerak", "Percepat produksi agar cepat selesai"], "c": 2, "e": "Berhenti tidak boleh menambah risiko.", "l": "general", "s": "Contoh demo"}, {"d": "stop", "q": "Peralatan terlihat berbahaya dan belum terisolasi. STOP yang tepat adalah...", "o": ["Matikan alarm", "Tunggu orang lain menanganinya", "Tetap bekerja di sekitarnya", "Hentikan pekerjaan, jangan memasuki zona bahaya, ikuti isolasi yang diwajibkan"], "c": 3, "e": "Keselamatan lebih utama daripada target.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Laporan CALL yang efektif memuat...", "o": ["Lokasi, gejala, waktu, dan tindakan penahanan yang sudah dilakukan", "Opini tentang siapa yang salah", "Foto tanpa keterangan", "Hanya kata 'ada masalah'"], "c": 0, "e": "Fakta yang jelas membantu respons cepat.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Kepada siapa abnormal dilaporkan pertama kali?", "o": ["Rekan satu line saja", "Leader atau pihak berwenang sesuai alur eskalasi", "Hanya dicatat di buku pribadi", "Tidak perlu dilaporkan jika kecil"], "c": 1, "e": "Gunakan jalur eskalasi yang berlaku.", "l": "general", "s": "Contoh demo"}, {"d": "call", "q": "Abnormal berpotensi berdampak ke departemen lain. CALL yang tepat adalah...", "o": ["Kirim pesan tanpa detail", "Cukup lapor ke satu orang", "Laporkan lewat rantai eskalasi dan jelaskan potensi dampak lintas fungsi", "Tunggu mereka menyadari sendiri"], "c": 2, "e": "Komunikasi lintas fungsi mencegah risiko menyebar.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Saat menunggu arahan setelah STOP, unit yang bermasalah harus...", "o": ["Dicampur dengan produk baik", "Dibuang tanpa dicatat", "Dipindahkan ke proses berikutnya", "Tetap HOLD dan diidentifikasi"], "c": 3, "e": "WAIT menjaga kondisi tetap terkendali.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Rekan menawarkan untuk 'mencoba sekali lagi' sebelum ada keputusan. Respons yang benar adalah...", "o": ["Menahan dan menunggu instruksi serta persetujuan", "Mencoba diam-diam", "Mengganti parameter sendiri", "Setuju agar cepat selesai"], "c": 0, "e": "Jangan mengubah kondisi sebelum ada keputusan.", "l": "general", "s": "Contoh demo"}, {"d": "wait", "q": "Selama WAIT, area kerja sebaiknya...", "o": ["Dibiarkan terbuka untuk semua orang", "Dibatasi dan dijaga sampai ada arahan", "Ditinggalkan tanpa tanda", "Dibersihkan sebelum diperiksa"], "c": 1, "e": "Pembatasan area menjaga bukti dan keselamatan.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Mesin boleh dijalankan kembali setelah...", "o": ["Jam istirahat selesai", "Satu orang merasa sudah aman", "Tindakan korektif diverifikasi dan ada otorisasi dari PIC berwenang", "Target produksi mendesak"], "c": 2, "e": "Restart membutuhkan verifikasi dan otorisasi.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Sebelum restart, hal yang perlu dipastikan adalah...", "o": ["Mesin sudah dingin saja", "Operator lain sudah pulang", "Tidak ada yang melihat", "Checklist start-up dan hasil awal sesuai standar"], "c": 3, "e": "Verifikasi menutup risiko berulang.", "l": "general", "s": "Contoh demo"}, {"d": "restart", "q": "Setelah perbaikan, masalah muncul lagi pada trial. Tindakan yang tepat adalah...", "o": ["Tetap STOP, laporkan ulang, dan ulangi verifikasi sebelum restart", "Sembunyikan hasil trial", "Turunkan kecepatan lalu lanjut", "Lanjut karena sudah diperbaiki"], "c": 0, "e": "Masalah berulang berarti belum aman untuk restart.", "l": "general", "s": "Contoh demo"}];const TR_MAP={"HRGA & IT|||Operator|||pre": [[0, "pre::HRGA & IT::Operator::detect::0"], [1, "pre::HRGA & IT::Operator::detect::1"], [2, "pre::HRGA & IT::Operator::detect::2"], [3, "pre::HRGA & IT::Operator::stop::3"], [4, "pre::HRGA & IT::Operator::stop::4"], [5, "pre::HRGA & IT::Operator::stop::5"], [6, "pre::HRGA & IT::Operator::call::6"], [7, "pre::HRGA & IT::Operator::call::7"], [8, "pre::HRGA & IT::Operator::call::8"], [9, "pre::HRGA & IT::Operator::wait::9"], [10, "pre::HRGA & IT::Operator::wait::10"], [11, "pre::HRGA & IT::Operator::wait::11"], [12, "pre::HRGA & IT::Operator::restart::12"], [13, "pre::HRGA & IT::Operator::restart::13"], [14, "pre::HRGA & IT::Operator::restart::14"]], "HRGA & IT|||Pengawas|||pre": [[0, "pre::HRGA & IT::Pengawas::detect::0"], [1, "pre::HRGA & IT::Pengawas::detect::1"], [2, "pre::HRGA & IT::Pengawas::detect::2"], [3, "pre::HRGA & IT::Pengawas::stop::3"], [4, "pre::HRGA & IT::Pengawas::stop::4"], [5, "pre::HRGA & IT::Pengawas::stop::5"], [6, "pre::HRGA & IT::Pengawas::call::6"], [7, "pre::HRGA & IT::Pengawas::call::7"], [8, "pre::HRGA & IT::Pengawas::call::8"], [9, "pre::HRGA & IT::Pengawas::wait::9"], [10, "pre::HRGA & IT::Pengawas::wait::10"], [11, "pre::HRGA & IT::Pengawas::wait::11"], [12, "pre::HRGA & IT::Pengawas::restart::12"], [13, "pre::HRGA & IT::Pengawas::restart::13"], [14, "pre::HRGA & IT::Pengawas::restart::14"]], "Accounting|||Operator|||pre": [[0, "pre::Accounting::Operator::detect::0"], [1, "pre::Accounting::Operator::detect::1"], [2, "pre::Accounting::Operator::detect::2"], [3, "pre::Accounting::Operator::stop::3"], [4, "pre::Accounting::Operator::stop::4"], [5, "pre::Accounting::Operator::stop::5"], [6, "pre::Accounting::Operator::call::6"], [7, "pre::Accounting::Operator::call::7"], [8, "pre::Accounting::Operator::call::8"], [9, "pre::Accounting::Operator::wait::9"], [10, "pre::Accounting::Operator::wait::10"], [11, "pre::Accounting::Operator::wait::11"], [12, "pre::Accounting::Operator::restart::12"], [13, "pre::Accounting::Operator::restart::13"], [14, "pre::Accounting::Operator::restart::14"]], "Accounting|||Pengawas|||pre": [[0, "pre::Accounting::Pengawas::detect::0"], [1, "pre::Accounting::Pengawas::detect::1"], [2, "pre::Accounting::Pengawas::detect::2"], [3, "pre::Accounting::Pengawas::stop::3"], [4, "pre::Accounting::Pengawas::stop::4"], [5, "pre::Accounting::Pengawas::stop::5"], [6, "pre::Accounting::Pengawas::call::6"], [7, "pre::Accounting::Pengawas::call::7"], [8, "pre::Accounting::Pengawas::call::8"], [9, "pre::Accounting::Pengawas::wait::9"], [10, "pre::Accounting::Pengawas::wait::10"], [11, "pre::Accounting::Pengawas::wait::11"], [12, "pre::Accounting::Pengawas::restart::12"], [13, "pre::Accounting::Pengawas::restart::13"], [14, "pre::Accounting::Pengawas::restart::14"]], "Purchasing|||Operator|||pre": [[0, "pre::Purchasing::Operator::detect::0"], [1, "pre::Purchasing::Operator::detect::1"], [2, "pre::Purchasing::Operator::detect::2"], [3, "pre::Purchasing::Operator::stop::3"], [4, "pre::Purchasing::Operator::stop::4"], [5, "pre::Purchasing::Operator::stop::5"], [6, "pre::Purchasing::Operator::call::6"], [7, "pre::Purchasing::Operator::call::7"], [8, "pre::Purchasing::Operator::call::8"], [9, "pre::Purchasing::Operator::wait::9"], [10, "pre::Purchasing::Operator::wait::10"], [11, "pre::Purchasing::Operator::wait::11"], [12, "pre::Purchasing::Operator::restart::12"], [13, "pre::Purchasing::Operator::restart::13"], [14, "pre::Purchasing::Operator::restart::14"]], "Purchasing|||Pengawas|||pre": [[0, "pre::Purchasing::Pengawas::detect::0"], [1, "pre::Purchasing::Pengawas::detect::1"], [2, "pre::Purchasing::Pengawas::detect::2"], [3, "pre::Purchasing::Pengawas::stop::3"], [4, "pre::Purchasing::Pengawas::stop::4"], [5, "pre::Purchasing::Pengawas::stop::5"], [6, "pre::Purchasing::Pengawas::call::6"], [7, "pre::Purchasing::Pengawas::call::7"], [8, "pre::Purchasing::Pengawas::call::8"], [9, "pre::Purchasing::Pengawas::wait::9"], [10, "pre::Purchasing::Pengawas::wait::10"], [11, "pre::Purchasing::Pengawas::wait::11"], [12, "pre::Purchasing::Pengawas::restart::12"], [13, "pre::Purchasing::Pengawas::restart::13"], [14, "pre::Purchasing::Pengawas::restart::14"]], "Sales|||Operator|||pre": [[0, "pre::Sales::Operator::detect::0"], [1, "pre::Sales::Operator::detect::1"], [2, "pre::Sales::Operator::detect::2"], [3, "pre::Sales::Operator::stop::3"], [4, "pre::Sales::Operator::stop::4"], [5, "pre::Sales::Operator::stop::5"], [6, "pre::Sales::Operator::call::6"], [7, "pre::Sales::Operator::call::7"], [8, "pre::Sales::Operator::call::8"], [9, "pre::Sales::Operator::wait::9"], [10, "pre::Sales::Operator::wait::10"], [11, "pre::Sales::Operator::wait::11"], [12, "pre::Sales::Operator::restart::12"], [13, "pre::Sales::Operator::restart::13"], [14, "pre::Sales::Operator::restart::14"]], "Sales|||Pengawas|||pre": [[0, "pre::Sales::Pengawas::detect::0"], [1, "pre::Sales::Pengawas::detect::1"], [2, "pre::Sales::Pengawas::detect::2"], [3, "pre::Sales::Pengawas::stop::3"], [4, "pre::Sales::Pengawas::stop::4"], [5, "pre::Sales::Pengawas::stop::5"], [6, "pre::Sales::Pengawas::call::6"], [7, "pre::Sales::Pengawas::call::7"], [8, "pre::Sales::Pengawas::call::8"], [9, "pre::Sales::Pengawas::wait::9"], [10, "pre::Sales::Pengawas::wait::10"], [11, "pre::Sales::Pengawas::wait::11"], [12, "pre::Sales::Pengawas::restart::12"], [13, "pre::Sales::Pengawas::restart::13"], [14, "pre::Sales::Pengawas::restart::14"]], "Machining|||Operator|||pre": [[0, "pre::Machining::Operator::detect::0"], [1, "pre::Machining::Operator::detect::1"], [2, "pre::Machining::Operator::detect::2"], [3, "pre::Machining::Operator::stop::3"], [4, "pre::Machining::Operator::stop::4"], [5, "pre::Machining::Operator::stop::5"], [6, "pre::Machining::Operator::call::6"], [7, "pre::Machining::Operator::call::7"], [8, "pre::Machining::Operator::call::8"], [9, "pre::Machining::Operator::wait::9"], [10, "pre::Machining::Operator::wait::10"], [11, "pre::Machining::Operator::wait::11"], [12, "pre::Machining::Operator::restart::12"], [13, "pre::Machining::Operator::restart::13"], [14, "pre::Machining::Operator::restart::14"]], "Machining|||Pengawas|||pre": [[0, "pre::Machining::Pengawas::detect::0"], [1, "pre::Machining::Pengawas::detect::1"], [2, "pre::Machining::Pengawas::detect::2"], [3, "pre::Machining::Pengawas::stop::3"], [4, "pre::Machining::Pengawas::stop::4"], [5, "pre::Machining::Pengawas::stop::5"], [6, "pre::Machining::Pengawas::call::6"], [7, "pre::Machining::Pengawas::call::7"], [8, "pre::Machining::Pengawas::call::8"], [9, "pre::Machining::Pengawas::wait::9"], [10, "pre::Machining::Pengawas::wait::10"], [11, "pre::Machining::Pengawas::wait::11"], [12, "pre::Machining::Pengawas::restart::12"], [13, "pre::Machining::Pengawas::restart::13"], [14, "pre::Machining::Pengawas::restart::14"]], "Maintenance|||Operator|||pre": [[0, "pre::Maintenance::Operator::detect::0"], [1, "pre::Maintenance::Operator::detect::1"], [2, "pre::Maintenance::Operator::detect::2"], [3, "pre::Maintenance::Operator::stop::3"], [4, "pre::Maintenance::Operator::stop::4"], [5, "pre::Maintenance::Operator::stop::5"], [6, "pre::Maintenance::Operator::call::6"], [7, "pre::Maintenance::Operator::call::7"], [8, "pre::Maintenance::Operator::call::8"], [9, "pre::Maintenance::Operator::wait::9"], [10, "pre::Maintenance::Operator::wait::10"], [11, "pre::Maintenance::Operator::wait::11"], [12, "pre::Maintenance::Operator::restart::12"], [13, "pre::Maintenance::Operator::restart::13"], [14, "pre::Maintenance::Operator::restart::14"]], "Maintenance|||Pengawas|||pre": [[0, "pre::Maintenance::Pengawas::detect::0"], [1, "pre::Maintenance::Pengawas::detect::1"], [2, "pre::Maintenance::Pengawas::detect::2"], [3, "pre::Maintenance::Pengawas::stop::3"], [4, "pre::Maintenance::Pengawas::stop::4"], [5, "pre::Maintenance::Pengawas::stop::5"], [6, "pre::Maintenance::Pengawas::call::6"], [7, "pre::Maintenance::Pengawas::call::7"], [8, "pre::Maintenance::Pengawas::call::8"], [9, "pre::Maintenance::Pengawas::wait::9"], [10, "pre::Maintenance::Pengawas::wait::10"], [11, "pre::Maintenance::Pengawas::wait::11"], [12, "pre::Maintenance::Pengawas::restart::12"], [13, "pre::Maintenance::Pengawas::restart::13"], [14, "pre::Maintenance::Pengawas::restart::14"]], "PPIC|||Operator|||pre": [[0, "pre::PPIC::Operator::detect::0"], [1, "pre::PPIC::Operator::detect::1"], [2, "pre::PPIC::Operator::detect::2"], [3, "pre::PPIC::Operator::stop::3"], [4, "pre::PPIC::Operator::stop::4"], [5, "pre::PPIC::Operator::stop::5"], [6, "pre::PPIC::Operator::call::6"], [7, "pre::PPIC::Operator::call::7"], [8, "pre::PPIC::Operator::call::8"], [9, "pre::PPIC::Operator::wait::9"], [10, "pre::PPIC::Operator::wait::10"], [11, "pre::PPIC::Operator::wait::11"], [12, "pre::PPIC::Operator::restart::12"], [13, "pre::PPIC::Operator::restart::13"], [14, "pre::PPIC::Operator::restart::14"]], "PPIC|||Pengawas|||pre": [[0, "pre::PPIC::Pengawas::detect::0"], [1, "pre::PPIC::Pengawas::detect::1"], [2, "pre::PPIC::Pengawas::detect::2"], [3, "pre::PPIC::Pengawas::stop::3"], [4, "pre::PPIC::Pengawas::stop::4"], [5, "pre::PPIC::Pengawas::stop::5"], [6, "pre::PPIC::Pengawas::call::6"], [7, "pre::PPIC::Pengawas::call::7"], [8, "pre::PPIC::Pengawas::call::8"], [9, "pre::PPIC::Pengawas::wait::9"], [10, "pre::PPIC::Pengawas::wait::10"], [11, "pre::PPIC::Pengawas::wait::11"], [12, "pre::PPIC::Pengawas::restart::12"], [13, "pre::PPIC::Pengawas::restart::13"], [14, "pre::PPIC::Pengawas::restart::14"]], "QA & QC|||Operator|||pre": [[0, "pre::QA & QC::Operator::detect::0"], [1, "pre::QA & QC::Operator::detect::1"], [2, "pre::QA & QC::Operator::detect::2"], [3, "pre::QA & QC::Operator::stop::3"], [4, "pre::QA & QC::Operator::stop::4"], [5, "pre::QA & QC::Operator::stop::5"], [6, "pre::QA & QC::Operator::call::6"], [7, "pre::QA & QC::Operator::call::7"], [8, "pre::QA & QC::Operator::call::8"], [9, "pre::QA & QC::Operator::wait::9"], [10, "pre::QA & QC::Operator::wait::10"], [11, "pre::QA & QC::Operator::wait::11"], [12, "pre::QA & QC::Operator::restart::12"], [13, "pre::QA & QC::Operator::restart::13"], [14, "pre::QA & QC::Operator::restart::14"]], "QA & QC|||Pengawas|||pre": [[0, "pre::QA & QC::Pengawas::detect::0"], [1, "pre::QA & QC::Pengawas::detect::1"], [2, "pre::QA & QC::Pengawas::detect::2"], [3, "pre::QA & QC::Pengawas::stop::3"], [4, "pre::QA & QC::Pengawas::stop::4"], [5, "pre::QA & QC::Pengawas::stop::5"], [6, "pre::QA & QC::Pengawas::call::6"], [7, "pre::QA & QC::Pengawas::call::7"], [8, "pre::QA & QC::Pengawas::call::8"], [9, "pre::QA & QC::Pengawas::wait::9"], [10, "pre::QA & QC::Pengawas::wait::10"], [11, "pre::QA & QC::Pengawas::wait::11"], [12, "pre::QA & QC::Pengawas::restart::12"], [13, "pre::QA & QC::Pengawas::restart::13"], [14, "pre::QA & QC::Pengawas::restart::14"]], "Forging|||Operator|||pre": [[0, "pre::Forging::Operator::detect::0"], [1, "pre::Forging::Operator::detect::1"], [2, "pre::Forging::Operator::detect::2"], [3, "pre::Forging::Operator::stop::3"], [4, "pre::Forging::Operator::stop::4"], [5, "pre::Forging::Operator::stop::5"], [6, "pre::Forging::Operator::call::6"], [7, "pre::Forging::Operator::call::7"], [8, "pre::Forging::Operator::call::8"], [9, "pre::Forging::Operator::wait::9"], [10, "pre::Forging::Operator::wait::10"], [11, "pre::Forging::Operator::wait::11"], [12, "pre::Forging::Operator::restart::12"], [13, "pre::Forging::Operator::restart::13"], [14, "pre::Forging::Operator::restart::14"]], "Forging|||Pengawas|||pre": [[0, "pre::Forging::Pengawas::detect::0"], [1, "pre::Forging::Pengawas::detect::1"], [2, "pre::Forging::Pengawas::detect::2"], [3, "pre::Forging::Pengawas::stop::3"], [4, "pre::Forging::Pengawas::stop::4"], [5, "pre::Forging::Pengawas::stop::5"], [6, "pre::Forging::Pengawas::call::6"], [7, "pre::Forging::Pengawas::call::7"], [8, "pre::Forging::Pengawas::call::8"], [9, "pre::Forging::Pengawas::wait::9"], [10, "pre::Forging::Pengawas::wait::10"], [11, "pre::Forging::Pengawas::wait::11"], [12, "pre::Forging::Pengawas::restart::12"], [13, "pre::Forging::Pengawas::restart::13"], [14, "pre::Forging::Pengawas::restart::14"]], "HRGA|||Operator|||pre": [[0, "pre::HRGA::Operator::detect::0"], [1, "pre::HRGA::Operator::detect::1"], [2, "pre::HRGA::Operator::detect::2"], [3, "pre::HRGA::Operator::stop::3"], [4, "pre::HRGA::Operator::stop::4"], [5, "pre::HRGA::Operator::stop::5"], [6, "pre::HRGA::Operator::call::6"], [7, "pre::HRGA::Operator::call::7"], [8, "pre::HRGA::Operator::call::8"], [9, "pre::HRGA::Operator::wait::9"], [10, "pre::HRGA::Operator::wait::10"], [11, "pre::HRGA::Operator::wait::11"], [12, "pre::HRGA::Operator::restart::12"], [13, "pre::HRGA::Operator::restart::13"], [14, "pre::HRGA::Operator::restart::14"]], "HRGA|||Pengawas|||pre": [[0, "pre::HRGA::Pengawas::detect::0"], [1, "pre::HRGA::Pengawas::detect::1"], [2, "pre::HRGA::Pengawas::detect::2"], [3, "pre::HRGA::Pengawas::stop::3"], [4, "pre::HRGA::Pengawas::stop::4"], [5, "pre::HRGA::Pengawas::stop::5"], [6, "pre::HRGA::Pengawas::call::6"], [7, "pre::HRGA::Pengawas::call::7"], [8, "pre::HRGA::Pengawas::call::8"], [9, "pre::HRGA::Pengawas::wait::9"], [10, "pre::HRGA::Pengawas::wait::10"], [11, "pre::HRGA::Pengawas::wait::11"], [12, "pre::HRGA::Pengawas::restart::12"], [13, "pre::HRGA::Pengawas::restart::13"], [14, "pre::HRGA::Pengawas::restart::14"]], "Assembling|||Operator|||pre": [[0, "pre::Assembling::Operator::detect::0"], [1, "pre::Assembling::Operator::detect::1"], [2, "pre::Assembling::Operator::detect::2"], [3, "pre::Assembling::Operator::stop::3"], [4, "pre::Assembling::Operator::stop::4"], [5, "pre::Assembling::Operator::stop::5"], [6, "pre::Assembling::Operator::call::6"], [7, "pre::Assembling::Operator::call::7"], [8, "pre::Assembling::Operator::call::8"], [9, "pre::Assembling::Operator::wait::9"], [10, "pre::Assembling::Operator::wait::10"], [11, "pre::Assembling::Operator::wait::11"], [12, "pre::Assembling::Operator::restart::12"], [13, "pre::Assembling::Operator::restart::13"], [14, "pre::Assembling::Operator::restart::14"]], "Assembling|||Pengawas|||pre": [[0, "pre::Assembling::Pengawas::detect::0"], [1, "pre::Assembling::Pengawas::detect::1"], [2, "pre::Assembling::Pengawas::detect::2"], [3, "pre::Assembling::Pengawas::stop::3"], [4, "pre::Assembling::Pengawas::stop::4"], [5, "pre::Assembling::Pengawas::stop::5"], [6, "pre::Assembling::Pengawas::call::6"], [7, "pre::Assembling::Pengawas::call::7"], [8, "pre::Assembling::Pengawas::call::8"], [9, "pre::Assembling::Pengawas::wait::9"], [10, "pre::Assembling::Pengawas::wait::10"], [11, "pre::Assembling::Pengawas::wait::11"], [12, "pre::Assembling::Pengawas::restart::12"], [13, "pre::Assembling::Pengawas::restart::13"], [14, "pre::Assembling::Pengawas::restart::14"]], "HRGA & IT|||Operator|||post": [[15, "post::HRGA & IT::Operator::detect::0"], [16, "post::HRGA & IT::Operator::detect::1"], [17, "post::HRGA & IT::Operator::detect::2"], [18, "post::HRGA & IT::Operator::stop::3"], [19, "post::HRGA & IT::Operator::stop::4"], [20, "post::HRGA & IT::Operator::stop::5"], [21, "post::HRGA & IT::Operator::call::6"], [22, "post::HRGA & IT::Operator::call::7"], [23, "post::HRGA & IT::Operator::call::8"], [24, "post::HRGA & IT::Operator::wait::9"], [25, "post::HRGA & IT::Operator::wait::10"], [26, "post::HRGA & IT::Operator::wait::11"], [27, "post::HRGA & IT::Operator::restart::12"], [28, "post::HRGA & IT::Operator::restart::13"], [29, "post::HRGA & IT::Operator::restart::14"]], "HRGA & IT|||Pengawas|||post": [[15, "post::HRGA & IT::Pengawas::detect::0"], [16, "post::HRGA & IT::Pengawas::detect::1"], [17, "post::HRGA & IT::Pengawas::detect::2"], [18, "post::HRGA & IT::Pengawas::stop::3"], [19, "post::HRGA & IT::Pengawas::stop::4"], [20, "post::HRGA & IT::Pengawas::stop::5"], [21, "post::HRGA & IT::Pengawas::call::6"], [22, "post::HRGA & IT::Pengawas::call::7"], [23, "post::HRGA & IT::Pengawas::call::8"], [24, "post::HRGA & IT::Pengawas::wait::9"], [25, "post::HRGA & IT::Pengawas::wait::10"], [26, "post::HRGA & IT::Pengawas::wait::11"], [27, "post::HRGA & IT::Pengawas::restart::12"], [28, "post::HRGA & IT::Pengawas::restart::13"], [29, "post::HRGA & IT::Pengawas::restart::14"]], "Accounting|||Operator|||post": [[15, "post::Accounting::Operator::detect::0"], [16, "post::Accounting::Operator::detect::1"], [17, "post::Accounting::Operator::detect::2"], [18, "post::Accounting::Operator::stop::3"], [19, "post::Accounting::Operator::stop::4"], [20, "post::Accounting::Operator::stop::5"], [21, "post::Accounting::Operator::call::6"], [22, "post::Accounting::Operator::call::7"], [23, "post::Accounting::Operator::call::8"], [24, "post::Accounting::Operator::wait::9"], [25, "post::Accounting::Operator::wait::10"], [26, "post::Accounting::Operator::wait::11"], [27, "post::Accounting::Operator::restart::12"], [28, "post::Accounting::Operator::restart::13"], [29, "post::Accounting::Operator::restart::14"]], "Accounting|||Pengawas|||post": [[15, "post::Accounting::Pengawas::detect::0"], [16, "post::Accounting::Pengawas::detect::1"], [17, "post::Accounting::Pengawas::detect::2"], [18, "post::Accounting::Pengawas::stop::3"], [19, "post::Accounting::Pengawas::stop::4"], [20, "post::Accounting::Pengawas::stop::5"], [21, "post::Accounting::Pengawas::call::6"], [22, "post::Accounting::Pengawas::call::7"], [23, "post::Accounting::Pengawas::call::8"], [24, "post::Accounting::Pengawas::wait::9"], [25, "post::Accounting::Pengawas::wait::10"], [26, "post::Accounting::Pengawas::wait::11"], [27, "post::Accounting::Pengawas::restart::12"], [28, "post::Accounting::Pengawas::restart::13"], [29, "post::Accounting::Pengawas::restart::14"]], "Purchasing|||Operator|||post": [[15, "post::Purchasing::Operator::detect::0"], [16, "post::Purchasing::Operator::detect::1"], [17, "post::Purchasing::Operator::detect::2"], [18, "post::Purchasing::Operator::stop::3"], [19, "post::Purchasing::Operator::stop::4"], [20, "post::Purchasing::Operator::stop::5"], [21, "post::Purchasing::Operator::call::6"], [22, "post::Purchasing::Operator::call::7"], [23, "post::Purchasing::Operator::call::8"], [24, "post::Purchasing::Operator::wait::9"], [25, "post::Purchasing::Operator::wait::10"], [26, "post::Purchasing::Operator::wait::11"], [27, "post::Purchasing::Operator::restart::12"], [28, "post::Purchasing::Operator::restart::13"], [29, "post::Purchasing::Operator::restart::14"]], "Purchasing|||Pengawas|||post": [[15, "post::Purchasing::Pengawas::detect::0"], [16, "post::Purchasing::Pengawas::detect::1"], [17, "post::Purchasing::Pengawas::detect::2"], [18, "post::Purchasing::Pengawas::stop::3"], [19, "post::Purchasing::Pengawas::stop::4"], [20, "post::Purchasing::Pengawas::stop::5"], [21, "post::Purchasing::Pengawas::call::6"], [22, "post::Purchasing::Pengawas::call::7"], [23, "post::Purchasing::Pengawas::call::8"], [24, "post::Purchasing::Pengawas::wait::9"], [25, "post::Purchasing::Pengawas::wait::10"], [26, "post::Purchasing::Pengawas::wait::11"], [27, "post::Purchasing::Pengawas::restart::12"], [28, "post::Purchasing::Pengawas::restart::13"], [29, "post::Purchasing::Pengawas::restart::14"]], "Sales|||Operator|||post": [[15, "post::Sales::Operator::detect::0"], [16, "post::Sales::Operator::detect::1"], [17, "post::Sales::Operator::detect::2"], [18, "post::Sales::Operator::stop::3"], [19, "post::Sales::Operator::stop::4"], [20, "post::Sales::Operator::stop::5"], [21, "post::Sales::Operator::call::6"], [22, "post::Sales::Operator::call::7"], [23, "post::Sales::Operator::call::8"], [24, "post::Sales::Operator::wait::9"], [25, "post::Sales::Operator::wait::10"], [26, "post::Sales::Operator::wait::11"], [27, "post::Sales::Operator::restart::12"], [28, "post::Sales::Operator::restart::13"], [29, "post::Sales::Operator::restart::14"]], "Sales|||Pengawas|||post": [[15, "post::Sales::Pengawas::detect::0"], [16, "post::Sales::Pengawas::detect::1"], [17, "post::Sales::Pengawas::detect::2"], [18, "post::Sales::Pengawas::stop::3"], [19, "post::Sales::Pengawas::stop::4"], [20, "post::Sales::Pengawas::stop::5"], [21, "post::Sales::Pengawas::call::6"], [22, "post::Sales::Pengawas::call::7"], [23, "post::Sales::Pengawas::call::8"], [24, "post::Sales::Pengawas::wait::9"], [25, "post::Sales::Pengawas::wait::10"], [26, "post::Sales::Pengawas::wait::11"], [27, "post::Sales::Pengawas::restart::12"], [28, "post::Sales::Pengawas::restart::13"], [29, "post::Sales::Pengawas::restart::14"]], "Machining|||Operator|||post": [[15, "post::Machining::Operator::detect::0"], [16, "post::Machining::Operator::detect::1"], [17, "post::Machining::Operator::detect::2"], [18, "post::Machining::Operator::stop::3"], [19, "post::Machining::Operator::stop::4"], [20, "post::Machining::Operator::stop::5"], [21, "post::Machining::Operator::call::6"], [22, "post::Machining::Operator::call::7"], [23, "post::Machining::Operator::call::8"], [24, "post::Machining::Operator::wait::9"], [25, "post::Machining::Operator::wait::10"], [26, "post::Machining::Operator::wait::11"], [27, "post::Machining::Operator::restart::12"], [28, "post::Machining::Operator::restart::13"], [29, "post::Machining::Operator::restart::14"]], "Machining|||Pengawas|||post": [[15, "post::Machining::Pengawas::detect::0"], [16, "post::Machining::Pengawas::detect::1"], [17, "post::Machining::Pengawas::detect::2"], [18, "post::Machining::Pengawas::stop::3"], [19, "post::Machining::Pengawas::stop::4"], [20, "post::Machining::Pengawas::stop::5"], [21, "post::Machining::Pengawas::call::6"], [22, "post::Machining::Pengawas::call::7"], [23, "post::Machining::Pengawas::call::8"], [24, "post::Machining::Pengawas::wait::9"], [25, "post::Machining::Pengawas::wait::10"], [26, "post::Machining::Pengawas::wait::11"], [27, "post::Machining::Pengawas::restart::12"], [28, "post::Machining::Pengawas::restart::13"], [29, "post::Machining::Pengawas::restart::14"]], "Maintenance|||Operator|||post": [[15, "post::Maintenance::Operator::detect::0"], [16, "post::Maintenance::Operator::detect::1"], [17, "post::Maintenance::Operator::detect::2"], [18, "post::Maintenance::Operator::stop::3"], [19, "post::Maintenance::Operator::stop::4"], [20, "post::Maintenance::Operator::stop::5"], [21, "post::Maintenance::Operator::call::6"], [22, "post::Maintenance::Operator::call::7"], [23, "post::Maintenance::Operator::call::8"], [24, "post::Maintenance::Operator::wait::9"], [25, "post::Maintenance::Operator::wait::10"], [26, "post::Maintenance::Operator::wait::11"], [27, "post::Maintenance::Operator::restart::12"], [28, "post::Maintenance::Operator::restart::13"], [29, "post::Maintenance::Operator::restart::14"]], "Maintenance|||Pengawas|||post": [[15, "post::Maintenance::Pengawas::detect::0"], [16, "post::Maintenance::Pengawas::detect::1"], [17, "post::Maintenance::Pengawas::detect::2"], [18, "post::Maintenance::Pengawas::stop::3"], [19, "post::Maintenance::Pengawas::stop::4"], [20, "post::Maintenance::Pengawas::stop::5"], [21, "post::Maintenance::Pengawas::call::6"], [22, "post::Maintenance::Pengawas::call::7"], [23, "post::Maintenance::Pengawas::call::8"], [24, "post::Maintenance::Pengawas::wait::9"], [25, "post::Maintenance::Pengawas::wait::10"], [26, "post::Maintenance::Pengawas::wait::11"], [27, "post::Maintenance::Pengawas::restart::12"], [28, "post::Maintenance::Pengawas::restart::13"], [29, "post::Maintenance::Pengawas::restart::14"]], "PPIC|||Operator|||post": [[15, "post::PPIC::Operator::detect::0"], [16, "post::PPIC::Operator::detect::1"], [17, "post::PPIC::Operator::detect::2"], [18, "post::PPIC::Operator::stop::3"], [19, "post::PPIC::Operator::stop::4"], [20, "post::PPIC::Operator::stop::5"], [21, "post::PPIC::Operator::call::6"], [22, "post::PPIC::Operator::call::7"], [23, "post::PPIC::Operator::call::8"], [24, "post::PPIC::Operator::wait::9"], [25, "post::PPIC::Operator::wait::10"], [26, "post::PPIC::Operator::wait::11"], [27, "post::PPIC::Operator::restart::12"], [28, "post::PPIC::Operator::restart::13"], [29, "post::PPIC::Operator::restart::14"]], "PPIC|||Pengawas|||post": [[15, "post::PPIC::Pengawas::detect::0"], [16, "post::PPIC::Pengawas::detect::1"], [17, "post::PPIC::Pengawas::detect::2"], [18, "post::PPIC::Pengawas::stop::3"], [19, "post::PPIC::Pengawas::stop::4"], [20, "post::PPIC::Pengawas::stop::5"], [21, "post::PPIC::Pengawas::call::6"], [22, "post::PPIC::Pengawas::call::7"], [23, "post::PPIC::Pengawas::call::8"], [24, "post::PPIC::Pengawas::wait::9"], [25, "post::PPIC::Pengawas::wait::10"], [26, "post::PPIC::Pengawas::wait::11"], [27, "post::PPIC::Pengawas::restart::12"], [28, "post::PPIC::Pengawas::restart::13"], [29, "post::PPIC::Pengawas::restart::14"]], "QA & QC|||Operator|||post": [[15, "post::QA & QC::Operator::detect::0"], [16, "post::QA & QC::Operator::detect::1"], [17, "post::QA & QC::Operator::detect::2"], [18, "post::QA & QC::Operator::stop::3"], [19, "post::QA & QC::Operator::stop::4"], [20, "post::QA & QC::Operator::stop::5"], [21, "post::QA & QC::Operator::call::6"], [22, "post::QA & QC::Operator::call::7"], [23, "post::QA & QC::Operator::call::8"], [24, "post::QA & QC::Operator::wait::9"], [25, "post::QA & QC::Operator::wait::10"], [26, "post::QA & QC::Operator::wait::11"], [27, "post::QA & QC::Operator::restart::12"], [28, "post::QA & QC::Operator::restart::13"], [29, "post::QA & QC::Operator::restart::14"]], "QA & QC|||Pengawas|||post": [[15, "post::QA & QC::Pengawas::detect::0"], [16, "post::QA & QC::Pengawas::detect::1"], [17, "post::QA & QC::Pengawas::detect::2"], [18, "post::QA & QC::Pengawas::stop::3"], [19, "post::QA & QC::Pengawas::stop::4"], [20, "post::QA & QC::Pengawas::stop::5"], [21, "post::QA & QC::Pengawas::call::6"], [22, "post::QA & QC::Pengawas::call::7"], [23, "post::QA & QC::Pengawas::call::8"], [24, "post::QA & QC::Pengawas::wait::9"], [25, "post::QA & QC::Pengawas::wait::10"], [26, "post::QA & QC::Pengawas::wait::11"], [27, "post::QA & QC::Pengawas::restart::12"], [28, "post::QA & QC::Pengawas::restart::13"], [29, "post::QA & QC::Pengawas::restart::14"]], "Forging|||Operator|||post": [[15, "post::Forging::Operator::detect::0"], [16, "post::Forging::Operator::detect::1"], [17, "post::Forging::Operator::detect::2"], [18, "post::Forging::Operator::stop::3"], [19, "post::Forging::Operator::stop::4"], [20, "post::Forging::Operator::stop::5"], [21, "post::Forging::Operator::call::6"], [22, "post::Forging::Operator::call::7"], [23, "post::Forging::Operator::call::8"], [24, "post::Forging::Operator::wait::9"], [25, "post::Forging::Operator::wait::10"], [26, "post::Forging::Operator::wait::11"], [27, "post::Forging::Operator::restart::12"], [28, "post::Forging::Operator::restart::13"], [29, "post::Forging::Operator::restart::14"]], "Forging|||Pengawas|||post": [[15, "post::Forging::Pengawas::detect::0"], [16, "post::Forging::Pengawas::detect::1"], [17, "post::Forging::Pengawas::detect::2"], [18, "post::Forging::Pengawas::stop::3"], [19, "post::Forging::Pengawas::stop::4"], [20, "post::Forging::Pengawas::stop::5"], [21, "post::Forging::Pengawas::call::6"], [22, "post::Forging::Pengawas::call::7"], [23, "post::Forging::Pengawas::call::8"], [24, "post::Forging::Pengawas::wait::9"], [25, "post::Forging::Pengawas::wait::10"], [26, "post::Forging::Pengawas::wait::11"], [27, "post::Forging::Pengawas::restart::12"], [28, "post::Forging::Pengawas::restart::13"], [29, "post::Forging::Pengawas::restart::14"]], "HRGA|||Operator|||post": [[15, "post::HRGA::Operator::detect::0"], [16, "post::HRGA::Operator::detect::1"], [17, "post::HRGA::Operator::detect::2"], [18, "post::HRGA::Operator::stop::3"], [19, "post::HRGA::Operator::stop::4"], [20, "post::HRGA::Operator::stop::5"], [21, "post::HRGA::Operator::call::6"], [22, "post::HRGA::Operator::call::7"], [23, "post::HRGA::Operator::call::8"], [24, "post::HRGA::Operator::wait::9"], [25, "post::HRGA::Operator::wait::10"], [26, "post::HRGA::Operator::wait::11"], [27, "post::HRGA::Operator::restart::12"], [28, "post::HRGA::Operator::restart::13"], [29, "post::HRGA::Operator::restart::14"]], "HRGA|||Pengawas|||post": [[15, "post::HRGA::Pengawas::detect::0"], [16, "post::HRGA::Pengawas::detect::1"], [17, "post::HRGA::Pengawas::detect::2"], [18, "post::HRGA::Pengawas::stop::3"], [19, "post::HRGA::Pengawas::stop::4"], [20, "post::HRGA::Pengawas::stop::5"], [21, "post::HRGA::Pengawas::call::6"], [22, "post::HRGA::Pengawas::call::7"], [23, "post::HRGA::Pengawas::call::8"], [24, "post::HRGA::Pengawas::wait::9"], [25, "post::HRGA::Pengawas::wait::10"], [26, "post::HRGA::Pengawas::wait::11"], [27, "post::HRGA::Pengawas::restart::12"], [28, "post::HRGA::Pengawas::restart::13"], [29, "post::HRGA::Pengawas::restart::14"]], "Assembling|||Operator|||post": [[15, "post::Assembling::Operator::detect::0"], [16, "post::Assembling::Operator::detect::1"], [17, "post::Assembling::Operator::detect::2"], [18, "post::Assembling::Operator::stop::3"], [19, "post::Assembling::Operator::stop::4"], [20, "post::Assembling::Operator::stop::5"], [21, "post::Assembling::Operator::call::6"], [22, "post::Assembling::Operator::call::7"], [23, "post::Assembling::Operator::call::8"], [24, "post::Assembling::Operator::wait::9"], [25, "post::Assembling::Operator::wait::10"], [26, "post::Assembling::Operator::wait::11"], [27, "post::Assembling::Operator::restart::12"], [28, "post::Assembling::Operator::restart::13"], [29, "post::Assembling::Operator::restart::14"]], "Assembling|||Pengawas|||post": [[15, "post::Assembling::Pengawas::detect::0"], [16, "post::Assembling::Pengawas::detect::1"], [17, "post::Assembling::Pengawas::detect::2"], [18, "post::Assembling::Pengawas::stop::3"], [19, "post::Assembling::Pengawas::stop::4"], [20, "post::Assembling::Pengawas::stop::5"], [21, "post::Assembling::Pengawas::call::6"], [22, "post::Assembling::Pengawas::call::7"], [23, "post::Assembling::Pengawas::call::8"], [24, "post::Assembling::Pengawas::wait::9"], [25, "post::Assembling::Pengawas::wait::10"], [26, "post::Assembling::Pengawas::wait::11"], [27, "post::Assembling::Pengawas::restart::12"], [28, "post::Assembling::Pengawas::restart::13"], [29, "post::Assembling::Pengawas::restart::14"]]};
+/**
+ * Training SCW (Stop-Call-Wait) - modul Apps Script
+ * Dipasang bersama Code.gs dan Bank.gs dalam satu proyek Apps Script.
+ * Data disimpan di sheet TR_* pada Spreadsheet yang sama. Akun admin/tamu memakai sheet "Akun" milik dashboard SCW.
+ * Peserta mendaftar sendiri dengan NIK + kode sesi training.
+ */
+const TR_TABEL = {
+  peserta: { n: 'TR_Peserta', f: ['nik', 'nama', 'plant', 'dept', 'peran', 'salt', 'hash', 'dibuat', 'aktif'], h: ['NIK', 'Nama', 'Plant', 'Departemen', 'Peran', 'Salt', 'Hash password', 'Dibuat', 'Aktif'] },
+  sesi:    { n: 'TR_Sesi', f: ['id', 'judul', 'kode', 'lulus', 'aktif', 'dibuat', 'oleh'], h: ['ID', 'Judul sesi', 'Kode', 'Batas lulus', 'Aktif', 'Dibuat', 'Dibuat oleh'] },
+  daftar:  { n: 'TR_Daftar', f: ['id', 'nik', 'sesi', 'gabung', 'materi', 'materiAt', 'cert', 'certBy', 'certAt', 'certKode'], h: ['ID', 'NIK', 'Sesi ID', 'Bergabung', 'Materi selesai', 'Waktu materi', 'Sertifikat', 'Disetujui oleh', 'Waktu sertifikat', 'Kode sertifikat'] },
+  tes:     { n: 'TR_Tes', f: ['id', 'daftar', 'fase', 'soal', 'jawab', 'skor', 'dim', 'mulai', 'kumpul'], h: ['ID', 'Daftar ID', 'Fase', 'Snapshot soal (JSON)', 'Jawaban (JSON)', 'Skor', 'Dimensi (JSON)', 'Mulai', 'Dikumpulkan'] },
+  soal:    { n: 'TR_Soal', f: ['id', 'payload', 'diubah', 'oleh'], h: ['ID soal', 'Revisi (JSON)', 'Diubah', 'Oleh'] },
+  audit:   { n: 'TR_Audit', f: ['waktu', 'oleh', 'aksi', 'ket'], h: ['Waktu', 'Pengguna', 'Aksi', 'Keterangan'] }
+};
+const TR_FASE = ['pre', 'post'];
+const TR_PERAN = ['Operator', 'Pengawas'];
+const TR_SESI_DETIK = 21600;
+const TR_MATERI = [
+  { code: 'STOP', title: 'Hentikan kegiatan dengan aman', text: 'Kenali abnormal, hentikan pekerjaan/proses sesuai SOP, lindungi orang dan area, jangan mengambil tindakan berisiko tanpa otorisasi.' },
+  { code: 'CALL', title: 'Hubungi pihak berwenang', text: 'Sampaikan fakta: lokasi, kondisi abnormal, identifikasi alat/lot, risiko, tindakan STOP, dan kebutuhan dukungan melalui jalur eskalasi yang berlaku.' },
+  { code: 'WAIT', title: 'Tunggu arahan dan pengendalian', text: 'Jaga status HOLD atau isolasi, jangan mengubah peralatan/material atau restart sebelum hasil verifikasi dan arahan dari pihak berwenang.' },
+  { code: 'RESTART', title: 'Lanjut hanya setelah verifikasi', text: 'Pastikan tindakan korektif, kontrol risiko, hasil trial, dan persetujuan restart telah dipenuhi sesuai SOP dan kewenangan TJForge.' }
+];
+
+function trErr_(c, m) { return { trE: true, c: c, m: m }; }
+function trNow_() { return Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd'T'HH:mm:ssXXX"); }
+
+/* ---------- akses sheet ---------- */
+function trSheet_(k) {
+  const t = TR_TABEL[k], ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(t.n);
+  if (!sh) {
+    sh = ss.insertSheet(t.n);
+    sh.getRange(1, 1, sh.getMaxRows(), t.h.length).setNumberFormat('@');
+    sh.getRange(1, 1, 1, t.h.length).setValues([t.h]).setFontWeight('bold').setBackground('#1f4e78').setFontColor('#ffffff');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+function trObj_(k, row) { const o = {}; TR_TABEL[k].f.forEach(function (f, i) { o[f] = String(row[i] === undefined ? '' : row[i]); }); return o; }
+function trAll_(k) {
+  const sh = trSheet_(k), last = sh.getLastRow(), n = TR_TABEL[k].f.length;
+  if (last < 2) return [];
+  return sh.getRange(2, 1, last - 1, n).getValues().map(function (r, i) { const o = trObj_(k, r); o._r = i + 2; return o; });
+}
+// Tes tanpa kolom soal/jawaban (besar) agar statistik cepat
+function trTesLite_() {
+  const sh = trSheet_('tes'), last = sh.getLastRow();
+  if (last < 2) return [];
+  const a = sh.getRange(2, 1, last - 1, 3).getValues(), b = sh.getRange(2, 6, last - 1, 4).getValues();
+  return a.map(function (r, i) { return { id: String(r[0]), daftar: String(r[1]), fase: String(r[2]), skor: String(b[i][0]), dim: String(b[i][1]), mulai: String(b[i][2]), kumpul: String(b[i][3]) }; });
+}
+function trPut_(k, rowNum, o) {
+  const f = TR_TABEL[k].f, row = f.map(function (x) { return o[x] === undefined ? '' : String(o[x]); });
+  if (rowNum) trSheet_(k).getRange(rowNum, 1, 1, f.length).setValues([row]); else trSheet_(k).appendRow(row);
+}
+function trNextId_(k) {
+  const sh = trSheet_(k), last = sh.getLastRow();
+  if (last < 2) return 1;
+  const v = sh.getRange(2, 1, last - 1, 1).getValues();
+  let m = 0; v.forEach(function (x) { const n = Number(x[0]); if (n > m) m = n; });
+  return m + 1;
+}
+function trAudit_(oleh, aksi, ket) { trPut_('audit', 0, { waktu: trNow_(), oleh: oleh, aksi: aksi, ket: String(ket || '').slice(0, 800) }); }
+
+/* ---------- soal ---------- */
+function trBank_(dept, role, fase, overrides) {
+  const lst = TR_MAP[[dept, role, fase].join('|||')];
+  if (!lst) throw trErr_(400, 'Bank soal tidak tersedia untuk profil tersebut.');
+  const ov = overrides || trOverrides_();
+  return lst.map(function (p) {
+    const b = TR_Q[p[0]], q = { id: p[1], dimension: b.d, question: b.q, options: b.o.slice(), correct: b.c, explanation: b.e, layer: b.l, source: b.s };
+    const x = ov[q.id];
+    if (x) { q.question = x.question; q.options = x.options; q.correct = x.correct; q.explanation = x.explanation; }
+    return q;
+  });
+}
+function trOverrides_() {
+  const m = {};
+  trAll_('soal').forEach(function (r) { try { m[r.id] = JSON.parse(r.payload); } catch (e) {} });
+  return m;
+}
+function trPublik_(qs) { return qs.map(function (q) { return { id: q.id, dimension: q.dimension, question: q.question, options: q.options, layer: q.layer, source: q.source }; }); }
+function trSkor_(qs, jw) {
+  let benar = 0; qs.forEach(function (q, i) { if (jw[i] === q.correct) benar++; });
+  const dim = {};
+  TR_DIMS.forEach(function (d) {
+    let n = 0, b = 0;
+    qs.forEach(function (q, i) { if (q.dimension === d[0]) { n++; if (jw[i] === q.correct) b++; } });
+    dim[d[0]] = n ? Math.round(100 * b / n) : 0;
+  });
+  return { skor: Math.round(100 * benar / qs.length), dim: dim };
+}
+
+/* ---------- hasil ---------- */
+function trAttempt_(t, tampilSoal) {
+  if (!t) return null;
+  const r = { phase: t.fase, started_at: t.mulai || null, submitted_at: t.kumpul || null, score: t.skor === '' ? null : Number(t.skor), dimensions: t.dim ? JSON.parse(t.dim) : null };
+  return r;
+}
+function trPerson_(e, s, tes) {
+  const by = {}; tes.forEach(function (t) { if (t.daftar === e.id) by[t.fase] = trAttempt_(t); });
+  const pre = by.pre || null, post = by.post || null;
+  const gain = pre && post && pre.score !== null && post.score !== null ? post.score - pre.score : null;
+  const lulus = Number(s.lulus);
+  return { enrollment_id: Number(e.id), course_id: Number(s.id), title: s.judul, pass_mark: lulus, material_done: e.materi === 'ya', certified: e.cert === 'ya', cert_code: e.certKode || null, certified_at: e.certAt || null, pre: pre, post: post, gain: gain, passed: !!(post && post.score !== null && post.score >= lulus), course_active: s.aktif === 'ya' };
+}
+function trAvg_(a) { return a.length ? Math.round(a.reduce(function (x, y) { return x + y; }, 0) / a.length * 10) / 10 : null; }
+function trStat_(items) {
+  const pres = items.filter(function (x) { return x.pre && x.pre.score !== null; }).map(function (x) { return x.pre.score; });
+  const posts = items.filter(function (x) { return x.post && x.post.score !== null; }).map(function (x) { return x.post.score; });
+  const pairs = items.filter(function (x) { return x.pre && x.post && x.pre.score !== null && x.post.score !== null; });
+  const radar = {};
+  TR_DIMS.forEach(function (d) {
+    radar[d[0]] = { pre: trAvg_(pairs.map(function (x) { return (x.pre.dimensions || {})[d[0]] || 0; })), post: trAvg_(pairs.map(function (x) { return (x.post.dimensions || {})[d[0]] || 0; })) };
+  });
+  function grup(f) {
+    const g = {}, urut = [];
+    items.forEach(function (x) { const k = x[f] || '-'; if (!g[k]) { g[k] = []; urut.push(k); } g[k].push(x); });
+    return urut.map(function (k) {
+      const v = g[k];
+      return { name: k, count: v.length, pre: trAvg_(v.filter(function (x) { return x.pre && x.pre.score !== null; }).map(function (x) { return x.pre.score; })), post: trAvg_(v.filter(function (x) { return x.post && x.post.score !== null; }).map(function (x) { return x.post.score; })), passed: v.filter(function (x) { return x.passed; }).length };
+    }).sort(function (a, b) { return b.count - a.count; });
+  }
+  return { total: items.length, pre_count: pres.length, post_count: posts.length, paired_count: pairs.length, pre_avg: trAvg_(pres), post_avg: trAvg_(posts), gain_avg: trAvg_(pairs.map(function (x) { return x.gain; })), certified: items.filter(function (x) { return x.certified; }).length, passed: items.filter(function (x) { return x.passed; }).length, pending_post: items.filter(function (x) { return x.pre && !x.post; }).length, radar: radar, plant: grup('plant'), roles: grup('position'), departments: grup('dept') };
+}
+function trRowsAdmin_(q) {
+  const sesi = trAll_('sesi'), peserta = trAll_('peserta'), tes = trTesLite_(), daftar = trAll_('daftar');
+  const sMap = {}; sesi.forEach(function (s) { sMap[s.id] = s; });
+  const pMap = {}; peserta.forEach(function (p) { pMap[p.nik] = p; });
+  const cid = String(Number(q.course_id) || 0), needle = String(q.q || '').trim().toLowerCase();
+  const out = [];
+  daftar.forEach(function (e) {
+    const s = sMap[e.sesi], p = pMap[e.nik];
+    if (!s || !p) return;
+    if (cid !== '0' && s.id !== cid) return;
+    if (q.plant && q.plant !== 'all' && p.plant !== q.plant) return;
+    if (q.dept && q.dept !== 'all' && p.dept !== q.dept) return;
+    if (q.position && q.position !== 'all' && p.peran !== q.position) return;
+    if (needle && [p.nama, p.nik, p.dept, s.judul, s.kode].join(' ').toLowerCase().indexOf(needle) < 0) return;
+    const r = trPerson_(e, s, tes);
+    out.push({ enrollment_id: r.enrollment_id, name: p.nama, employee_id: p.nik, plant: p.plant, dept: p.dept, position: p.peran, title: s.judul, course_id: r.course_id, pre: r.pre, post: r.post, gain: r.gain, certified: r.certified, passed: r.passed, pass_mark: r.pass_mark, material_done: r.material_done, joined_at: e.gabung, _name: p.nama });
+  });
+  out.sort(function (a, b) { return a.joined_at < b.joined_at ? 1 : a.joined_at > b.joined_at ? -1 : a._name.localeCompare(b._name); });
+  out.forEach(function (x) { delete x._name; });
+  return out;
+}
+function trCsv_(v) {
+  let s = String(v === null || v === undefined ? '' : v).replace(/[\r\n]+/g, ' ');
+  if (/^\s*[=+\-@]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+
+/* ---------- sesi login ---------- */
+function trMe_(sid) {
+  if (!sid || !/^[a-f0-9]{64}$/.test(String(sid))) return null;
+  const nik = CacheService.getScriptCache().get('trp_' + sid);
+  if (nik) {
+    const p = trAll_('peserta').filter(function (x) { return x.nik === nik; })[0];
+    if (!p || p.aktif === 'tidak') return null;
+    return { role: 'participant', nik: p.nik, nama: p.nama, plant: p.plant, dept: p.dept, peran: p.peran, oleh: p.nik };
+  }
+  const s = sesi_(sid);
+  if (!s) return null;
+  return { role: s.peran === 'tamu' ? 'tamu' : 'admin', user: s.user, nama: s.nama, guest: !!s.guest, oleh: s.user };
+}
+function trLoginPeserta_(nik, pw) {
+  nik = String(nik || '').trim().toUpperCase();
+  const cache = CacheService.getScriptCache(), kk = 'trgagal_' + nik;
+  if (Number(cache.get(kk) || 0) >= MAKS_GAGAL) throw trErr_(429, 'Terlalu banyak percobaan. Coba lagi 15 menit lagi.');
+  const p = trAll_('peserta').filter(function (x) { return x.nik === nik; })[0];
+  let ok = false;
+  if (p) ok = p.aktif !== 'tidak' && safeEq_(hash_(p.salt, pw), p.hash); else hash_('x', pw);
+  if (!ok) { cache.put(kk, String(Number(cache.get(kk) || 0) + 1), KUNCI_DETIK); throw trErr_(401, 'Username atau password tidak sesuai.'); }
+  cache.remove(kk);
+  const sid = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+  cache.put('trp_' + sid, nik, TR_SESI_DETIK);
+  return { session: sid };
+}
+
+/* ---------- router ---------- */
+function trAksi_(rec) {
+  try { return json_({ ok: true, data: trRoute_(rec) }); }
+  catch (ex) {
+    if (ex && ex.trE) return json_({ ok: false, code: ex.c === 401 ? 'AUTH' : ex.c, error: ex.m });
+    return json_({ ok: false, error: 'Terjadi kesalahan server: ' + String(ex) });
+  }
+}
+const TR_TULIS = { '/api/enroll': 1, '/api/material-complete': 1, '/api/attempts/start': 1, '/api/attempts/submit': 1, '/api/admin/courses': 1, '/api/admin/courses/toggle': 1, '/api/admin/certify': 1, '/api/admin/questions': 1, '/api/change-password': 1 };
+
+function trRoute_(rec) {
+  const path = String(rec.path || ''), met = String(rec.method || 'GET').toUpperCase(), q = rec.query || {}, b = rec.body || {};
+  if (TR_TULIS[path] && met !== 'GET') {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(25000);
+    try { return trRoute2_(path, met, q, b, rec.session); } finally { lock.releaseLock(); }
+  }
+  return trRoute2_(path, met, q, b, rec.session);
+}
+
+function trRoute2_(path, met, q, b, sid) {
+  // ----- tanpa login -----
+  if (path === '/api/meta') return { demo: false, plants: TR_DEPTS, dimensions: TR_DIMS, version: '3.0' };
+  if (path === '/api/login') {
+    const u = String(b.username || '').trim();
+    const adaAkun = akunRow_(ensureAkunSheet_(SpreadsheetApp.getActiveSpreadsheet()), u.toLowerCase());
+    if (adaAkun) {
+      const r = login_(u, b.password);
+      if (!r.ok) throw trErr_(401, r.error);
+      return { session: r.session };
+    }
+    return trLoginPeserta_(u, String(b.password || ''));
+  }
+  if (path === '/api/login-tamu') {
+    const r = loginTamu_();
+    if (!r.ok) throw trErr_(403, r.error);
+    return { session: r.session };
+  }
+  if (path === '/api/register') return trDaftar_(b);
+
+  const me = trMe_(sid);
+  if (!me) throw trErr_(401, 'Sesi tidak ada atau sudah berakhir. Silakan login.');
+  const staff = me.role !== 'participant', admin = me.role === 'admin', peserta = me.role === 'participant';
+  const butuhAdmin = function () { if (!admin) throw trErr_(403, 'Hanya admin yang boleh melakukan ini.'); };
+  const butuhStaff = function () { if (!staff) throw trErr_(403, 'Akses tidak diizinkan untuk akun ini.'); };
+  const butuhPeserta = function () { if (!peserta) throw trErr_(403, 'Menu ini hanya untuk peserta.'); };
+
+  if (path === '/api/logout') {
+    CacheService.getScriptCache().remove('trp_' + sid); CacheService.getScriptCache().remove('sesi_' + sid);
+    return { ok: true };
+  }
+  if (path === '/api/me') {
+    const sesi = trAll_('sesi');
+    if (peserta) {
+      const daftar = trAll_('daftar').filter(function (e) { return e.nik === me.nik; }), tes = trTesLite_(), sMap = {};
+      sesi.forEach(function (s) { sMap[s.id] = s; });
+      return { logged_in: true, user: { id: me.nik, username: me.nik, employee_id: me.nik, name: me.nama, role: 'participant', plant: me.plant, dept: me.dept, position: me.peran, courses: daftar.filter(function (e) { return sMap[e.sesi]; }).map(function (e) { return trPerson_(e, sMap[e.sesi], tes); }) } };
+    }
+    const list = sesi.map(function (s) { return { id: Number(s.id), title: s.judul, code: admin ? s.kode : '', pass_mark: Number(s.lulus), active: s.aktif === 'ya', created_at: s.dibuat }; }).sort(function (a, b) { return b.id - a.id; });
+    return { logged_in: true, user: { id: me.user, username: me.user, name: me.nama, role: me.role, guest: me.guest, courses: list } };
+  }
+  if (path === '/api/change-password') {
+    if (peserta) {
+      const lama = String(b.old_password || ''), baru = String(b.new_password || '');
+      if (baru.length < 10 || baru.length > 128) throw trErr_(400, 'Password baru minimal 10 dan maksimal 128 karakter.');
+      const p = trAll_('peserta').filter(function (x) { return x.nik === me.nik; })[0];
+      if (!safeEq_(hash_(p.salt, lama), p.hash)) throw trErr_(403, 'Password lama tidak benar.');
+      p.salt = Utilities.getUuid(); p.hash = hash_(p.salt, baru);
+      trPut_('peserta', p._r, p); trAudit_(me.nik, 'PASSWORD_CHANGED', '');
+      return { ok: true };
+    }
+    if (me.guest || me.role === 'tamu') throw trErr_(403, 'Akun tamu tidak memiliki password.');
+    const r = aksi_({ action: 'ganti_sandi', session: sid, lama: b.old_password, baru: b.new_password });
+    if (!r.ok) throw trErr_(400, r.error);
+    return { ok: true };
+  }
+
+  // ----- materi -----
+  if (path === '/api/material') {
+    let dept = me.dept, peran = me.peran;
+    if (peserta) {
+      const cid = String(Number(q.course_id) || 0);
+      if (!trAll_('daftar').some(function (e) { return e.nik === me.nik && e.sesi === cid; })) throw trErr_(404, 'Training tidak ditemukan untuk akun Anda.');
+    } else { dept = String(q.dept || 'Forging'); peran = null; }
+    if (!TR_SKENARIO[dept]) throw trErr_(400, 'Departemen tidak dikenal.');
+    return { steps: TR_MATERI, scenario: TR_SKENARIO[dept], role: peran, dept: dept, disclaimer: 'Materi contoh harus divalidasi dengan SOP, trainer, HSE, dan QA sebelum menjadi standar resmi.' };
+  }
+
+  // ----- peserta -----
+  if (path === '/api/my/results' || path === '/api/my/assessment') {
+    butuhPeserta();
+    const cid = String(Number(q.course_id) || 0);
+    const e = trAll_('daftar').filter(function (x) { return x.nik === me.nik && x.sesi === cid; })[0];
+    if (!e) throw trErr_(404, 'Training tidak ditemukan.');
+    const s = trAll_('sesi').filter(function (x) { return x.id === cid; })[0];
+    const tes = trAll_('tes').filter(function (t) { return t.daftar === e.id; });
+    if (path === '/api/my/assessment') {
+      if (TR_FASE.indexOf(q.phase) < 0) throw trErr_(400, 'Parameter tes tidak valid.');
+      const t = tes.filter(function (x) { return x.fase === q.phase; })[0];
+      return { attempt: t ? { id: Number(t.id), phase: q.phase, questions: trPublik_(JSON.parse(t.soal)), completed: !!t.kumpul, score: t.skor === '' ? null : Number(t.skor), started_at: t.mulai } : null };
+    }
+    const hasil = trPerson_(e, s, tes.map(function (t) { return { id: t.id, daftar: t.daftar, fase: t.fase, skor: t.skor, dim: t.dim, mulai: t.mulai, kumpul: t.kumpul }; }));
+    tes.forEach(function (t) {
+      const a = trAttempt_(t);
+      if (t.kumpul) {
+        const qs = JSON.parse(t.soal), jw = JSON.parse(t.jawab);
+        a.review = qs.map(function (x, i) { return { dimension: x.dimension, question: x.question, choice: jw[i], answer: x.correct, options: x.options, explanation: x.explanation, correct: jw[i] === x.correct }; });
+      }
+      hasil[t.fase] = a;
+    });
+    return { result: hasil };
+  }
+  if (path === '/api/enroll') {
+    butuhPeserta();
+    const kode = String(b.code || '').trim().toUpperCase();
+    const s = trAll_('sesi').filter(function (x) { return x.kode.toUpperCase() === kode && x.aktif === 'ya'; })[0];
+    if (!s) throw trErr_(404, 'Kode training tidak tersedia.');
+    if (!trAll_('daftar').some(function (e) { return e.nik === me.nik && e.sesi === s.id; })) {
+      trPut_('daftar', 0, { id: trNextId_('daftar'), nik: me.nik, sesi: s.id, gabung: trNow_(), materi: 'tidak', cert: 'tidak' });
+      trAudit_(me.nik, 'ENROLL', kode);
+    }
+    return { ok: true, course_id: Number(s.id) };
+  }
+  if (path === '/api/material-complete') {
+    butuhPeserta();
+    const cid = String(Number(b.course_id) || 0);
+    const e = trAll_('daftar').filter(function (x) { return x.nik === me.nik && x.sesi === cid; })[0];
+    if (!e) throw trErr_(404, 'Training tidak ditemukan.');
+    const pre = trAll_('tes').filter(function (t) { return t.daftar === e.id && t.fase === 'pre' && t.kumpul; })[0];
+    if (!pre) throw trErr_(409, 'Selesaikan Pre-Test lebih dulu.');
+    e.materi = 'ya'; e.materiAt = trNow_(); trPut_('daftar', e._r, e);
+    trAudit_(me.nik, 'MATERIAL_COMPLETED', cid);
+    return { ok: true };
+  }
+  if (path === '/api/attempts/start') {
+    butuhPeserta();
+    const cid = String(Number(b.course_id) || 0), fase = String(b.phase || '');
+    if (TR_FASE.indexOf(fase) < 0) throw trErr_(400, 'Jenis tes tidak valid.');
+    const e = trAll_('daftar').filter(function (x) { return x.nik === me.nik && x.sesi === cid; })[0];
+    if (!e) throw trErr_(404, 'Training tidak ditemukan.');
+    const s = trAll_('sesi').filter(function (x) { return x.id === cid; })[0];
+    if (!s || s.aktif !== 'ya') throw trErr_(409, 'Sesi training sudah ditutup.');
+    const tes = trAll_('tes').filter(function (t) { return t.daftar === e.id; });
+    if (fase === 'post') {
+      const pre = tes.filter(function (t) { return t.fase === 'pre' && t.kumpul; })[0];
+      if (!pre || e.materi !== 'ya') throw trErr_(409, 'Selesaikan Pre-Test dan pelajari materi sebelum Post-Test.');
+    }
+    const ada = tes.filter(function (t) { return t.fase === fase; })[0];
+    if (ada) {
+      if (ada.kumpul) throw trErr_(409, 'Tes ini sudah dikumpulkan dan tidak bisa diulang.');
+      return { ok: true, attempt_id: Number(ada.id), questions: trPublik_(JSON.parse(ada.soal)) };
+    }
+    const qs = trBank_(me.dept, me.peran, fase);
+    const id = trNextId_('tes');
+    trPut_('tes', 0, { id: id, daftar: e.id, fase: fase, soal: JSON.stringify(qs), mulai: trNow_() });
+    trAudit_(me.nik, 'ASSESSMENT_STARTED', cid + ':' + fase);
+    return { ok: true, attempt_id: id, questions: trPublik_(qs) };
+  }
+  if (path === '/api/attempts/submit') {
+    butuhPeserta();
+    const aid = String(Number(b.attempt_id) || 0), jw = b.answers;
+    const t = trAll_('tes').filter(function (x) { return x.id === aid; })[0];
+    const e = t && trAll_('daftar').filter(function (x) { return x.id === t.daftar; })[0];
+    if (!t || !e || e.nik !== me.nik) throw trErr_(404, 'Tes tidak ditemukan.');
+    if (t.kumpul) throw trErr_(409, 'Tes sudah dikumpulkan.');
+    const s = trAll_('sesi').filter(function (x) { return x.id === e.sesi; })[0];
+    if (!s || s.aktif !== 'ya') throw trErr_(409, 'Sesi training sudah ditutup.');
+    const qs = JSON.parse(t.soal);
+    if (!Array.isArray(jw) || jw.length !== qs.length || jw.some(function (v) { return v !== 0 && v !== 1 && v !== 2 && v !== 3; })) throw trErr_(400, 'Semua soal wajib dijawab dengan pilihan yang valid.');
+    const h = trSkor_(qs, jw);
+    t.jawab = JSON.stringify(jw); t.skor = String(h.skor); t.dim = JSON.stringify(h.dim); t.kumpul = trNow_();
+    trPut_('tes', t._r, t);
+    trAudit_(me.nik, 'ASSESSMENT_SUBMITTED', e.sesi + ':' + t.fase + ':score=' + h.skor);
+    return { ok: true, score: h.skor, dimensions: h.dim };
+  }
+
+  // ----- staf (admin & tamu) -----
+  if (path === '/api/admin/courses' && met === 'GET') {
+    butuhStaff();
+    return { courses: trAll_('sesi').map(function (s) { return { id: Number(s.id), title: s.judul, code: admin ? s.kode : '', pass_mark: Number(s.lulus), active: s.aktif === 'ya', created_at: s.dibuat }; }).sort(function (a, b) { return b.id - a.id; }) };
+  }
+  if (path === '/api/admin/stats') {
+    butuhStaff();
+    const items = trRowsAdmin_(q);
+    return { stats: trStat_(items), rows: items };
+  }
+
+  // ----- khusus admin -----
+  if (path === '/api/admin/courses' && met === 'POST') {
+    butuhAdmin();
+    const judul = String(b.title || '').trim(), lulus = b.pass_mark;
+    if (judul.length < 1 || judul.length > 120) throw trErr_(400, 'Judul training tidak valid.');
+    if (typeof lulus !== 'number' || lulus % 1 !== 0 || lulus < 0 || lulus > 100) throw trErr_(400, 'Batas kelulusan harus 0–100.');
+    const kode = 'SCW-' + Utilities.getUuid().replace(/-/g, '').slice(0, 6).toUpperCase();
+    trPut_('sesi', 0, { id: trNextId_('sesi'), judul: judul, kode: kode, lulus: lulus, aktif: 'ya', dibuat: trNow_(), oleh: me.user });
+    trAudit_(me.user, 'COURSE_CREATED', kode);
+    return { ok: true, code: kode };
+  }
+  if (path === '/api/admin/courses/toggle') {
+    butuhAdmin();
+    const s = trAll_('sesi').filter(function (x) { return x.id === String(Number(b.id)); })[0];
+    if (!s || typeof b.active !== 'boolean') throw trErr_(404, 'Training tidak ditemukan.');
+    s.aktif = b.active ? 'ya' : 'tidak'; trPut_('sesi', s._r, s);
+    trAudit_(me.user, 'COURSE_ACTIVE_CHANGED', s.id + '=' + b.active);
+    return { ok: true };
+  }
+  if (path === '/api/admin/certify') {
+    butuhAdmin();
+    const e = trAll_('daftar').filter(function (x) { return x.id === String(Number(b.enrollment_id)); })[0];
+    if (!e) throw trErr_(404, 'Peserta tidak ditemukan.');
+    const s = trAll_('sesi').filter(function (x) { return x.id === e.sesi; })[0];
+    const post = trAll_('tes').filter(function (t) { return t.daftar === e.id && t.fase === 'post' && t.kumpul; })[0];
+    if (!post || Number(post.skor) < Number(s.lulus) || e.materi !== 'ya') throw trErr_(409, 'Sertifikat hanya dapat diterbitkan untuk peserta yang menyelesaikan materi, Post-Test, dan memenuhi nilai kelulusan.');
+    if (e.cert === 'ya') return { ok: true, cert_code: e.certKode };
+    e.cert = 'ya'; e.certBy = me.user; e.certAt = trNow_(); e.certKode = 'SCW-CERT-' + Utilities.getUuid().replace(/-/g, '').slice(0, 12).toUpperCase();
+    trPut_('daftar', e._r, e);
+    trAudit_(me.user, 'CERTIFICATE_APPROVED', e.nik + ' / ' + e.certKode);
+    return { ok: true, cert_code: e.certKode };
+  }
+  if (path === '/api/admin/questions' && met === 'GET') {
+    butuhAdmin();
+    if (!TR_SKENARIO[q.dept] || TR_PERAN.indexOf(q.position) < 0 || TR_FASE.indexOf(q.phase) < 0) throw trErr_(400, 'Pilih departemen, peran, dan jenis tes yang valid.');
+    return { questions: trBank_(q.dept, q.position, q.phase) };
+  }
+  if (path === '/api/admin/questions' && met === 'PUT') {
+    butuhAdmin();
+    const qid = String(b.id || '').trim(), bagian = qid.split('::');
+    if (bagian.length !== 5 || TR_FASE.indexOf(bagian[0]) < 0 || !TR_SKENARIO[bagian[1]] || TR_PERAN.indexOf(bagian[2]) < 0) throw trErr_(400, 'Format ID soal tidak sesuai.');
+    const dasar = (TR_MAP[[bagian[1], bagian[2], bagian[0]].join('|||')] || []).filter(function (p) { return p[1] === qid; })[0];
+    if (!dasar) throw trErr_(404, 'Soal tidak ditemukan dalam bank dasar.');
+    const soal = String(b.question || '').trim(), opsi = b.options, pembahasan = String(b.explanation || '').trim(), kunci = b.correct;
+    const ok = function (x, max) { return typeof x === 'string' && x.trim().length >= 1 && x.trim().length <= max; };
+    if (soal.length < 10 || soal.length > 1000 || !Array.isArray(opsi) || opsi.length !== 4 || opsi.some(function (o) { return !ok(o, 240); })) throw trErr_(400, 'Teks soal atau empat opsi jawaban tidak valid.');
+    const uniq = {}; opsi.forEach(function (o) { uniq[o.trim().toLowerCase()] = 1; });
+    if (Object.keys(uniq).length !== 4) throw trErr_(400, 'Keempat opsi jawaban harus berbeda.');
+    if ([0, 1, 2, 3].indexOf(kunci) < 0 || !ok(pembahasan, 1500)) throw trErr_(400, 'Kunci jawaban atau pembahasan tidak valid.');
+    const baris = trAll_('soal').filter(function (x) { return x.id === qid; })[0];
+    trPut_('soal', baris ? baris._r : 0, { id: qid, payload: JSON.stringify({ question: soal, options: opsi.map(function (o) { return o.trim(); }), correct: kunci, explanation: pembahasan }), diubah: trNow_(), oleh: me.user });
+    trAudit_(me.user, 'QUESTION_UPDATED', qid);
+    return { ok: true };
+  }
+  if (path === '/api/admin/audit') {
+    butuhAdmin();
+    const sh = trSheet_('audit'), last = sh.getLastRow();
+    const n = Math.min(100, Math.max(0, last - 1));
+    const v = n ? sh.getRange(last - n + 1, 1, n, 4).getValues().reverse() : [];
+    return { events: v.map(function (r) { return { created_at: String(r[0]), name: String(r[1]), action: String(r[2]), details: String(r[3]) }; }) };
+  }
+  if (path === '/api/admin/export') {
+    butuhAdmin();
+    const data = trRowsAdmin_(q);
+    const kepala = ['Nama', 'NIK', 'Plant', 'Departemen', 'Peran', 'Training', 'Pre-Test', 'Post-Test', 'Peningkatan', 'Lulus', 'Materi Selesai', 'Sertifikat Disetujui'].concat(TR_DIMS.map(function (d) { return 'Pre ' + d[1]; })).concat(TR_DIMS.map(function (d) { return 'Post ' + d[1]; }));
+    const baris = [kepala.map(trCsv_).join(',')];
+    data.forEach(function (x) {
+      const r = [x.name, x.employee_id, x.plant, x.dept, x.position, x.title, x.pre ? x.pre.score : '', x.post ? x.post.score : '', x.gain !== null ? x.gain : '', x.passed ? 'Ya' : 'Tidak', x.material_done ? 'Ya' : 'Tidak', x.certified ? 'Ya' : 'Tidak']
+        .concat(TR_DIMS.map(function (d) { return x.pre && x.pre.dimensions ? x.pre.dimensions[d[0]] : ''; }))
+        .concat(TR_DIMS.map(function (d) { return x.post && x.post.dimensions ? x.post.dimensions[d[0]] : ''; }));
+      baris.push(r.map(trCsv_).join(','));
+    });
+    trAudit_(me.user, 'EXPORT_CSV', data.length + ' baris');
+    return { csv: '﻿' + baris.join('\r\n'), name: 'TJForge_SCW_Report.csv' };
+  }
+  throw trErr_(404, 'Endpoint tidak ditemukan.');
+}
+
+function trDaftar_(p) {
+  const wajib = ['name', 'employee_id', 'password', 'plant', 'dept', 'position', 'code'];
+  for (var i = 0; i < wajib.length; i++) { const v = String(p[wajib[i]] === undefined ? '' : p[wajib[i]]); if (wajib[i] !== 'password' && (v.trim().length < 1 || v.length > 100)) throw trErr_(400, 'Seluruh kolom pendaftaran wajib diisi.'); }
+  if (!TR_DEPTS[p.plant] || TR_DEPTS[p.plant].indexOf(p.dept) < 0 || TR_PERAN.indexOf(p.position) < 0) throw trErr_(400, 'Plant, departemen, atau jabatan tidak sesuai.');
+  const pw = String(p.password || '');
+  if (pw.length < 10 || pw.length > 128) throw trErr_(400, 'Password minimal 10 karakter.');
+  const nik = String(p.employee_id).trim().toUpperCase();
+  if (!/^[A-Z0-9._-]{3,30}$/.test(nik)) throw trErr_(400, 'NIK hanya boleh berisi huruf, angka, titik, garis bawah, dan strip.');
+  const kode = String(p.code).trim().toUpperCase();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(25000);
+  try {
+    const s = trAll_('sesi').filter(function (x) { return x.kode.toUpperCase() === kode && x.aktif === 'ya'; })[0];
+    if (!s) throw trErr_(400, 'Kode training tidak aktif atau tidak dikenal.');
+    if (trAll_('peserta').some(function (x) { return x.nik === nik; }) || akunRow_(ensureAkunSheet_(SpreadsheetApp.getActiveSpreadsheet()), nik.toLowerCase())) throw trErr_(409, 'NIK sudah terdaftar. Gunakan halaman Login.');
+    const salt = Utilities.getUuid();
+    trPut_('peserta', 0, { nik: nik, nama: clean_(String(p.name).trim()), plant: p.plant, dept: p.dept, peran: p.position, salt: salt, hash: hash_(salt, pw), dibuat: trNow_(), aktif: 'ya' });
+    trPut_('daftar', 0, { id: trNextId_('daftar'), nik: nik, sesi: s.id, gabung: trNow_(), materi: 'tidak', cert: 'tidak' });
+    trAudit_(nik, 'REGISTER', 'Training: ' + s.kode);
+  } finally { lock.releaseLock(); }
+  return { ok: true, username: nik };
+}
+
+// ---- data contoh ----
+const T0=Date.now()-6*864e5;const iso=d=>new Date(d).toISOString();
+trPut_('sesi',0,{id:1,judul:'SCW Batch Demo',kode:'SCW-DEMO01',lulus:80,aktif:'ya',dibuat:iso(T0),oleh:'demo-admin'});
+const nama=['Budi Santoso','Siti Rahma','Agus Pratama','Dewi Lestari','Rudi Hartono','Nina Wulandari','Eko Prasetyo','Yuni Safitri','Hadi Kurniawan','Rina Marlina','Joko Susilo','Lina Anggraini','Tono Wibowo','Maya Putri'];
+const plants=Object.keys(TR_DEPTS);let seed=7;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+nama.forEach((n,i)=>{
+ const plant=plants[i%plants.length],ds=TR_DEPTS[plant],dept=ds[(i*3)%ds.length],peran=i%4===3?'Pengawas':'Operator',nik='TJFI-'+String(100+i);
+ trPut_('peserta',0,{nik:nik,nama:n,plant:plant,dept:dept,peran:peran,salt:'s',hash:'x',dibuat:iso(T0),aktif:'ya'});
+ const did=i+1,tahap=i<9?2:(i<12?1:0);
+ trPut_('daftar',0,{id:did,nik:nik,sesi:1,gabung:iso(T0+i*36e5),materi:tahap===2?'ya':'tidak',cert:'tidak'});
+ const mk=(base)=>{const dim={};let tot=0;TR_DIMS.forEach(d=>{const v=Math.max(0,Math.min(100,Math.round((base+(rnd()-.5)*50)/33.3)*33.3));dim[d[0]]=Math.round(v);tot+=v});return{dim:dim,skor:Math.round(tot/TR_DIMS.length)}};
+ if(tahap>=1){const a=mk(35+rnd()*20);trPut_('tes',0,{id:did*2-1,daftar:did,fase:'pre',soal:'[]',jawab:'[]',skor:a.skor,dim:JSON.stringify(a.dim),mulai:iso(T0),kumpul:iso(T0)})}
+ if(tahap===2){const a=mk(72+rnd()*28);trPut_('tes',0,{id:did*2,daftar:did,fase:'post',soal:'[]',jawab:'[]',skor:a.skor,dim:JSON.stringify(a.dim),mulai:iso(T0),kumpul:iso(T0)});
+  if(a.skor>=80&&i%2===0){const e=trAll_('daftar').filter(x=>x.id===String(did))[0];e.cert='ya';e.certBy='demo-admin';e.certAt=iso(T0);e.certKode='SCW-CERT-DEMO'+did;trPut_('daftar',e._r,e)}}
+});
+trPut_('peserta',0,{nik:'DEMO-001',nama:'Peserta Demo',plant:'Plant 2',dept:'Assembling',peran:'Operator',salt:'d',hash:hash_('d','DemoPeserta1'),dibuat:iso(T0),aktif:'ya'});
+trPut_('daftar',0,{id:nama.length+1,nik:'DEMO-001',sesi:1,gabung:iso(Date.now()),materi:'tidak',cert:'tidak'});
+window.DEMO_CALL=async function(rec){await new Promise(r=>setTimeout(r,350));try{return {ok:true,data:trRoute_(rec)}}catch(ex){if(ex&&ex.trE)return{ok:false,code:ex.c===401?'AUTH':ex.c,error:ex.m};return{ok:false,error:String(ex)}}};
+})();
+</script>
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";
+let SESSION = null;
+</script>
+<script>
+'use strict';
+const state={meta:null,me:null,csrf:null,view:'overview',courseId:0,adminCourseId:0,adminPlant:'all',adminDept:'all',adminPosition:'all',adminSearch:'',bankDept:'Forging',bankPosition:'Operator',bankPhase:'pre',stats:null,assessment:null,questionIndex:0,answers:[],busy:false,sidebar:false};
+const roots={root:document.getElementById('root'),toast:document.getElementById('toast'),modal:document.getElementById('modalRoot'),cert:document.getElementById('certPrint')};
+const DIMENSIONS=[['detect','Deteksi Abnormal'],['stop','STOP'],['call','CALL'],['wait','WAIT'],['restart','Restart Aman']];
+const SVG={home:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',book:'<path d="M4 19V5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 1-2-2zm0 0a2 2 0 0 1 2-2h14"/>',pencil:'<path d="m15 4 5 5-11 11H4v-5L15 4zm-2 2 5 5"/>',check:'<path d="m4 12 6 6L20 6"/>',chart:'<path d="M3 3v18h18M6 17l5-6 4 3 5-8"/>',users:'<circle cx="9" cy="7" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M17 4a4 4 0 0 1 0 8M22 21v-2a7 7 0 0 0-4-6"/>',layers:'<path d="m12 2 9 6-9 6-9-6 9-6zm-9 11 9 6 9-6M3 18l9 5 9-5"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="m19 13 2-1-2-1-.7-2 1-2-2-2-2 1-2-.7-1-2h-2l-1 2-2 .7-2-1-2 2 1 2-.7 2-2 1 2 1 .7 2-1 2 2 2 2-1 2 .7 1 2h2l1-2 2-.7 2 1 2-2-1-2z"/>',logout:'<path d="M10 17l5-5-5-5m5 5H3m12-9h5v18h-5"/>',download:'<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>',shield:'<path d="m12 2 9 4v6c0 5-3 8-9 10-6-2-9-5-9-10V6l9-4zm-4 10 3 3 5-6"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 3"/>',plus:'<path d="M12 5v14m-7-7h14"/>',arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',refresh:'<path d="M20 7v-4l-3 3a8 8 0 1 0 3 7"/>',trend:'<path d="m3 17 7-7 4 4 7-8m-5 0h5v5"/>',filter:'<path d="M4 7h16M7 12h10m-7 5h4"/>',award:'<circle cx="12" cy="8" r="5"/><path d="M8 12 6 22l6-3 6 3-2-10"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'};
+const icon=(name,size=18)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG[name]||SVG.home}</svg>`;
+const E=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+const fNum=n=>n==null?'—':String(n).replace('.',',');
+const pct=n=>n==null?'—':`${fNum(n)}%`;
+const change=n=>n==null?'—':`${n>0?'+':''}${fNum(n)} poin`;
+const date=s=>s?new Date(s).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Jakarta'}):'—';
+const nameFor=d=>DIMENSIONS.find(x=>x[0]===d)?.[1]||d;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function message(s,isError=false){roots.toast.textContent=s;roots.toast.classList.toggle('error',isError);roots.toast.classList.remove('hidden');clearTimeout(message.timer);message.timer=setTimeout(()=>roots.toast.classList.add('hidden'),4100)}
+function setBusy(b){state.busy=b;document.body.style.cursor=b?'progress':'';}
+async function api(path,options={}){
+ const method=(options.method||'GET').toUpperCase();
+ const [p,qs]=path.split('?');
+ const query=Object.fromEntries(new URLSearchParams(qs||''));
+ let body={};if(options.body){try{body=JSON.parse(options.body)}catch(e){body={}}}
+ let response,data;busyOn();
+ try{data=await DEMO_CALL({action:'tr',path:p,method,query,body,session:SESSION})}
+ catch(e){busyOff();throw new Error('Server tidak terhubung. Periksa jaringan lalu coba lagi.')}
+ busyOff();
+ if(!data.ok){if(data.code==='AUTH'&&path!=='/api/login'&&path!=='/api/me'){setSession(null);state.me=null;state.csrf=null;renderAuth();}throw new Error(data.error||'Permintaan gagal.')}
+ return data.data||{};
+}
+let _bn=0,_b0,_b1,_b2;
+function busyOn(msg,now){const t=document.querySelector('#busy .bt');if(_bn++){if(msg&&t)t.textContent=msg;return}clearTimeout(_b0);if(t)t.textContent=msg||'Memuat…';const show=()=>{const e=document.getElementById('busy');if(!e)return;document.getElementById('busyMsg').textContent='';e.classList.add('on');_b1=setTimeout(()=>{document.getElementById('busyMsg').textContent='Server sedang bangun, mohon tunggu sebentar…'},4000);_b2=setTimeout(()=>{document.getElementById('busyMsg').textContent='Masih memproses. Koneksi atau server sedang lambat, jangan tutup halaman ini.'},12000)};if(now)show();else _b0=setTimeout(show,250)}
+function busyMsg(m){const t=document.querySelector('#busy .bt');if(t)t.textContent=m}
+function busyOff(){_bn=Math.max(0,_bn-1);if(_bn)return;clearTimeout(_b0);clearTimeout(_b1);clearTimeout(_b2);const e=document.getElementById('busy');if(e)e.classList.remove('on')}
+function setSession(s){SESSION=s||null;try{if(s)sessionStorage.setItem('scw_trn',s);else sessionStorage.removeItem('scw_trn')}catch(e){}}
+const IS_ADMIN=()=>state.me?.role==='admin';
+async function post(path,body){return api(path,{method:'POST',body:JSON.stringify(body)})}
+function optionsHtml(arr,selected){return arr.map(x=>{const [value,label]=Array.isArray(x)?x:[x,x];return `<option value="${E(value)}" ${String(value)===String(selected)?'selected':''}>${E(label)}</option>`}).join('')}
+function fieldSelect(id,label,values,value=''){return `<div class="field"><label for="${id}">${label}</label><select class="select" id="${id}">${optionsHtml(values,value)}</select></div>`}
+function navItems(){if(state.me.role==='participant')return [['overview','Beranda','home'],['material','Materi Training','book'],['pre','Pre-Test','pencil'],['post','Post-Test','check'],['result','Hasil Individu','chart'],['profile','Profil','users']];
+ const base=[['dashboard','Dashboard HSE','home'],['participants','Hasil Peserta','users'],['courses','Sesi Training','layers']];
+ if(IS_ADMIN())base.push(['questions','Bank Soal','pencil']);
+ base.push(['reports','Statistik & Laporan','chart'],['material','Materi','book']);
+ if(IS_ADMIN())base.push(['settings','Pengaturan','settings']);return base;}
+function courseOptions(){let list=state.me?.courses||[];return list.map(c=>[String(c.course_id||c.id),c.title])}
+function selectedCourse(){return (state.me?.courses||[]).find(c=>(c.course_id||c.id)===state.courseId) || state.me?.courses?.[0] || null}
+async function refreshMe(){let m={logged_in:false};if(SESSION){try{m=await api('/api/me')}catch(e){setSession(null)}}state.me=m.logged_in?m.user:null;state.csrf=m.csrf||null;if(state.me){const courses=state.me.courses||[];if(!courses.some(c=>(c.course_id||c.id)===state.courseId))state.courseId=courses[0]?.course_id||courses[0]?.id||0;if(!courses.some(c=>(c.course_id||c.id)===state.adminCourseId))state.adminCourseId=courses[0]?.course_id||courses[0]?.id||0}}
+async function init(){try{try{SESSION=null}catch(e){}
+ state.meta=await api('/api/meta');await refreshMe();if(state.me){state.view=state.me.role==='participant'?'overview':'dashboard';await navigate(state.view)}else renderAuth()}catch(e){roots.root.innerHTML=`<main class="auth-content"><div class="auth-box"><h2>Tidak dapat memuat aplikasi</h2><p>${E(e.message)}</p></div></main>`}}
+function renderAuth(mode='login'){
+ state.view=mode;
+ const form=mode==='login'?`<form id="loginForm">
+ <div class="field"><label>Username / NIK</label><input class="input" name="username" required autocomplete="username" placeholder="admin atau NIK peserta"></div>
+ <div class="field"><label>Password</label><input class="input" name="password" type="password" required autocomplete="current-password" placeholder="Masukkan password"></div>
+ <button type="submit" class="btn orange full" style="margin-top:6px">${icon('lock',16)} Masuk ke Sistem</button></form><div class="demo-box"><b>Coba sebagai:</b><div class="demo-btns"><button type="button" class="btn full" data-act="demo-login" data-who="peserta">Peserta (belum ada tes)</button><button type="button" class="btn full" data-act="demo-login" data-who="admin">Admin HSE</button><button type="button" class="btn full" data-act="demo-login" data-who="tamu">Tamu (hanya melihat)</button></div><small>Atau daftar sebagai peserta baru dengan kode <code>SCW-DEMO01</code> (tab Daftar Peserta).</small></div>`:
+ `<form id="registerForm"><div class="form-grid">
+ <div class="field span-2"><label>Nama lengkap *</label><input class="input" name="name" required maxlength="100" placeholder="Nama sesuai identitas karyawan"></div>
+ <div class="field"><label>NIK / Employee ID *</label><input class="input" name="employee_id" required maxlength="30" placeholder="Contoh TJFI-0012"></div>
+ <div class="field"><label>Kode training dari trainer *</label><input class="input" name="code" required maxlength="40" placeholder="Contoh SCW-ABC123"></div>
+ <div class="field"><label>Plant *</label><select class="select" name="plant" id="signupPlant">${optionsHtml(Object.keys(state.meta.plants),'Plant 1')}</select></div>
+ <div class="field"><label>Departemen *</label><select class="select" name="dept" id="signupDept">${optionsHtml(state.meta.plants['Plant 1'])}</select></div>
+ <div class="field"><label>Peran Training *</label><select class="select" name="position">${optionsHtml(['Operator','Pengawas'])}</select></div>
+ <div class="field"><label>Password baru * (min. 10 karakter)</label><input class="input" type="password" name="password" required minlength="10" maxlength="128" autocomplete="new-password"></div>
+ </div><button class="btn orange full" style="margin-top:19px" type="submit">Daftar dan Ikuti Training ${icon('arrow',16)}</button></form>`;
+ roots.root.innerHTML=`<div class="auth-shell"><aside class="auth-art">
+ <div><div class="auth-logo"><img class="scs" src="scs-icon.png" alt="SCS"><img src="tjforge-logo.png" alt="Logo resmi PT TJForge Indonesia"></div><div style="margin-top:95px"><span class="eyebrow">SAFETY CULTURE DEVELOPMENT</span><h1>STOP.<br>CALL.<br><span style="color:#ff9d36">WAIT.</span></h1><p>Platform training interaktif untuk meningkatkan respons kondisi abnormal, budaya pelaporan, dan pengambilan keputusan aman pada setiap departemen.</p><div class="scw-steps"><div class="scw-step"><strong>STOP</strong><div class="small">Hentikan dengan aman</div></div><div class="scw-step"><strong>CALL</strong><div class="small">Laporkan kondisi</div></div><div class="scw-step"><strong>WAIT</strong><div class="small">Tunggu otorisasi</div></div></div></div></div><div class="small" style="color:#97a8bc">PT TJForge Indonesia · Training & Competency Center ${state.meta.demo?'· MODE DEMO':''}</div>
+ </aside><main class="auth-content"><div class="auth-box"><div class="header"><div class="eyebrow">TJFORGE TRAINING CENTER</div><h2>${mode==='login'?'Selamat Datang':'Registrasi Peserta'}</h2><div class="muted small">${mode==='login'?'Login untuk mengakses training dan hasil asesmen.':'Buat akun menggunakan kode training yang diberikan trainer.'}</div></div><div class="switcher"><button type="button" data-auth="login" class="${mode==='login'?'active':''}">Login</button><button type="button" data-auth="register" class="${mode==='register'?'active':''}">Daftar Peserta</button></div>${form}${state.meta.demo?'<div class="hint warn section-gap"><b>MODE DEMO</b><div>Admin: <code>admin / DemoAdmin2026!</code></div><div>Peserta: <code>TJFI-1001 / DemoPeserta2026!</code></div><div>Kode registrasi: <code>SCW-DEMO</code></div><div>Seluruh nama dan nilai contoh adalah data fiktif.</div></div>':''}<p class="auth-bottom"><a href="menu.html" style="color:inherit;font-weight:700">← Kembali ke menu Stop Call Wait</a><br><br>Sistem ini menggunakan bank soal sesuai departemen dan peran. Untuk penggunaan resmi, soal dan SOP harus divalidasi oleh tim terkait.</p></div></main></div>`;
+}
+function renderShell(){
+ const user=state.me;const currentNav=navItems();roots.root.innerHTML=`<div class="shell"><aside class="sidebar ${state.sidebar?'open':''}" id="sidebar"><div class="brand"><div class="brand-logo scs"><img src="scs-icon.png" alt="SCS"><span><b>Training SCW</b><small>Stop · Call · Wait</small></span></div><div class="brand-caption">SAFETY CONTROL SYSTEM</div></div><div class="nav-head">${user.role==='participant'?'PESERTA TRAINING':'ADMINISTRASI TRAINING'}</div><nav>${currentNav.map(([id,label,ic])=>`<button class="nav-btn ${state.view===id?'active':''}" data-nav="${id}">${icon(ic)}<span>${E(label)}</span></button>`).join('')}</nav><div class="nav-head">TAUTAN</div><a class="nav-btn" href="menu.html" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span>Kembali ke Menu SCW</span></a><div class="side-bottom"><strong>Safety Control Mindset</strong>Kenali abnormal, hentikan pekerjaan, laporkan, dan jangan restart sebelum ada keputusan sah.</div></aside><div class="main"><header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="btn sm hamb" id="toggleMenu">☰</button><img class="top-ic" src="scs-icon.png" alt="SCS"><div><small>PT TJFORGE INDONESIA / TRAINING</small><h2 id="topHeading">${E(user.role==='participant'?'Participant Center':'Training Administration')}</h2></div></div><div class="topbar-right"><span class="pill live"><i></i>${state.meta.demo?'DEMO':'DATA LIVE'}</span><div class="circle">${E((user.name||'?').charAt(0).toUpperCase())}</div><div class="user-details"><b class="small">${E(user.name)}</b><div class="tiny muted">${E(user.role==='participant'?user.position:user.role.toUpperCase())}</div></div><button class="btn sm" id="logoutBtn" title="Logout">${icon('logout',16)}</button></div></header><main class="content" id="content"><div class="card">Memuat data...</div></main></div></div>`;
+}
+function layoutHeader(title,subtitle,action=''){return `<div class="top-h"><div><div class="eyebrow">STOP–CALL–WAIT TRAINING</div><h1>${E(title)}</h1><p>${E(subtitle)}</p></div><div class="btn-row">${action}</div></div>`}
+function actionButton(label,action,cls=''){return `<button class="btn ${cls}" data-act="${action}">${label}</button>`}
+function kpi(title,val,desc,ico='chart'){return `<div class="card kpi"><div class="top"><label>${E(title)}</label><i>${icon(ico,17)}</i></div><strong class="numeric">${E(val)}</strong><small>${E(desc)}</small></div>`}
+function progress(value){return `<div class="progress progress-sm"><span style="width:${Math.min(100,Math.max(0,Number(value)||0))}%"></span></div>`}
+function radarSvg(pre,post){const cx=225,cy=170,r=110;const angles=[-90,-18,54,126,198].map(x=>x*Math.PI/180),pos=(i,v)=>[cx+Math.cos(angles[i])*r*v/100,cy+Math.sin(angles[i])*r*v/100];
+ const poly=v=>v.map((x,i)=>pos(i,x).map(y=>y.toFixed(1)).join(',')).join(' ');
+ const grid=[20,40,60,80,100].map(v=>`<polygon points="${poly(Array(5).fill(v))}" fill="${v===100?'#fbfcfe':'none'}" stroke="#e4ebf3" stroke-width="1"/>`).join('');
+ const axes=angles.map((a,i)=>{const [x,y]=pos(i,100);const [lx,ly]=pos(i,125);return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#dfe7ef"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="#637389" font-size="12" font-weight="700">${E(DIMENSIONS[i][1])}</text>`}).join('');
+ const area=(v,color)=>v?`<polygon points="${poly(v)}" fill="${color}" fill-opacity=".13" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>${v.map((n,i)=>{const [x,y]=pos(i,n);return `<circle cx="${x}" cy="${y}" r="3.2" fill="${color}" stroke="white" stroke-width="1.4"/>`}).join('')}`:'';
+ return `<svg class="radar-svg" viewBox="0 0 450 330" role="img" aria-label="Radar kompetensi Pre-Test dan Post-Test">${grid}${axes}${area(pre,'#7694c9')}${area(post,'#ff8200')}</svg><div class="radar-legend"><span class="key"><span class="sw" style="background:#7694c9"></span> Pre-Test</span><span class="key"><span class="sw" style="background:#ff8200"></span> Post-Test</span></div>`;
+}
+function dimsToArr(o){return o?DIMENSIONS.map(([k])=>o[k]??0):null}
+function bars(items,key='count',nameKey='name'){if(!items?.length)return `<div class="chart-empty">Belum ada data pada filter ini.</div>`;const max=Math.max(1,...items.map(x=>Number(x[key])||0));return `<div class="bar-chart">${items.map(x=>`<div class="bar-line"><span title="${E(x[nameKey])}">${E(x[nameKey])}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,100*(Number(x[key])||0)/max)}%"></div></div><b>${E(x[key])}</b></div>`).join('')}</div>`}
+function userCourses(){const list=state.me.courses||[];return `<select id="courseSelect" class="select select-course">${optionsHtml(courseOptions(),state.courseId)}</select>`}
+async function navigate(view){
+ state.view=view;state.sidebar=false;renderShell();const content=document.getElementById('content');
+ try{
+  if(state.me.role==='participant')await renderParticipantView(view,content);
+  else await renderAdminView(view,content);
+ }catch(e){content.innerHTML=`<div class="card"><h2>Tidak bisa memuat halaman</h2><p class="muted">${E(e.message)}</p>${actionButton('Coba lagi','reload','orange')}</div>`;message(e.message,true)}
+ const heading=document.getElementById('topHeading');if(heading)heading.textContent=({overview:'Training Overview',material:'Materi Pembelajaran',pre:'Pre-Test',post:'Post-Test',result:'Hasil Individu',profile:'Profil Peserta',dashboard:'Dashboard HSE',participants:'Peserta Training',courses:'Sesi Training',questions:'Bank Soal',reports:'Statistik & Laporan',settings:'Pengaturan'})[view]||'Training';
+ window.scrollTo({top:0,behavior:'instant'});
+}
+async function renderParticipantView(view,root){
+ if(view==='overview')return participantOverview(root);
+ if(view==='material')return participantMaterial(root);
+ if(view==='pre'||view==='post')return participantTest(root,view);
+ if(view==='result')return participantResults(root);
+ if(view==='profile')return participantProfile(root);
+ return participantOverview(root);
+}
+async function participantOverview(root){
+ const c=selectedCourse();let result=c?.course_id?await api(`/api/my/results?course_id=${c.course_id}`):null;result=result?.result;
+ const pre=result?.pre;const post=result?.post;const radar=pre?radarSvg(dimsToArr(pre.dimensions),dimsToArr(post?.dimensions)):'';
+ root.innerHTML=`${layoutHeader('Beranda Training','Perkembangan kompetensi STOP–CALL–WAIT secara individual.',userCourses())}
+ <section class="hero"><div><span class="eyebrow" style="color:#ffbd75">BUILDING SAFETY CULTURE</span><h2>Kenali abnormal. Ambil tindakan tepat.</h2><p>Profil: ${E(state.me.name)} · ${E(state.me.plant)} / ${E(state.me.dept)} · ${E(state.me.position)}. Kerjakan Pre-Test, pelajari materi, lalu buktikan peningkatan pada Post-Test.</p>${actionButton(post?'Lihat hasil training':pre?'Lanjut belajar':'Mulai Pre-Test',post?'result':pre?'material':'pre','orange')}</div><div class="hero-letters"><b>S</b><b>C</b><b>W</b></div></section>
+ ${!c?'<div class="card section-gap"><h2>Anda belum terdaftar pada sesi training.</h2><p>Masukkan kode training dari trainer di menu Profil.</p></div>':`<div class="kpi-grid section-gap">${kpi('Pre-Test',pre?pct(pre.score):'—','Nilai sebelum training','pencil')}${kpi('Post-Test',post?pct(post.score):'—','Nilai setelah training','check')}${kpi('Improvement',change(result.gain),'Selisih nilai berpasangan','trend')}${kpi('Status',post?(result.passed?'Lulus':'Belum Lulus'):pre?'Proses':'Belum Mulai',`Kriteria kelulusan ${c.pass_mark}%`,'shield')}</div><div class="cols-2 section-gap"><section class="card"><div class="card-title"><div><h2>Radar kompetensi</h2><p>Perbandingan lima kompetensi utama</p></div><span class="pill orange">5 dimensi</span></div>${pre?radar:'<div class="chart-empty">Radar akan muncul setelah Pre-Test dikumpulkan.</div>'}</section><section class="card"><div class="card-title"><div><h2>Alur training</h2><p>Berjalan berurutan untuk menjaga validitas asesmen.</p></div></div><div class="timeline"><div class="timeline-item"><div class="timeline-num">01</div><div><h3>Pre-Test ${pre?'✓':''}</h3><p>${pre?`Selesai pada ${date(pre.submitted_at)}. Nilai ${pre.score}%.`:'Ukur pengetahuan sebelum mempelajari materi.'}</p></div></div><div class="timeline-item"><div class="timeline-num">02</div><div><h3>Pelajari materi ${c.material_done?'✓':''}</h3><p>${c.material_done?'Materi telah ditandai selesai.':'Pahami STOP, CALL, WAIT, dan persyaratan restart.'}</p></div></div><div class="timeline-item"><div class="timeline-num">03</div><div><h3>Post-Test ${post?'✓':''}</h3><p>${post?`Selesai. Nilai ${post.score}%.`:'Pertanyaan berbeda sesuai departemen dan peran.'}</p></div></div><div class="timeline-item"><div class="timeline-num">04</div><div><h3>Verifikasi Trainer ${result.certified?'✓':''}</h3><p>${result.certified?'Sertifikat disetujui dan dapat dicetak.':'Sertifikat hanya tersedia jika lulus dan disetujui trainer.'}</p></div></div></div></section></div>`}`;
+}
+async function participantMaterial(root){
+ const c=selectedCourse();if(!c)return root.innerHTML=layoutHeader('Materi Training','Daftarkan diri ke sesi training terlebih dahulu.');
+ const m=await api(`/api/material?course_id=${c.course_id}`);
+ const caseData=m.scenario?.pre;const p=state.me;
+ root.innerHTML=`${layoutHeader('Materi STOP–CALL–WAIT',`Pembelajaran untuk ${p.dept} · ${p.position}`,userCourses())}
+ <div class="hint warn">Materi ini disusun dari prototipe TJForge dan merupakan draft training. Pastikan alur eskalasi, tindakan STOP, standar isolasi, dan persetujuan restart disesuaikan dengan SOP resmi perusahaan.</div>
+ <div class="cols-2 section-gap">${m.steps.map((step,i)=>`<div class="card"><div class="step-card" style="height:100%"><div class="index">0${i+1} · ${E(step.code)}</div><h3>${E(step.title)}</h3><p>${E(step.text)}</p></div></div>`).join('')}</div>
+ <section class="card section-gap"><div class="card-title"><div><h2>Contoh Kasus: ${E(p.dept)}</h2><p>Contoh latihan berdasarkan departemen yang Anda pilih.</p></div><span class="pill orange">${E(p.position)}</span></div>${caseData?`<div class="timeline"><div class="timeline-item"><div class="timeline-num">!</div><div><h3>Temuan abnormal</h3><p>${E(caseData.issue)}</p></div></div><div class="timeline-item"><div class="timeline-num">S</div><div><h3>STOP</h3><p>${E(caseData.stop)}</p></div></div><div class="timeline-item"><div class="timeline-num">C</div><div><h3>CALL</h3><p>${E(caseData.contact)}</p></div></div><div class="timeline-item"><div class="timeline-num">W</div><div><h3>WAIT</h3><p>${E(caseData.hold)}</p></div></div><div class="timeline-item"><div class="timeline-num">✓</div><div><h3>Restart</h3><p>${E(caseData.restart)} dan ada otorisasi dari PIC yang berwenang.</p></div></div></div>`:'<p>Kasus belum tersedia.</p>'}</section>
+ <section class="card section-gap"><h2>Sudah menyelesaikan materi?</h2><p class="muted small">Tandai selesai setelah mempelajari keempat langkah, memahami kasus departemen, dan siap mengerjakan Post-Test.</p><div class="btn-row section-gap">${c.material_done?'<span class="pill green">Materi telah selesai</span>':actionButton('Saya sudah mempelajari materi','material-finish','orange')}${actionButton('Buka Post-Test','post')}</div></section>`;
+}
+function draftKey(){return `scw_answers:${state.me.id}:${state.courseId}:${state.assessment.phase}:${state.assessment.id}`}
+async function participantTest(root,phase){
+ const c=selectedCourse();if(!c){root.innerHTML=layoutHeader(phase==='pre'?'Pre-Test':'Post-Test','Belum terdaftar dalam sesi training.');return;}
+ const r=await api(`/api/my/assessment?course_id=${c.course_id}&phase=${phase}`);
+ if(!r.attempt){
+  const blocked=phase==='post'&&(!c.pre?.submitted_at||!c.material_done);
+  root.innerHTML=`${layoutHeader(phase==='pre'?'Pre-Test':'Post-Test','15 soal adaptif berdasarkan departemen dan peran.',userCourses())}<div class="cols-2-1"><div class="card"><div class="eyebrow">TRAINING ASSESSMENT</div><h2 style="margin:8px 0 12px">${phase==='pre'?'Ukur pemahaman sebelum training':'Evaluasi pemahaman setelah training'}</h2><p class="muted">Soal terdiri dari 5 prinsip umum, 5 soal tanggung jawab ${E(state.me.position)}, dan 5 kasus departemen ${E(state.me.dept)}. Setiap kompetensi mendapat tiga pertanyaan.</p><div class="stat-row"><span>Jumlah pertanyaan</span><b>15</b></div><div class="stat-row"><span>Plant / Departemen</span><b>${E(state.me.plant)} / ${E(state.me.dept)}</b></div><div class="stat-row"><span>Peran</span><b>${E(state.me.position)}</b></div><div class="stat-row"><span>Percobaan</span><b>1 kali per sesi</b></div><div class="hint warn section-gap">${blocked?'Post-Test dikunci. Selesaikan Pre-Test dan pelajari materi terlebih dahulu.':'Kumpulkan jawaban ketika seluruh soal sudah terisi. Setelah submit, jawaban tidak dapat diubah.'}</div><div class="btn-row section-gap">${blocked?actionButton('Buka Materi','material','orange'):actionButton('Mulai '+(phase==='pre'?'Pre-Test':'Post-Test'),'begin-test','orange')}</div></div><div class="card"><h2>5 kompetensi yang dinilai</h2><div class="timeline section-gap">${DIMENSIONS.map(([k,n],i)=>`<div class="timeline-item"><span class="timeline-num">0${i+1}</span><div><h3>${n}</h3><p>3 soal yang menguji pemahaman dan respons tindakan.</p></div></div>`).join('')}</div></div></div>`;
+  return;
+ }
+ if(r.attempt.completed){root.innerHTML=`${layoutHeader(phase==='pre'?'Pre-Test':'Post-Test','Tes telah diselesaikan.',userCourses())}<div class="card"><div class="pill green">Selesai</div><h2 style="font-size:33px;margin:12px 0">Nilai ${r.attempt.score}%</h2><p class="muted">Tes hanya dapat dikerjakan satu kali. Buka halaman hasil untuk analisis radar dan pembahasan.</p>${actionButton('Lihat hasil','result','orange')}</div>`;return;}
+ state.assessment={...r.attempt,phase};
+ try{const stored=JSON.parse(sessionStorage.getItem(draftKey()));state.answers=Array.isArray(stored)&&stored.length===r.attempt.questions.length?stored:Array(r.attempt.questions.length).fill(null)}catch(e){state.answers=Array(r.attempt.questions.length).fill(null)}
+ state.questionIndex=0;renderQuestion();
+}
+function renderQuestion(){
+ const a=state.assessment;if(!a)return;const q=a.questions[state.questionIndex],root=document.getElementById('content');const done=state.answers.filter(Number.isInteger).length;
+ root.innerHTML=`${layoutHeader(a.phase==='pre'?'Pre-Test':'Post-Test',`${E(state.me.dept)} · ${E(state.me.position)} · Soal ${state.questionIndex+1} dari ${a.questions.length}`,`<span class="pill blue">${done}/${a.questions.length} dijawab</span>`)}<div class="cols-2-1"><section class="card"><div class="question-top"><span class="pill orange">${E(nameFor(q.dimension))}</span><span class="small muted">${E(q.source)}</span></div><h2 class="question">${E(q.question)}</h2><div>${q.options.map((text,i)=>`<button class="answer ${state.answers[state.questionIndex]===i?'selected':''}" data-answer="${i}"><span class="letter">${String.fromCharCode(65+i)}</span><span>${E(text)}</span></button>`).join('')}</div><div class="btn-row section-gap" style="justify-content:space-between">${actionButton('← Sebelumnya','prev-question','','')}${state.questionIndex===a.questions.length-1?actionButton('Periksa & Submit','quiz-submit','orange'):actionButton('Berikutnya →','next-question','orange')}</div></section><aside class="card"><div class="card-title"><div><h2>Navigasi Soal</h2><p>Pilih nomor soal untuk berpindah.</p></div><span class="pill">${Math.round(done/a.questions.length*100)}%</span></div>${progress(done/a.questions.length*100)}<div class="q-grid section-gap">${a.questions.map((x,i)=>`<button class="${i===state.questionIndex?'active':''} ${Number.isInteger(state.answers[i])?'done':''}" data-q="${i}">${i+1}</button>`).join('')}</div><div class="hint section-gap">Jawaban sementara disimpan selama sesi browser ini. Jawaban dinilai dan disimpan permanen hanya setelah Anda menekan Submit.</div></aside></div>`;
+}
+async function participantResults(root){
+ const c=selectedCourse();if(!c){root.innerHTML=layoutHeader('Hasil Individu','Belum terdaftar dalam sesi training.');return}
+ const {result:r}=await api(`/api/my/results?course_id=${c.course_id}`);
+ const pre=r.pre,post=r.post,competence=post?.dimensions||pre?.dimensions||{};
+ root.innerHTML=`${layoutHeader('Hasil Individu',`${state.me.name} · ${state.me.employee_id} · ${state.me.dept} · ${state.me.position}`,userCourses())}
+ ${pre?`<div class="kpi-grid">${kpi('Pre-Test',pct(pre.score),'15 soal adaptif','pencil')}${kpi('Post-Test',pct(post?.score),'15 soal adaptif','check')}${kpi('Peningkatan',change(r.gain),'Post dikurangi Pre','trend')}${kpi('Kelulusan',post?(r.passed?'LULUS':'BELUM LULUS'):'PROSES',`Batas nilai ${r.pass_mark}%`,'shield')}</div>
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><div><h2>Radar Kompetensi Individu</h2><p>Lima dimensi sebelum dan sesudah training</p></div></div>${radarSvg(dimsToArr(pre.dimensions),dimsToArr(post?.dimensions))}</section><section class="card"><div class="card-title"><div><h2>Detail Kompetensi</h2><p>Memudahkan menentukan kebutuhan tindak lanjut.</p></div></div>${DIMENSIONS.map(([k,label])=>`<div style="margin:15px 0"><div class="stat-row"><span>${E(label)}</span><b>Pre ${pct(pre.dimensions[k])} · Post ${pct(post?.dimensions?.[k])}</b></div>${progress(post?.dimensions?.[k]??pre.dimensions[k])}</div>`).join('')}<div class="hint section-gap">Nilai radar diperoleh dari tiga soal per dimensi. Peningkatan dihitung hanya dari pasangan Pre-Test dan Post-Test pada peserta yang sama.</div></section></div>
+ <section class="card section-gap"><div class="card-title"><div><h2>Status Sertifikat</h2><p>Penerbitan memerlukan kelulusan dan verifikasi trainer.</p></div>${r.certified?'<span class="pill green">Disetujui Trainer</span>':'<span class="pill orange">Belum Disetujui</span>'}</div>${r.certified?`<p>Nomor: <b>${E(r.cert_code)}</b></p>${actionButton('Cetak Sertifikat','print-certificate','orange')}`:r.passed?'<p class="muted">Anda lulus Post-Test. Sertifikat menunggu verifikasi trainer.</p>':post?'<p class="muted">Belum memenuhi standar kelulusan. Hubungi trainer untuk tindak lanjut training.</p>':'<p class="muted">Selesaikan Post-Test untuk melihat status kelulusan.</p>'}</section>
+ <section class="card section-gap"><div class="card-title"><div><h2>Ulasan Jawaban</h2><p>Lihat jawaban dan pembahasan setelah tes selesai.</p></div></div>${[pre,post].filter(Boolean).map(a=>`<details style="margin:12px 0" ${a.phase==='post'?'open':''}><summary style="cursor:pointer;font-weight:800;padding:11px 0">${a.phase==='pre'?'PRE-TEST':'POST-TEST'} · ${a.score}%</summary>${a.review?.map((q,i)=>`<div class="review-item"><div class="btn-row"><span class="pill ${q.correct?'green':'red'}">${q.correct?'Benar':'Perlu perbaikan'}</span><span class="small muted">#${i+1} · ${E(nameFor(q.dimension))}</span></div><p><b>${E(q.question)}</b></p><p class="small">Pilihan Anda: ${E(q.options[q.choice])}</p>${!q.correct?`<p class="small">Jawaban tepat: <b>${E(q.options[q.answer])}</b></p>`:''}<p class="explanation">${E(q.explanation)}</p></div>`).join('')||''}</details>`).join('')}</section>`:`<section class="card"><h2>Belum ada hasil.</h2><p class="muted">Kerjakan Pre-Test untuk membuka radar kompetensi Anda.</p>${actionButton('Mulai Pre-Test','pre','orange')}</section>`}`;
+}
+function participantProfile(root){const c=selectedCourse();const u=state.me;root.innerHTML=`${layoutHeader('Profil Peserta','Informasi peserta, sesi training, dan keamanan akun.')}
+ <div class="cols-2"><section class="card"><h2>Identitas peserta</h2><div class="section-gap">${[['Nama Lengkap',u.name],['NIK',u.employee_id],['Plant',u.plant],['Departemen',u.dept],['Peran',u.position]].map(([a,b])=>`<div class="stat-row"><span>${E(a)}</span><b>${E(b)}</b></div>`).join('')}</div><div class="hint section-gap">Identitas dikunci agar nilai Pre-Test dan Post-Test dapat dibandingkan secara konsisten. Koreksi data dilakukan melalui administrator.</div></section><section class="card"><h2>Daftar training lain</h2><p class="muted small">Masukkan kode dari trainer untuk mengikuti sesi baru.</p><form id="joinForm" class="section-gap"><div class="field"><label>Kode Training</label><input class="input" name="code" placeholder="SCW-XXXXXX" required></div><button class="btn orange section-gap" type="submit">Daftar Sesi Training</button></form><hr class="sep"><h2>Ganti Password</h2><form id="passwordForm" class="section-gap"><div class="field"><label>Password Lama</label><input class="input" type="password" name="old_password" autocomplete="current-password" required></div><div class="field section-gap"><label>Password Baru (minimal 10 karakter)</label><input class="input" type="password" name="new_password" minlength="10" autocomplete="new-password" required></div><button class="btn dark section-gap" type="submit">Simpan Password Baru</button></form></section></div>`}
+async function renderAdminView(view,root){if(view==='dashboard')return adminDashboard(root);if(view==='participants')return adminParticipants(root);if(view==='courses')return adminCourses(root);if(view==='questions')return adminQuestions(root);if(view==='reports')return adminReports(root);if(view==='settings'&&IS_ADMIN())return adminSettings(root);if(view==='material')return adminMaterial(root);if(view==='questions'&&!IS_ADMIN())return adminDashboard(root);return adminDashboard(root)}
+function adminFilters(){return `<div class="card"><div class="filter-grid">${fieldSelect('adminCourse','Sesi Training',[['0','Semua sesi'],...courseOptions()],String(state.adminCourseId))}${fieldSelect('adminPlant','Plant',[['all','Semua Plant'],...Object.keys(state.meta.plants).map(x=>[x,x])],state.adminPlant)}${fieldSelect('adminDept','Departemen',[['all','Semua Departemen'],...allDepartments().map(x=>[x,x])],state.adminDept)}${fieldSelect('adminPosition','Peran',[['all','Operator & Pengawas'],['Operator','Operator'],['Pengawas','Pengawas']],state.adminPosition)}</div></div>`}
+function allDepartments(){return [...new Set(Object.values(state.meta.plants).flat())].sort((a,b)=>a.localeCompare(b))}
+function adminParams(){const p=new URLSearchParams();if(state.adminCourseId)p.set('course_id',state.adminCourseId);if(state.adminPlant!=='all')p.set('plant',state.adminPlant);if(state.adminDept!=='all')p.set('dept',state.adminDept);if(state.adminPosition!=='all')p.set('position',state.adminPosition);if(state.adminSearch)p.set('q',state.adminSearch);return p.toString()}
+async function loadStats(){return (state.stats=await api('/api/admin/stats?'+adminParams()))}
+function adminSummary(s){return `<div class="kpi-grid section-gap">${kpi('Total Peserta',s.total,'Berdasarkan filter aktif','users')}${kpi('Rata-rata Pre-Test',pct(s.pre_avg),`${s.pre_count} peserta sudah Pre-Test`,'pencil')}${kpi('Rata-rata Post-Test',pct(s.post_avg),`${s.post_count} peserta sudah Post-Test`,'check')}${kpi('Peningkatan',change(s.gain_avg),`${s.paired_count} peserta berpasangan`,'trend')}</div>`}
+async function adminMaterial(root){const dept=state.matDept||'Forging';const m=await api('/api/material?dept='+encodeURIComponent(dept));
+ const tl=c=>c?`<div class="timeline"><div class="timeline-item"><div class="timeline-num">!</div><div><h3>Temuan abnormal</h3><p>${E(c.issue)}</p></div></div><div class="timeline-item"><div class="timeline-num">S</div><div><h3>STOP</h3><p>${E(c.stop)}</p></div></div><div class="timeline-item"><div class="timeline-num">C</div><div><h3>CALL</h3><p>${E(c.contact)}</p></div></div><div class="timeline-item"><div class="timeline-num">W</div><div><h3>WAIT</h3><p>${E(c.hold)}</p></div></div><div class="timeline-item"><div class="timeline-num">✓</div><div><h3>Restart</h3><p>${E(c.restart)} dan ada otorisasi dari PIC yang berwenang.</p></div></div></div>`:'<p>Kasus belum tersedia.</p>';
+ root.innerHTML=`${layoutHeader('Materi STOP–CALL–WAIT','Pratinjau materi dan contoh kasus yang dilihat peserta, per departemen.')}<section class="card"><div class="filter-grid">${fieldSelect('matDept','Departemen',allDepartments(),dept)}</div></section>
+ <div class="hint warn section-gap">${E(m.disclaimer)}</div>
+ <div class="cols-2 section-gap">${m.steps.map((step,i)=>`<div class="card"><div class="step-card" style="height:100%"><div class="index">0${i+1} · ${E(step.code)}</div><h3>${E(step.title)}</h3><p>${E(step.text)}</p></div></div>`).join('')}</div>
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><div><h2>Contoh Kasus Pre-Test: ${E(dept)}</h2></div></div>${tl(m.scenario?.pre)}</section><section class="card"><div class="card-title"><div><h2>Contoh Kasus Post-Test: ${E(dept)}</h2></div></div>${tl(m.scenario?.post)}</section></div>`;}
+async function adminDashboard(root){const {stats:s,rows}=await loadStats();root.innerHTML=`${layoutHeader('Dashboard HSE','Ringkasan efektivitas training STOP–CALL–WAIT semua departemen.',actionButton(icon('refresh',15)+' Refresh','reload')+' '+(IS_ADMIN()?actionButton(icon('download',15)+' Ekspor CSV','export','orange'):''))}
+ <section class="hero"><div><span class="eyebrow" style="color:#ffb76a">TRAINING ANALYTICS</span><h2>Safety Competence Performance</h2><p>Perbandingan hasil pre-test dan post-test, radar kompetensi, serta efektivitas training di Plant 1 dan Plant 2. Nilai didapat dari database server dan disaring berdasarkan izin akun.</p><span class="pill orange">${s.paired_count} peserta telah menyelesaikan kedua tes</span></div><div class="hero-letters"><b>S</b><b>C</b><b>W</b></div></section>
+ <div class="section-gap">${adminFilters()}</div>${adminSummary(s)}
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><div><h2>Radar Kompetensi Kelas</h2><p>Hanya peserta dengan Pre-Test dan Post-Test lengkap (paired)</p></div><span class="pill blue">${s.paired_count} paired</span></div>${s.paired_count?radarSvg(DIMENSIONS.map(([k])=>s.radar[k].pre??0),DIMENSIONS.map(([k])=>s.radar[k].post??0)):'<div class="chart-empty">Radar muncul setelah peserta menyelesaikan Pre-Test dan Post-Test.</div>'}</section><section class="card"><div class="card-title"><div><h2>Training Completion</h2><p>Progres berdasarkan status peserta.</p></div></div>${[['Sudah Pre-Test',s.pre_count],['Sudah Post-Test',s.post_count],['Lulus',s.passed],['Sertifikat Terverifikasi',s.certified]].map(([label,val])=>`<div style="margin:20px 0"><div class="stat-row"><span>${E(label)}</span><b>${val} dari ${s.total}</b></div>${progress(s.total?val/s.total*100:0)}</div>`).join('')}<div class="hint section-gap">Peningkatan dihitung dari peserta berpasangan. Rata-rata kelas tidak berarti hasil training otomatis memenuhi standar K3.</div></section></div>
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><h2>Jumlah Peserta per Plant</h2></div>${bars(s.plant)}</section><section class="card"><div class="card-title"><h2>Peserta per Departemen</h2></div>${bars(s.departments.slice(0,9))}</section></div>
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><h2>Komparasi Operator & Pengawas</h2></div>${s.roles.length?s.roles.map(x=>`<div class="stat-row"><div><b>${E(x.name)}</b><div class="small muted">${x.count} peserta · Post ${pct(x.post)}</div></div><div class="numeric">${x.passed} lulus</div></div>`).join(''):'<div class="chart-empty">Belum ada data.</div>'}</section><section class="card"><div class="card-title"><h2>Perhatian Trainer</h2></div>${[['Menunggu Post-Test',s.pending_post],['Belum Lulus',rows.filter(x=>x.post&&!x.passed).length],['Sudah Lulus & Belum Sertifikat',rows.filter(x=>x.passed&&!x.certified).length]].map(([label,val])=>`<div class="stat-row"><span>${E(label)}</span><b class="numeric">${val}</b></div>`).join('')}<div class="btn-row section-gap">${actionButton('Buka daftar peserta','participants','orange')}</div></section></div>`}
+async function adminParticipants(root){const {stats:s,rows}=await loadStats();root.innerHTML=`${layoutHeader('Hasil Peserta',`Monitoring ${rows.length} peserta sesuai filter.`,(IS_ADMIN()?actionButton(icon('download',15)+' Export CSV','export','orange'):''))}${adminFilters()}
+ <section class="card section-gap"><div class="card-title"><div><h2>Rekap Peserta</h2><p>Nilai dihitung oleh server; trainer dapat memverifikasi sertifikat peserta lulus.</p></div><span class="pill blue">${s.total} peserta</span></div><div class="table-scroll"><table><thead><tr><th>Peserta</th><th>Plant / Dept</th><th>Peran</th><th>Sesi</th><th>Pre</th><th>Post</th><th>Gain</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td><b>${E(r.name)}</b><br><span class="muted tiny">${E(r.employee_id)}</span></td><td>${E(r.plant)}<br><span class="muted">${E(r.dept)}</span></td><td><span class="pill orange">${E(r.position)}</span></td><td>${E(r.title)}</td><td>${pillScore(r.pre?.score)}</td><td>${pillScore(r.post?.score)}</td><td><b>${change(r.gain)}</b></td><td>${r.certified?'<span class="pill green">Sertifikat Terbit</span>':r.passed?'<span class="pill blue">Lulus</span>':r.post?'<span class="pill red">Belum Lulus</span>':r.pre?'<span class="pill orange">Sedang Training</span>':'<span class="pill">Belum Mulai</span>'}</td><td>${IS_ADMIN()&&r.passed&&!r.certified?`<button class="btn sm orange" data-certify="${r.enrollment_id}">Verifikasi</button>`:'—'}</td></tr>`).join(''):'<tr><td colspan="9">Belum ada peserta sesuai filter.</td></tr>'}</tbody></table></div></section>`;}
+function pillScore(s){return s==null?'<span class="pill">—</span>':`<span class="pill ${s>=80?'green':s>=60?'orange':'red'}">${pct(s)}</span>`}
+async function adminCourses(root){const {courses}=await api('/api/admin/courses');root.innerHTML=`${layoutHeader('Sesi Training','Buat kode training, atur batas kelulusan, dan aktifkan/arsipkan sesi.')}
+ <div class="cols-2-1"><section class="card"><div class="card-title"><div><h2>Daftar Sesi Training</h2><p>Kode digunakan untuk pendaftaran peserta baru.</p></div></div><div class="table-scroll"><table style="min-width:580px"><thead><tr><th>Judul</th><th>Kode</th><th>Batas Lulus</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${courses.map(c=>`<tr><td><b>${E(c.title)}</b><br><span class="tiny muted">Dibuat ${date(c.created_at)}</span></td><td><code>${E(c.code||'—')}</code></td><td>${c.pass_mark}%</td><td><span class="pill ${c.active?'green':'red'}">${c.active?'Aktif':'Arsip'}</span></td><td>${IS_ADMIN()?`<button class="btn sm" data-toggle-course="${c.id}" data-toggle-value="${c.active?'0':'1'}">${c.active?'Arsipkan':'Aktifkan'}</button>`:'—'}</td></tr>`).join('')}</tbody></table></div></section>
+ ${IS_ADMIN()?`<aside class="card"><h2>Buat Training Baru</h2><p class="muted small">Untuk batch lain, buat kode terpisah agar hasil tetap tercatat sesuai sesinya.</p><form id="courseForm" class="section-gap"><div class="field"><label>Nama sesi training</label><input class="input" name="title" required maxlength="120" placeholder="Contoh: SCW Batch November 2026"></div><div class="field section-gap"><label>Minimal nilai kelulusan</label><input class="input" type="number" name="pass_mark" min="0" max="100" value="80" required></div><button class="btn orange section-gap" type="submit">Buat Sesi dan Kode</button></form><div class="hint section-gap">Kode training bersifat akses pendaftaran, bukan pengganti verifikasi identitas karyawan oleh trainer.</div></aside>`:''}</div>`;}
+async function adminQuestions(root){const key=`dept=${encodeURIComponent(state.bankDept)}&position=${encodeURIComponent(state.bankPosition)}&phase=${state.bankPhase}`;const {questions}=await api('/api/admin/questions?'+key);state.questionList=questions;
+ root.innerHTML=`${layoutHeader('Bank Soal Adaptif','Kelola soal untuk departemen, peran, dan fase asesmen. Revisi hanya berlaku untuk tes yang belum dimulai.')}
+ <section class="card"><div class="filter-grid">${fieldSelect('bankDept','Departemen',allDepartments(),state.bankDept)}${fieldSelect('bankPosition','Peran',['Operator','Pengawas'],state.bankPosition)}${fieldSelect('bankPhase','Fase',[['pre','Pre-Test'],['post','Post-Test']],state.bankPhase)}<div class="field"><label>Jumlah soal</label><div class="input" style="display:flex;align-items:center;font-weight:800">${questions.length} soal</div></div></div><div class="hint section-gap">Setiap tes memuat 5 soal departemen, 5 soal peran, dan 5 soal umum. Perubahan bank soal tidak memengaruhi tes yang sudah dimulai karena snapshot soal disimpan pada database.</div></section>
+ <section class="card section-gap"><div class="card-title"><div><h2>Soal ${E(state.bankDept)} · ${E(state.bankPosition)}</h2><p>${state.bankPhase==='pre'?'Pre-Test':'Post-Test'} · 15 pertanyaan</p></div></div>${questions.map((q,i)=>`<div class="review-item"><div class="btn-row"><span class="pill orange">#${i+1} · ${E(nameFor(q.dimension))}</span><span class="pill blue">${E(q.source)}</span></div><p><b>${E(q.question)}</b></p><div class="small muted">Jawaban: ${E(q.options[q.correct])}</div><div class="btn-row section-gap"><button class="btn sm" data-edit-question="${i}">Edit Soal</button></div></div>`).join('')}</section>`;}
+async function adminReports(root){const {stats:s,rows}=await loadStats();root.innerHTML=`${layoutHeader('Statistik & Laporan','Dashboard analitik per kelas dan kompetensi.',(IS_ADMIN()?actionButton(icon('download',15)+' Ekspor CSV','export','orange'):''))}${adminFilters()}${adminSummary(s)}
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><div><h2>Radar Pre/Post (Paired)</h2><p>Analisis hanya dari ${s.paired_count} peserta yang lengkap.</p></div></div>${s.paired_count?radarSvg(DIMENSIONS.map(([k])=>s.radar[k].pre??0),DIMENSIONS.map(([k])=>s.radar[k].post??0)):'<div class="chart-empty">Belum ada data paired.</div>'}</section><section class="card"><div class="card-title"><h2>Distribusi Hasil Post-Test</h2></div>${bars([{name:'Di bawah 60',count:rows.filter(x=>x.post&&x.post.score<60).length},{name:'60 sampai 79',count:rows.filter(x=>x.post&&x.post.score>=60&&x.post.score<80).length},{name:'80 sampai 100',count:rows.filter(x=>x.post&&x.post.score>=80).length}])}<hr class="sep"><h2>Kelulusan Menurut Peran</h2>${s.roles.map(x=>`<div class="stat-row"><span>${E(x.name)} (${x.count} peserta)</span><b>${x.passed} lulus</b></div>`).join('')}</section></div>
+ <div class="cols-2 section-gap"><section class="card"><div class="card-title"><h2>Perbandingan Plant</h2></div>${s.plant.map(x=>`<div class="stat-row"><span>${E(x.name)} · ${x.count} peserta</span><b>Pre ${pct(x.pre)} → Post ${pct(x.post)}</b></div>`).join('')}</section><section class="card"><div class="card-title"><h2>Departemen</h2></div>${s.departments.map(x=>`<div class="stat-row"><span>${E(x.name)} · ${x.count}</span><b>${pct(x.post)}</b></div>`).join('')}</section></div><div class="hint section-gap">Perlu interpretasi HSE/trainer: perbedaan nilai tidak membuktikan perubahan perilaku lapangan secara otomatis. Gunakan observasi kerja dan tindak lanjut bersama data tes.</div>`;}
+async function adminSettings(root){const audit=await api('/api/admin/audit');root.innerHTML=`${layoutHeader('Pengaturan Sistem','Pengelolaan akun, kebijakan akses, dan log aktivitas.')}
+ <div class="cols-2"><section class="card"><h2>Ubah Password</h2><form id="passwordForm" class="section-gap"><div class="field"><label>Password lama</label><input class="input" type="password" name="old_password" autocomplete="current-password" required></div><div class="field section-gap"><label>Password baru (minimal 10 karakter)</label><input class="input" type="password" name="new_password" minlength="10" autocomplete="new-password" required></div><button class="btn dark section-gap" type="submit">Ganti Password</button></form></section><section class="card"><h2>Akun Admin &amp; Tamu</h2><p class="muted small">Akun admin dan tamu dikelola dari dashboard SCW (menu Akun) dan dipakai bersama modul Training. Peserta mendaftar sendiri dengan NIK dan kode sesi.</p><hr class="sep"><div class="hint">Data tersimpan di Google Sheet (sheet TR_*) dan hanya dapat diakses melalui Apps Script. Lakukan backup Spreadsheet secara berkala.</div></section></div>
+ <section class="card section-gap"><div class="card-title"><div><h2>Audit Aktivitas Terbaru</h2><p>100 aktivitas server terakhir.</p></div></div><div class="table-scroll"><table style="min-width:600px"><thead><tr><th>Waktu</th><th>Pengguna</th><th>Aksi</th><th>Keterangan</th></tr></thead><tbody>${audit.events.map(r=>`<tr><td>${date(r.created_at)}</td><td>${E(r.name||'Sistem')}</td><td><code>${E(r.action)}</code></td><td>${E(r.details||'-')}</td></tr>`).join('')}</tbody></table></div></section>`;}
+function showModal(content){roots.modal.innerHTML=`<div class="modal-bg"><div class="modal"><div class="btn-row align-right"><button class="btn sm" data-act="close-modal">✕ Tutup</button></div>${content}</div></div>`}
+function closeModal(){roots.modal.innerHTML=''}
+function questionEdit(index){const q=state.questionList?.[index];if(!q)return;showModal(`<h2>Edit Soal #${index+1}</h2><p class="muted small">${E(state.bankDept)} · ${E(state.bankPosition)} · ${E(state.bankPhase)}</p><form id="editQuestionForm" data-qid="${E(q.id)}"><div class="field section-gap"><label>Pertanyaan</label><textarea class="textarea" name="question" required minlength="10" maxlength="1000">${E(q.question)}</textarea></div>${q.options.map((o,i)=>`<div class="field section-gap"><label>Opsi ${String.fromCharCode(65+i)}</label><input class="input" name="option${i}" value="${E(o)}" required maxlength="240"></div>`).join('')}<div class="field section-gap"><label>Kunci Jawaban</label><select class="select" name="correct">${optionsHtml([['0','A'],['1','B'],['2','C'],['3','D']],String(q.correct))}</select></div><div class="field section-gap"><label>Pembahasan</label><textarea class="textarea" name="explanation" maxlength="1500" required>${E(q.explanation)}</textarea></div><div class="btn-row align-right section-gap"><button class="btn orange" type="submit">Simpan Revisi Soal</button></div></form>`)}
+function certificatePrint(){const c=selectedCourse(),r=c;if(!r?.certified||!r.cert_code){message('Sertifikat belum diverifikasi trainer.',true);return;}const u=state.me;
+ roots.cert.innerHTML=`<div class="cert-sheet"><img class="logo" src="tjforge-logo.png" alt="PT TJForge Indonesia"><h1>Certificate of Completion</h1><p>Diberikan kepada</p><div class="name">${E(u.name)}</div><p><b>NIK:</b> ${E(u.employee_id)} · ${E(u.plant)} / ${E(u.dept)}<br>Telah menyelesaikan <b>${E(r.title)}</b><br>Peran: ${E(u.position)} · Post-Test: ${r.post?.score??'—'}% · Kelulusan: ${r.pass_mark}%<br>Disetujui trainer pada ${date(r.certified_at)}</p><p style="margin-top:20px;color:#19815d;font-weight:800">TELAH LULUS & TERVERIFIKASI</p><div class="code">Nomor Sertifikat: ${E(r.cert_code)}</div></div>`;
+ window.print();
+}
+function formPayload(form){return Object.fromEntries(new FormData(form).entries())}
+async function handleForm(event){const form=event.target;if(!form.id)return;event.preventDefault();if(state.busy)return;setBusy(true);
+ try{
+  if(form.id==='loginForm'){
+   busyOn('Memeriksa akun…',1);try{const lr=await post('/api/login',formPayload(form));setSession(lr.session);busyMsg('Memuat data training…');await refreshMe();state.view=state.me.role==='participant'?'overview':'dashboard';await navigate(state.view);}finally{busyOff()}message(`Selamat datang, ${state.me.name}!`);
+  }else if(form.id==='registerForm'){
+   const p=formPayload(form);const r=await post('/api/register',p);renderAuth('login');document.querySelector('#loginForm [name=username]').value=r.username;message('Registrasi berhasil. Silakan login menggunakan NIK dan password Anda.');
+  }else if(form.id==='joinForm'){
+   await post('/api/enroll',formPayload(form));await refreshMe();await navigate('overview');message('Berhasil bergabung dengan sesi training.');
+  }else if(form.id==='passwordForm'){
+   await post('/api/change-password',formPayload(form));form.reset();message('Password diperbarui.');
+  }else if(form.id==='courseForm'){
+   const p=formPayload(form);p.pass_mark=Number(p.pass_mark);const r=await post('/api/admin/courses',p);await refreshMe();await navigate('courses');showModal(`<div class="eyebrow">SESI BERHASIL DIBUAT</div><h2>Kode Training</h2><div style="font-size:28px;font-weight:900;color:#f08000;margin:20px 0">${E(r.code)}</div><p>Bagikan kode hanya kepada calon peserta training. Simpan untuk kebutuhan registrasi.</p>`);
+  }else if(form.id==='editQuestionForm'){
+   const p=formPayload(form);await api('/api/admin/questions',{method:'PUT',body:JSON.stringify({id:form.dataset.qid,question:p.question,options:[p.option0,p.option1,p.option2,p.option3],correct:Number(p.correct),explanation:p.explanation})});closeModal();await navigate('questions');message('Bank soal diperbarui untuk tes baru.');
+  }else if(form.id==='trainerForm'){
+   const r=await post('/api/admin/users/create',formPayload(form));showModal(`<h2>Akun Trainer Berhasil Dibuat</h2><p>Username: <b>${E(r.username)}</b></p><p>Password sementara:</p><div style="padding:14px;background:#fff4e7;border:1px solid #ffcd8a;border-radius:12px;font:700 21px ui-monospace,monospace;overflow-wrap:anywhere">${E(r.temp_password)}</div><p class="small muted">Catat sekarang dan sampaikan langsung kepada trainer. Password tidak akan ditampilkan lagi.</p>`);
+  }
+ }catch(e){message(e.message,true)}finally{setBusy(false)}
+}
+let event_who='';document.addEventListener('click',e=>{const b=e.target.closest('[data-who]');if(b)event_who=b.dataset.who},true);
+async function doAction(act){if(state.busy)return;
+ if(['overview','material','pre','post','result','profile','dashboard','participants','courses','questions','reports','settings'].includes(act))return navigate(act);
+ if(act==='close-modal')return closeModal();if(act==='reload')return navigate(state.view);
+ if(act==='begin-test'){
+  setBusy(true);try{const phase=state.view;const r=await post('/api/attempts/start',{course_id:state.courseId,phase});state.assessment={id:r.attempt_id,phase,questions:r.questions};state.questionIndex=0;state.answers=Array(r.questions.length).fill(null);renderQuestion()}catch(e){message(e.message,true)}finally{setBusy(false)}return;
+ }
+ if(act==='next-question'||act==='prev-question'){
+  if(!state.assessment)return;state.questionIndex=Math.min(state.assessment.questions.length-1,Math.max(0,state.questionIndex+(act==='next-question'?1:-1)));renderQuestion();return;
+ }
+ if(act==='quiz-submit'){
+  const missing=state.answers.findIndex(x=>!Number.isInteger(x));if(missing>=0){state.questionIndex=missing;renderQuestion();message('Masih ada pertanyaan yang belum dijawab.',true);return;}
+  if(!confirm('Kumpulkan semua jawaban sekarang? Hasil tidak dapat diubah dan tes tidak dapat diulang.'))return;
+  setBusy(true);try{await post('/api/attempts/submit',{attempt_id:state.assessment.id,answers:state.answers});sessionStorage.removeItem(draftKey());state.assessment=null;await refreshMe();await navigate('result');message('Tes berhasil dikumpulkan. Hasil radar diperbarui.')}catch(e){message(e.message,true)}finally{setBusy(false)}return;
+ }
+ if(act==='material-finish'){
+  if(!confirm('Saya telah mempelajari materi dan siap melanjutkan ke Post-Test.'))return;
+  setBusy(true);try{await post('/api/material-complete',{course_id:state.courseId});await refreshMe();await navigate('post');message('Materi selesai. Silakan memulai Post-Test.')}catch(e){message(e.message,true)}finally{setBusy(false)}return;
+ }
+ if(act==='export'){try{const r=await api('/api/admin/export?'+adminParams());const blob=new Blob([r.csv],{type:'text/csv;charset=utf-8'});const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=r.name||'TJForge_SCW_Report.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),3000);message('Laporan CSV berhasil diunduh.')}catch(e){message(e.message,true)}return;}
+ if(act==='print-certificate')return certificatePrint();
+ if(act==='demo-login'){const W={peserta:['DEMO-001','DemoPeserta1'],admin:['demo-admin','DemoAdmin123'],tamu:['demo-tamu','DemoTamu123']}[event_who];setBusy(true);busyOn('Masuk…',1);try{const r=await post('/api/login',{username:W[0],password:W[1]});setSession(r.session);busyMsg('Memuat data training…');await refreshMe();state.view=state.me.role==='participant'?'overview':'dashboard';await navigate(state.view)}catch(e){message(e.message,true)}finally{busyOff();setBusy(false)}return;}
+ if(act==='guest-login'){setBusy(true);busyOn('Masuk sebagai tamu…',1);try{const r=await post('/api/login-tamu',{});setSession(r.session);busyMsg('Memuat data training…');await refreshMe();state.view='dashboard';await navigate('dashboard');message('Masuk sebagai tamu (hanya melihat).')}catch(e){message(e.message,true)}finally{busyOff();setBusy(false)}return;}
+}
+async function logout(){if(!confirm('Keluar dari akun sekarang?'))return;busyOn('Keluar dari akun…',1);try{await post('/api/logout',{});}catch(e){}setSession(null);state.me=null;state.csrf=null;state.assessment=null;renderAuth();busyOff();message('Anda telah keluar dari sistem.');}
+function handleSelect(event){const el=event.target,id=el.id;
+ if(id==='signupPlant'){document.getElementById('signupDept').innerHTML=optionsHtml(state.meta.plants[el.value]);return}
+ if(id==='courseSelect'){state.courseId=Number(el.value);return navigate(state.view)}
+ if(id==='adminCourse'){state.adminCourseId=Number(el.value);return navigate(state.view)}
+ if(id==='adminPlant'){state.adminPlant=el.value;if(state.adminDept!=='all'&&state.adminPlant!=='all'&&!state.meta.plants[el.value].includes(state.adminDept))state.adminDept='all';return navigate(state.view)}
+ if(id==='adminDept'){state.adminDept=el.value;return navigate(state.view)}
+ if(id==='adminPosition'){state.adminPosition=el.value;return navigate(state.view)}
+ if(id==='matDept'){state.matDept=el.value;return navigate('material')}
+ if(id==='bankDept'){state.bankDept=el.value;return navigate('questions')}
+ if(id==='bankPosition'){state.bankPosition=el.value;return navigate('questions')}
+ if(id==='bankPhase'){state.bankPhase=el.value;return navigate('questions')}
+}
+document.addEventListener('submit',handleForm);
+document.addEventListener('change',handleSelect);
+document.addEventListener('click',async(e)=>{
+ const auth=e.target.closest('[data-auth]');if(auth)return renderAuth(auth.dataset.auth);
+ const nav=e.target.closest('[data-nav]');if(nav)return navigate(nav.dataset.nav);
+ const act=e.target.closest('[data-act]');if(act)return doAction(act.dataset.act);
+ const a=e.target.closest('[data-answer]');if(a&&state.assessment){state.answers[state.questionIndex]=Number(a.dataset.answer);try{sessionStorage.setItem(draftKey(),JSON.stringify(state.answers))}catch(e){}renderQuestion();return}
+ const q=e.target.closest('[data-q]');if(q&&state.assessment){state.questionIndex=Number(q.dataset.q);return renderQuestion()}
+ const edit=e.target.closest('[data-edit-question]');if(edit)return questionEdit(Number(edit.dataset.editQuestion));
+ const cert=e.target.closest('[data-certify]');if(cert){if(!confirm('Verifikasi hasil kelulusan dan terbitkan sertifikat peserta ini?'))return;try{await post('/api/admin/certify',{enrollment_id:Number(cert.dataset.certify)});await navigate('participants');message('Sertifikat disetujui dan dapat dicetak peserta.')}catch(e){message(e.message,true)}return}
+ const toggle=e.target.closest('[data-toggle-course]');if(toggle){if(!confirm('Ubah status aktif sesi training? Peserta tidak dapat memulai tes pada sesi yang dinonaktifkan.'))return;try{await post('/api/admin/courses/toggle',{id:Number(toggle.dataset.toggleCourse),active:toggle.dataset.toggleValue==='1'});await refreshMe();await navigate('courses');message('Status sesi training diubah.')}catch(e){message(e.message,true)}return;}
+ if(e.target.closest('#logoutBtn'))return logout();if(e.target.closest('#toggleMenu')){state.sidebar=!state.sidebar;document.getElementById('sidebar').classList.toggle('open',state.sidebar);return}
+});
+init();
+
+</script>
+</body>
+</html>
