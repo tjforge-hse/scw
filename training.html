@@ -131,7 +131,8 @@ async function api(path,options={}){
  return data.data||{};
 }
 let _bn=0,_b0,_b1,_b2;
-function busyOn(){if(_bn++)return;clearTimeout(_b0);_b0=setTimeout(()=>{const e=document.getElementById('busy');if(!e)return;document.getElementById('busyMsg').textContent='';e.classList.add('on');_b1=setTimeout(()=>{document.getElementById('busyMsg').textContent='Server sedang bangun, mohon tunggu sebentar…'},4000);_b2=setTimeout(()=>{document.getElementById('busyMsg').textContent='Masih memproses. Koneksi atau server sedang lambat, jangan tutup halaman ini.'},12000)},250)}
+function busyOn(msg,now){const t=document.querySelector('#busy .bt');if(_bn++){if(msg&&t)t.textContent=msg;return}clearTimeout(_b0);if(t)t.textContent=msg||'Memuat…';const show=()=>{const e=document.getElementById('busy');if(!e)return;document.getElementById('busyMsg').textContent='';e.classList.add('on');_b1=setTimeout(()=>{document.getElementById('busyMsg').textContent='Server sedang bangun, mohon tunggu sebentar…'},4000);_b2=setTimeout(()=>{document.getElementById('busyMsg').textContent='Masih memproses. Koneksi atau server sedang lambat, jangan tutup halaman ini.'},12000)};if(now)show();else _b0=setTimeout(show,250)}
+function busyMsg(m){const t=document.querySelector('#busy .bt');if(t)t.textContent=m}
 function busyOff(){_bn=Math.max(0,_bn-1);if(_bn)return;clearTimeout(_b0);clearTimeout(_b1);clearTimeout(_b2);const e=document.getElementById('busy');if(e)e.classList.remove('on')}
 function setSession(s){SESSION=s||null;try{if(s)sessionStorage.setItem('scw_trn',s);else sessionStorage.removeItem('scw_trn')}catch(e){}}
 const IS_ADMIN=()=>state.me?.role==='admin';
@@ -293,7 +294,7 @@ function formPayload(form){return Object.fromEntries(new FormData(form).entries(
 async function handleForm(event){const form=event.target;if(!form.id)return;event.preventDefault();if(state.busy)return;setBusy(true);
  try{
   if(form.id==='loginForm'){
-   const lr=await post('/api/login',formPayload(form));setSession(lr.session);await refreshMe();state.view=state.me.role==='participant'?'overview':'dashboard';await navigate(state.view);message(`Selamat datang, ${state.me.name}!`);
+   busyOn('Memeriksa akun…',1);try{const lr=await post('/api/login',formPayload(form));setSession(lr.session);busyMsg('Memuat data training…');await refreshMe();state.view=state.me.role==='participant'?'overview':'dashboard';await navigate(state.view);}finally{busyOff()}message(`Selamat datang, ${state.me.name}!`);
   }else if(form.id==='registerForm'){
    const p=formPayload(form);const r=await post('/api/register',p);renderAuth('login');document.querySelector('#loginForm [name=username]').value=r.username;message('Registrasi berhasil. Silakan login menggunakan NIK dan password Anda.');
   }else if(form.id==='joinForm'){
@@ -329,9 +330,9 @@ async function doAction(act){if(state.busy)return;
  }
  if(act==='export'){try{const r=await api('/api/admin/export?'+adminParams());const blob=new Blob([r.csv],{type:'text/csv;charset=utf-8'});const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=r.name||'TJForge_SCW_Report.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),3000);message('Laporan CSV berhasil diunduh.')}catch(e){message(e.message,true)}return;}
  if(act==='print-certificate')return certificatePrint();
- if(act==='guest-login'){setBusy(true);try{const r=await post('/api/login-tamu',{});setSession(r.session);await refreshMe();state.view='dashboard';await navigate('dashboard');message('Masuk sebagai tamu (hanya melihat).')}catch(e){message(e.message,true)}finally{setBusy(false)}return;}
+ if(act==='guest-login'){setBusy(true);busyOn('Masuk sebagai tamu…',1);try{const r=await post('/api/login-tamu',{});setSession(r.session);busyMsg('Memuat data training…');await refreshMe();state.view='dashboard';await navigate('dashboard');message('Masuk sebagai tamu (hanya melihat).')}catch(e){message(e.message,true)}finally{busyOff();setBusy(false)}return;}
 }
-async function logout(){if(!confirm('Keluar dari akun sekarang?'))return;try{await post('/api/logout',{});}catch(e){}setSession(null);state.me=null;state.csrf=null;state.assessment=null;renderAuth();message('Anda telah keluar dari sistem.');}
+async function logout(){if(!confirm('Keluar dari akun sekarang?'))return;busyOn('Keluar dari akun…',1);try{await post('/api/logout',{});}catch(e){}setSession(null);state.me=null;state.csrf=null;state.assessment=null;renderAuth();busyOff();message('Anda telah keluar dari sistem.');}
 function handleSelect(event){const el=event.target,id=el.id;
  if(id==='signupPlant'){document.getElementById('signupDept').innerHTML=optionsHtml(state.meta.plants[el.value]);return}
  if(id==='courseSelect'){state.courseId=Number(el.value);return navigate(state.view)}
