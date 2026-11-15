@@ -84,10 +84,20 @@ a{color:#db780b;text-decoration:none}a:hover{text-decoration:underline}
 
 a.nav-btn{display:flex;align-items:center;gap:10px}
 
+#busy{position:fixed;inset:0;z-index:9999;background:rgba(17,30,45,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;color:#fff}
+#busy.on{display:flex}
+#busy .sp{width:58px;height:58px;border-radius:50%;border:5px solid rgba(255,255,255,.22);border-top-color:#ff8200;animation:bspin .9s linear infinite}
+#busy .bt{font-weight:800;font-size:16px;letter-spacing:.02em}
+#busy .bs{font-size:13px;color:#cbd5e1;min-height:18px;max-width:320px}
+#busy .bb{width:210px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
+#busy .bb i{display:block;height:100%;width:40%;background:#ff8200;border-radius:2px;animation:bslide 1.3s ease-in-out infinite}
+@keyframes bspin{to{transform:rotate(360deg)}}@keyframes bslide{0%{margin-left:-40%}100%{margin-left:100%}}
+@media(prefers-reduced-motion:reduce){#busy .sp,#busy .bb i{animation-duration:3s}}
+
 </style>
 </head>
 <body>
-<div id="root"><div style="padding:40px;font:600 15px system-ui">Memuat...</div></div><div id="toast" class="hidden" role="status" aria-live="polite"></div><div id="modalRoot"></div><div id="certPrint"></div>
+<div id="root"><div style="padding:40px;font:600 15px system-ui">Memuat...</div></div><div id="toast" class="hidden" role="status" aria-live="polite"></div><div id="modalRoot"></div><div id="certPrint"></div><div id="busy" role="alert" aria-live="polite"><div class="sp"></div><div class="bt">Memuat…</div><div class="bb"><i></i></div><div class="bs" id="busyMsg"></div></div>
 <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";
 let SESSION = null;
@@ -113,12 +123,16 @@ async function api(path,options={}){
  const [p,qs]=path.split('?');
  const query=Object.fromEntries(new URLSearchParams(qs||''));
  let body={};if(options.body){try{body=JSON.parse(options.body)}catch(e){body={}}}
- let response,data;
+ let response,data;busyOn();
  try{response=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'tr',path:p,method,query,body,session:SESSION})});data=await response.json()}
- catch(e){throw new Error('Server tidak terhubung. Periksa jaringan lalu coba lagi.')}
+ catch(e){busyOff();throw new Error('Server tidak terhubung. Periksa jaringan lalu coba lagi.')}
+ busyOff();
  if(!data.ok){if(data.code==='AUTH'&&path!=='/api/login'&&path!=='/api/me'){setSession(null);state.me=null;state.csrf=null;renderAuth();}throw new Error(data.error||'Permintaan gagal.')}
  return data.data||{};
 }
+let _bn=0,_b0,_b1,_b2;
+function busyOn(){if(_bn++)return;clearTimeout(_b0);_b0=setTimeout(()=>{const e=document.getElementById('busy');if(!e)return;document.getElementById('busyMsg').textContent='';e.classList.add('on');_b1=setTimeout(()=>{document.getElementById('busyMsg').textContent='Server sedang bangun, mohon tunggu sebentar…'},4000);_b2=setTimeout(()=>{document.getElementById('busyMsg').textContent='Masih memproses. Koneksi atau server sedang lambat, jangan tutup halaman ini.'},12000)},250)}
+function busyOff(){_bn=Math.max(0,_bn-1);if(_bn)return;clearTimeout(_b0);clearTimeout(_b1);clearTimeout(_b2);const e=document.getElementById('busy');if(e)e.classList.remove('on')}
 function setSession(s){SESSION=s||null;try{if(s)sessionStorage.setItem('scw_trn',s);else sessionStorage.removeItem('scw_trn')}catch(e){}}
 const IS_ADMIN=()=>state.me?.role==='admin';
 async function post(path,body){return api(path,{method:'POST',body:JSON.stringify(body)})}
