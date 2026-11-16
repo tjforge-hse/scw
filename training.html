@@ -201,6 +201,32 @@ body.drawer-open{overflow:hidden}
 
 a.nav-btn{display:flex;align-items:center;gap:10px}
 
+#splash{position:fixed;inset:0;z-index:9998;background:radial-gradient(ellipse at 50% 35%,#1c2e43,#0e1824 70%);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;text-align:center;padding:24px}
+#splash .sp-k{font-size:12px;letter-spacing:.22em;color:#ff8200;font-weight:800}
+#splash .sp-t{font-size:30px;font-weight:800;margin:6px 0 34px}
+#splash .sp-tag{font-size:14px;color:#cbd5e1;letter-spacing:.06em}
+#splash .sp-bar{width:220px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);overflow:hidden}
+#splash .sp-bar i{display:block;height:100%;width:40%;background:#ff8200;border-radius:2px;animation:bslide 1.3s ease-in-out infinite}
+.scwl-r{display:flex;align-items:center;justify-content:center;gap:0}
+.scwl-n{display:flex;flex-direction:column;align-items:center;position:relative;opacity:.32;transform:scale(.88);animation:scwl-on 4.5s infinite}
+.scwl-n.stop{--c:#e5483f;animation-delay:0s}.scwl-n.call{--c:#ff8200;animation-delay:1.5s}.scwl-n.wait{--c:#15b27d;animation-delay:3s}
+.scwl-n .i{display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--c);color:var(--c);box-shadow:0 0 0 0 var(--c)}
+.scwl-n .i svg{width:56%;height:56%}
+.scwl-n.call .i svg path,.scwl-n.wait .i svg path{fill:#fff}
+.scwl-n b{font-size:12px;letter-spacing:.14em;margin-top:9px;color:#fff}
+.scwl-n+.scwl-n::before{content:"";position:absolute;top:var(--ly);right:100%;width:var(--lw);height:3px;background:rgba(255,255,255,.22);border-radius:2px}
+.scwl.big{--ly:35px;--lw:48px}.scwl.big .scwl-n+.scwl-n{margin-left:48px}.scwl.big .scwl-n{min-width:70px}.scwl.big .i{width:70px;height:70px}
+.scwl.mini{--ly:15px;--lw:26px}.scwl.mini .scwl-n+.scwl-n{margin-left:26px}.scwl.mini .scwl-n{min-width:34px}.scwl.mini .i{width:30px;height:30px}.scwl.mini b{font-size:9px;margin-top:5px}
+@keyframes scwl-on{0%{opacity:.32;transform:scale(.88)}6%,30%{opacity:1;transform:scale(1.1)}38%,100%{opacity:.32;transform:scale(.88)}}
+.scwl-n .i{animation:scwl-pulse 4.5s infinite}.scwl-n.call .i{animation-delay:1.5s}.scwl-n.wait .i{animation-delay:3s}
+@keyframes scwl-pulse{0%{box-shadow:0 0 0 0 transparent}6%{box-shadow:0 0 0 0 var(--c)}30%{box-shadow:0 0 0 16px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.scwl-cap{position:relative;height:22px;margin-top:26px;font-size:15px;color:#e2e8f0;min-width:300px}
+.scwl-cap .c{position:absolute;left:0;right:0;opacity:0;animation:scwl-cap 4.5s infinite}
+.scwl-cap .c.call{animation-delay:1.5s}.scwl-cap .c.wait{animation-delay:3s}
+@keyframes scwl-cap{0%{opacity:0;transform:translateY(6px)}6%,30%{opacity:1;transform:none}36%,100%{opacity:0}}
+#busy .scwl.mini{margin-bottom:2px}#splash~#busy{display:none!important}
+@media(prefers-reduced-motion:reduce){.scwl-n,.scwl-n .i,.scwl-cap .c{animation-duration:9s}}
+
 #busy{position:fixed;inset:0;z-index:9999;background:rgba(17,30,45,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;color:#fff}
 #busy.on{display:flex}
 #busy .sp{width:58px;height:58px;border-radius:50%;border:5px solid rgba(255,255,255,.22);border-top-color:#ff8200;animation:bspin .9s linear infinite}
@@ -214,7 +240,7 @@ a.nav-btn{display:flex;align-items:center;gap:10px}
 </style>
 </head>
 <body>
-<div id="root"><div style="padding:40px;font:600 15px system-ui">Memuat...</div></div><div id="toast" class="hidden" role="status" aria-live="polite"></div><div id="modalRoot"></div><div id="certPrint"></div><div id="busy" role="alert" aria-live="polite"><div class="sp"></div><div class="bt">Memuat…</div><div class="bb"><i></i></div><div class="bs" id="busyMsg"></div></div>
+<div id="root"></div><div id="splash" role="status" aria-live="polite"><div class="sp-in"><div class="sp-k">SAFETY CONTROL SYSTEM</div><div class="sp-t">Training SCW</div><div class="scwl big"><div class="scwl-r"><div class="scwl-n stop"><span class="i"><svg viewBox="0 0 24 24"><path d="M8.3 2h7.4L22 8.3v7.4L15.7 22H8.3L2 15.7V8.3z" fill="#fff"/><rect x="7" y="10.5" width="10" height="3" rx="1.2" fill="currentColor"/></svg></span><b>STOP</b></div><div class="scwl-n call"><span class="i"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.300.2 2.500.6 3.600.1.300 0 .700-.2 1z" fill="currentColor"/></svg></span><b>CALL</b></div><div class="scwl-n wait"><span class="i"><svg viewBox="0 0 24 24"><path d="M6 2h12v4.500L13.500 12 18 17.500V22H6v-4.500L10.500 12 6 6.500z" fill="currentColor"/></svg></span><b>WAIT</b></div></div></div><div class="scwl-cap"><span class="c stop">Berhenti saat ada yang abnormal</span><span class="c call">Laporkan ke pihak berwenang</span><span class="c wait">Tunggu instruksi dan jaga kondisi aman</span></div></div><div class="sp-tag">Berhenti. Laporkan. Tunggu.</div><div class="sp-bar"><i></i></div></div><script>(function(){var t0=Date.now(),r=document.getElementById('root'),s=document.getElementById('splash');if(!r||!s)return;var gone=false;function done(){if(gone)return;gone=true;setTimeout(function(){s.style.transition='opacity .35s';s.style.opacity=0;setTimeout(function(){s.remove()},380)},Math.max(0,1100-(Date.now()-t0)))}new MutationObserver(function(m,o){if(r.children.length){o.disconnect();done()}}).observe(r,{childList:true});setTimeout(done,25000)})();</script><div id="toast" class="hidden" role="status" aria-live="polite"></div><div id="modalRoot"></div><div id="certPrint"></div><div id="busy" role="alert" aria-live="polite"><div class="scwl mini"><div class="scwl-r"><div class="scwl-n stop"><span class="i"><svg viewBox="0 0 24 24"><path d="M8.3 2h7.4L22 8.3v7.4L15.7 22H8.3L2 15.7V8.3z" fill="#fff"/><rect x="7" y="10.5" width="10" height="3" rx="1.2" fill="currentColor"/></svg></span><b>STOP</b></div><div class="scwl-n call"><span class="i"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.300.2 2.500.6 3.600.1.300 0 .700-.2 1z" fill="currentColor"/></svg></span><b>CALL</b></div><div class="scwl-n wait"><span class="i"><svg viewBox="0 0 24 24"><path d="M6 2h12v4.500L13.500 12 18 17.500V22H6v-4.500L10.500 12 6 6.500z" fill="currentColor"/></svg></span><b>WAIT</b></div></div></div><div class="bt">Memuat…</div><div class="bb"><i></i></div><div class="bs" id="busyMsg"></div></div>
 <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEvx1d2kaI6WHVO8sRnWNAHH2CykAYBZ53rDpwy7nZ6S7iRJkkkmmZZl4qFXd50a9tjw/exec";
 let SESSION = null;
